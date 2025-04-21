@@ -1,0 +1,45 @@
+---
+name: Java CI with Maven
+"on":
+  push:
+    branches:
+    - main
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+  pull_request:
+    branches:
+    - main
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: |
+          17
+          21
+        distribution: liberica
+        cache: maven
+    - name: Build
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
+      run: mvn -B clean deploy sonar:sonar
