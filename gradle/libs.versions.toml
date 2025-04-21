@@ -1,0 +1,23 @@
+[versions]
+assertj = "3.27.6"
+byte-buddy = "1.18.3"
+equalsverifier = "4.2.5"
+jspecify = "1.0.0"
+junit = "6.0.1"
+spotbugs = "6.4.8"
+spotless = "8.1.0"
+version-catalog-update = "1.0.1"
+
+[plugins]
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
+
+[libraries]
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+byte-buddy = { module = "net.bytebuddy:byte-buddy", version.ref = "byte-buddy" }
+equalsverifier = { module = "nl.jqno.equalsverifier:equalsverifier", version.ref = "equalsverifier" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-platform = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }

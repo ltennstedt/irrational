@@ -1,12 +1,12 @@
-package sliderule.core.number;
+package irrational.core.number;
 
+import irrational.core.util.Longs;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Comparator;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import sliderule.core.util.Longs;
 
 /** Immutable implementation of a rational number */
 public final class LongRational extends AbstractRational<LongRational> {

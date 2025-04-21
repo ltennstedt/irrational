@@ -1,4 +1,4 @@
-package sliderule.core.number;
+package irrational.core.number;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -7,9 +7,12 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@Execution(ExecutionMode.CONCURRENT)
 final class LongRationalTest {
     private final LongRational rational1 = new LongRational(2, 3);
     private final LongRational rational2 = new LongRational(4, 5);

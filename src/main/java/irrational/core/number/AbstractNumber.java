@@ -1,4 +1,4 @@
-package sliderule.core.number;
+package irrational.core.number;
 
 import java.math.BigDecimal;
 import java.util.Objects;

@@ -1,12 +1,15 @@
-package sliderule.core.number;
+package irrational.core.number;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@Execution(ExecutionMode.CONCURRENT)
 final class AbstractNumberTest {
     @Test
     void isNotInvertible_should_return_false_isInvertible_is_true() {

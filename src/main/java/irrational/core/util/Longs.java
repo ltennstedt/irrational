@@ -1,4 +1,4 @@
-package sliderule.core.util;
+package irrational.core.util;
 
 import java.util.function.IntFunction;
 import java.util.function.LongBinaryOperator;

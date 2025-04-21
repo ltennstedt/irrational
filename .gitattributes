@@ -1,10 +1,8 @@
 *.java text
-*.kt text
-*.groovy text
+*.kts text
 *.properties text
 *.xml text
-*.yml text
-*.config text
+*.yaml text
 *.md text
 .editorconfig text
 LICENSE text

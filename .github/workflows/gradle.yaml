@@ -1,5 +1,5 @@
 ---
-name: Java CI with Maven
+name: Java CI with Gradle
 "on":
   push:
     branches:
@@ -35,11 +35,24 @@ jobs:
       with:
         java-version: |
           17
-          21
-        distribution: liberica
-        cache: maven
+          25
+        distribution: temurin
+        cache: gradle
+    - name: Clean
+      run: gradle clean
     - name: Build
+      run: gradle classes testClasses
+    - name: Test
+      run: gradle test
+    - name: Lint
+      run: gradle lint
+    - name: Publishing
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
-      run: mvn -B clean deploy sonar:sonar
+      run: gradle publish
+    - name: DeepSource
+      env:
+        DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"
+      run: |
+        curl https://deepsource.com/cli | sh
+        ./bin/deepsource report --analyzer test-coverage --key java --value-file ./build/reports/jacoco/test/jacocoTestReport.xml
