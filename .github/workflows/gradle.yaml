@@ -1,0 +1,63 @@
+---
+name: Java CI with Gradle
+"on":
+  push:
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+  pull_request:
+    branches:
+    - main
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+jobs:
+  build:
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      packages: write
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: |
+        -Dorg.gradle.console=plain -Dorg.gradle.logging.stacktrace=all
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
+      with:
+        gradle-version: 9.4.1
+    - name: Building
+      run: gradle clean build
+    - name: Publishing
+      if: github.ref == 'refs/heads/develop'
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      run: gradle publishMavenPublicationToGithubRepository
+    - name: DeepSource
+      env:
+        DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"
+      uses: deepsourcelabs/test-coverage-action@master
+      with:
+        key: java
+        coverage-file: ./build/reports/jacoco/test/jacocoTestReport.xml
+        dsn: "${{ secrets.DEEPSOURCE_DSN }}"
+    - name: Deleting old workflow runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        retain_days: 1
