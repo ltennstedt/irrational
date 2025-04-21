@@ -1,0 +1,65 @@
+---
+name: Java CI with Gradle
+"on":
+  push:
+    branches:
+    - main
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+  pull_request:
+    branches:
+    - main
+    paths-ignore:
+    - .editorconfig
+    - .gitignore
+    - .gitattributes
+    - LICENSE
+    - '**/*.md'
+jobs:
+  build:
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v5
+    - name: Cleaning
+      run: gradle clean
+    - name: Compilation
+      run: gradle classes testClasses
+    - name: Testing
+      run: gradle test
+    - name: Assembling
+      run: gradle assemble
+    - name: Checking
+      run: gradle check
+    - name: Publishing
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      run: gradle publish
+    - name: DeepSource
+      env:
+        DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"
+      run: |
+        curl https://deepsource.com/cli | sh
+        ./bin/deepsource report --analyzer test-coverage --key java --value-file ./build/reports/jacoco/test/jacocoTestReport.xml
+    - name: Deleting old workflow runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        retain_days: 1

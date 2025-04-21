@@ -1,12 +1,15 @@
-package sliderule.core.util;
+package irrational.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.stream.Stream;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+@Execution(ExecutionMode.CONCURRENT)
 final class LongsTest {
     static Stream<Arguments> baseAndExponentAndExpectedProvider() {
         return Stream.of(
@@ -21,7 +24,7 @@ final class LongsTest {
 
     @ParameterizedTest
     @MethodSource("baseAndExponentAndExpectedProvider")
-    void powerExact_should_succeed(final long base, final int exponent, final double expected) {
-        assertThat(Longs.powerExact(base, exponent)).isEqualByComparingTo(expected);
+    void power_should_succeed(final long base, final int exponent, final double expected) {
+        assertThat(Longs.power(base, exponent)).isEqualByComparingTo(expected);
     }
 }
