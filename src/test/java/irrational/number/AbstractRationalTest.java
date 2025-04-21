@@ -1,4 +1,4 @@
-package sliderule.core.number;
+package irrational.number;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
@@ -7,17 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-final class AbstractNumberTest {
-    @Test
-    void isNotInvertible_should_return_false_isInvertible_is_true() {
-        assertThat(LongRational.ONE.isNotInvertible()).isFalse();
-    }
-
-    @Test
-    void isNotInvertible_should_return_true_isInvertible_is_true() {
-        assertThat(LongRational.ZERO.isNotInvertible()).isTrue();
-    }
-
+final class AbstractRationalTest {
     @Test
     void isLessThan_should_throw_Exception_when_other_is_null() {
         assertThatNullPointerException()
@@ -27,9 +17,9 @@ final class AbstractNumberTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {0, 1})
+    @ValueSource(longs = {0L, 1L})
     void isLessThan_should_return_false_when_compareTo_returns_positive_or_0(final long numerator) {
-        assertThat(LongRational.ONE.isLessThan(new LongRational(numerator, 1))).isFalse();
+        assertThat(LongRational.ONE.isLessThan(LongRational.of(numerator, 1L))).isFalse();
     }
 
     @Test
@@ -51,9 +41,9 @@ final class AbstractNumberTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {0, 1})
+    @ValueSource(longs = {0L, 1L})
     void isLessThanOrEqualTo_should_return_true_when_compareTo_returns_negative_or_0(final long numerator) {
-        assertThat(LongRational.ZERO.isLessThanOrEqualTo(new LongRational(numerator, 1)))
+        assertThat(LongRational.ZERO.isLessThanOrEqualTo(LongRational.of(numerator, 1L)))
                 .isTrue();
     }
 
@@ -66,9 +56,9 @@ final class AbstractNumberTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {0, 1})
+    @ValueSource(longs = {0L, 1L})
     void isGreaterThan_should_return_false_when_compareTo_returns_positive_or_0(final long numerator) {
-        assertThat(LongRational.ZERO.isGreaterThan(new LongRational(numerator, 1)))
+        assertThat(LongRational.ZERO.isGreaterThan(LongRational.of(numerator, 1L)))
                 .isFalse();
     }
 
@@ -91,39 +81,9 @@ final class AbstractNumberTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {0, 1})
+    @ValueSource(longs = {0L, 1L})
     void isGreaterThanOrEqualTo_should_return_true_when_compareTo_returns_positive_or_0(final long numerator) {
-        assertThat(LongRational.ONE.isGreaterThanOrEqualTo(new LongRational(numerator, 1)))
+        assertThat(LongRational.ONE.isGreaterThanOrEqualTo(LongRational.of(numerator, 1L)))
                 .isTrue();
-    }
-
-    @Test
-    void intValue_should_succeed() {
-        assertThat(LongRational.ZERO.intValue()).isZero();
-    }
-
-    @Test
-    void intValueExact_should_succeed() {
-        assertThat(LongRational.ZERO.intValueExact()).isZero();
-    }
-
-    @Test
-    void longValue_should_succeed() {
-        assertThat(LongRational.ZERO.longValue()).isZero();
-    }
-
-    @Test
-    void longValueExact_should_succeed() {
-        assertThat(LongRational.ZERO.longValueExact()).isZero();
-    }
-
-    @Test
-    void floatValue_should_succeed() {
-        assertThat(LongRational.ZERO.floatValue()).isZero();
-    }
-
-    @Test
-    void doubleValue_should_succeed() {
-        assertThat(LongRational.ZERO.doubleValue()).isZero();
     }
 }
