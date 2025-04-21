@@ -1,0 +1,34 @@
+[versions]
+assertj = "3.27.7"
+checkstyle = "12.3.1"
+cyclonedx = "3.2.0"
+dependency-license-report = "3.1.1"
+flexmark = "0.64.8"
+jacoco = "0.8.14"
+jspecify = "1.0.0"
+junit = "6.0.3"
+junit-pioneer = "2.3.0"
+ktlint = "1.8.0"
+palantir-java-format = "2.89.0"
+pmd = "7.22.0"
+spotbugsLibrary = "4.9.8"
+spotbugsPlugin = "6.4.8"
+spotless = "8.2.1"
+task-tree = "4.0.1"
+version-catalog-update = "1.1.0"
+
+[plugins]
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
+dependency-license-report = { id = "com.github.jk1.dependency-license-report", version.ref = "dependency-license-report" }
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugsPlugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+task-tree = { id = "com.dorongold.task-tree", version.ref = "task-tree" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
+
+[libraries]
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-pioneer = { module = "org.junit-pioneer:junit-pioneer", version.ref = "junit-pioneer" }
+junit-platform = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
