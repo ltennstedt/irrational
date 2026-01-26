@@ -1,14 +1,15 @@
 package irrational.number;
 
+import static java.util.Objects.requireNonNull;
+
 import irrational.util.Longs;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Comparator;
-import java.util.Objects;
-import org.jspecify.annotations.Nullable;
 
-/** Immutable implementation of a rational number */
-public final class LongRational extends AbstractRational<LongRational> {
+/** Immutable implementation of a rational number based on long */
+public final class LongRational implements Rational<LongRational> {
     /** Comparator */
     public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
 
@@ -31,15 +32,23 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @param denominator denominator
      * @throws IllegalArgumentException when denominator is 0
      * @throws ArithmeticException when an arithmetic overflow occurs
+     * @see #of(long)
+     * @see #of(long, long)
      */
-    private LongRational(final long numerator, final long denominator) {
+    public LongRational(final long numerator, final long denominator) {
         if (denominator == 0) {
             throw new IllegalArgumentException("denominator must not be 0 but was " + denominator);
         }
-        final var sign = denominator < 0L ? -1L : 1L;
         final var gcd = Longs.gcd(numerator, denominator);
-        this.numerator = Math.multiplyExact(sign, numerator) / gcd;
-        this.denominator = Math.multiplyExact(sign, denominator) / gcd;
+        final var reducedNumerator = numerator / gcd;
+        final var reducedDenominator = denominator / gcd;
+        if (denominator < 0L) {
+            this.numerator = Math.negateExact(reducedNumerator);
+            this.denominator = Math.negateExact(reducedDenominator);
+        } else {
+            this.numerator = reducedNumerator;
+            this.denominator = reducedDenominator;
+        }
     }
 
     /**
@@ -84,16 +93,16 @@ public final class LongRational extends AbstractRational<LongRational> {
 
     @Override
     public boolean isZero() {
-        return this == ZERO;
+        return numerator == 0L;
     }
 
     @Override
     public boolean isOne() {
-        return this == ONE;
+        return numerator == denominator;
     }
 
     @Override
-    public boolean isUnit() {
+    public boolean isUnitFraction() {
         return numerator == 1L;
     }
 
@@ -109,7 +118,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public boolean isProper() {
-        return Math.absExact(numerator) < Math.absExact(denominator);
+        return Math.absExact(numerator) < denominator;
     }
 
     @Override
@@ -124,7 +133,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational negate() {
-        return new LongRational(Math.negateExact(numerator), denominator);
+        return of(Math.negateExact(numerator), denominator);
     }
 
     /**
@@ -134,7 +143,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational abs() {
-        return new LongRational(Math.absExact(numerator), Math.absExact(denominator));
+        return of(Math.absExact(numerator), denominator);
     }
 
     /**
@@ -144,12 +153,12 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational add(final LongRational summand) {
-        Objects.requireNonNull(summand, "summand");
-        return new LongRational(
+        requireNonNull(summand, "summand");
+        return of(
                 Math.addExact(
-                        Math.multiplyExact(summand.getDenominator(), numerator),
-                        Math.multiplyExact(denominator, summand.getNumerator())),
-                Math.multiplyExact(denominator, summand.getDenominator()));
+                        Math.multiplyExact(summand.denominator, numerator),
+                        Math.multiplyExact(denominator, summand.numerator)),
+                Math.multiplyExact(denominator, summand.denominator));
     }
 
     /**
@@ -159,12 +168,12 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational subtract(final LongRational subtrahend) {
-        Objects.requireNonNull(subtrahend, "subtrahend");
-        return new LongRational(
+        requireNonNull(subtrahend, "subtrahend");
+        return of(
                 Math.subtractExact(
-                        Math.multiplyExact(subtrahend.getDenominator(), numerator),
-                        Math.multiplyExact(denominator, subtrahend.getNumerator())),
-                Math.multiplyExact(denominator, subtrahend.getDenominator()));
+                        Math.multiplyExact(subtrahend.denominator, numerator),
+                        Math.multiplyExact(denominator, subtrahend.numerator)),
+                Math.multiplyExact(denominator, subtrahend.denominator));
     }
 
     /**
@@ -174,10 +183,10 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational multiply(final LongRational multiplier) {
-        Objects.requireNonNull(multiplier, "multiplier");
-        return new LongRational(
-                Math.multiplyExact(numerator, multiplier.getNumerator()),
-                Math.multiplyExact(denominator, multiplier.getDenominator()));
+        requireNonNull(multiplier, "multiplier");
+        return of(
+                Math.multiplyExact(numerator, multiplier.numerator),
+                Math.multiplyExact(denominator, multiplier.denominator));
     }
 
     /**
@@ -187,13 +196,12 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational divide(final LongRational divisor) {
-        Objects.requireNonNull(divisor, "divisor");
+        requireNonNull(divisor, "divisor");
         if (divisor.isNotInvertible()) {
             throw new IllegalArgumentException("divisor must be invertible but was " + divisor);
         }
-        return new LongRational(
-                Math.multiplyExact(numerator, divisor.getNumerator()),
-                Math.multiplyExact(denominator, divisor.getDenominator()));
+        return of(
+                Math.multiplyExact(numerator, divisor.denominator), Math.multiplyExact(denominator, divisor.numerator));
     }
 
     @Override
@@ -201,7 +209,7 @@ public final class LongRational extends AbstractRational<LongRational> {
         if (isNotInvertible()) {
             throw new IllegalStateException("this must be invertible but was " + this);
         }
-        return new LongRational(denominator, numerator);
+        return of(denominator, numerator);
     }
 
     /**
@@ -211,7 +219,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public LongRational power(final int exponent) {
-        return new LongRational((long) Longs.power(numerator, exponent), (long) Longs.power(denominator, exponent));
+        return of((long) Longs.power(numerator, exponent), (long) Longs.power(denominator, exponent));
     }
 
     @Override
@@ -221,41 +229,60 @@ public final class LongRational extends AbstractRational<LongRational> {
 
     @Override
     public LongRational min(final LongRational other) {
-        Objects.requireNonNull(other, "other");
+        requireNonNull(other, "other");
         return isLessThanOrEqualTo(other) ? this : other;
     }
 
     @Override
     public LongRational max(final LongRational other) {
-        Objects.requireNonNull(other, "other");
+        requireNonNull(other, "other");
         return isGreaterThanOrEqualTo(other) ? this : other;
     }
 
     @Override
-    public BigDecimal toBigDecimal() {
-        return BigDecimal.valueOf(numerator).divide(BigDecimal.valueOf(denominator), MathContext.DECIMAL128);
+    public BigDecimal toBigDecimal(final int scale, final RoundingMode roundingMode) {
+        requireNonNull(roundingMode, "roundingMode");
+        return BigDecimal.valueOf(numerator).divide(BigDecimal.valueOf(denominator), scale, roundingMode);
     }
 
     @Override
+    public BigDecimal toBigDecimal(final RoundingMode roundingMode) {
+        requireNonNull(roundingMode, "roundingMode");
+        return BigDecimal.valueOf(numerator).divide(BigDecimal.valueOf(denominator), roundingMode);
+    }
+
+    @Override
+    public BigDecimal toBigDecimal(final MathContext mathContext) {
+        requireNonNull(mathContext, "mathContext");
+        return BigDecimal.valueOf(numerator).divide(BigDecimal.valueOf(denominator), mathContext);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ArithmeticException when an arithmetic overflow occurs
+     */
+    @Override
     public int compareTo(final LongRational other) {
-        Objects.requireNonNull(other, "other");
-        return Long.compare(other.getDenominator() * numerator, denominator * other.getNumerator());
+        requireNonNull(other, "other");
+        return Long.compare(
+                Math.multiplyExact(numerator, other.denominator), Math.multiplyExact(other.numerator, denominator));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numerator, denominator);
+        return 31 * Long.hashCode(numerator) + Long.hashCode(denominator);
     }
 
     @Override
-    public boolean equals(final @Nullable Object object) {
+    public boolean equals(final Object object) {
         if (this == object) {
             return true;
         }
-        if (!(object instanceof final LongRational that)) {
+        if (!(object instanceof LongRational that)) {
             return false;
         }
-        return numerator == that.getNumerator() && denominator == that.getDenominator();
+        return numerator == that.numerator && denominator == that.denominator;
     }
 
     @Override

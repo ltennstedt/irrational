@@ -1,5 +1,5 @@
 ---
-name: Java CI with Gradle
+name: Java CI with gradle
 "on":
   push:
     branches:
@@ -39,26 +39,20 @@ jobs:
         cache: gradle
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v5
-    - name: Cleaning
-      run: gradle clean
-    - name: Compilation
-      run: gradle classes testClasses
-    - name: Testing
-      run: gradle test
-    - name: Assembling
-      run: gradle assemble
-    - name: Checking
-      run: gradle check
-    - name: Publishing
+      with:
+        gradle-version: 8.14.4
+    - name: Building
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      run: gradle publish
+      run: gradle clean build publish
     - name: DeepSource
       env:
         DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"
-      run: |
-        curl https://deepsource.com/cli | sh
-        ./bin/deepsource report --analyzer test-coverage --key java --value-file ./build/reports/jacoco/test/jacocoTestReport.xml
+      uses: deepsourcelabs/test-coverage-action@master
+      with:
+        key: java
+        coverage-file: ./build/reports/jacoco/test/jacocoTestReport.xml
+        dsn: "${{ secrets.DEEPSOURCE_DSN }}"
     - name: Deleting old workflow runs
       uses: Mattraks/delete-workflow-runs@v2
       with:

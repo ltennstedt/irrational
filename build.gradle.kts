@@ -1,7 +1,10 @@
+import com.github.jk1.license.render.InventoryMarkdownReportRenderer
+import com.github.jk1.license.render.ReportRenderer
+import com.github.jk1.license.render.SimpleHtmlReportRenderer
+import com.github.jk1.license.render.XmlReportRenderer
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import java.nio.charset.StandardCharsets
-import java.util.Locale
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.ALL
+import java.nio.charset.StandardCharsets.UTF_8
 
 plugins {
     alias(libs.plugins.spotless)
@@ -14,14 +17,12 @@ plugins {
     alias(libs.plugins.version.catalog.update)
     alias(libs.plugins.dependency.license.report)
     alias(libs.plugins.task.tree)
-    `project-report`
-    `build-dashboard`
 }
 
-group = "irrational"
+group = "io.github.irrational"
 version = "0.1.0-SNAPSHOT"
 
-val isCi = System.getenv("CI") != null
+val isCi = providers.environmentVariable("CI").isPresent
 if (isCi) {
     logger.lifecycle("Environment variable CI is set.")
     gradle.startParameter.apply {
@@ -57,7 +58,7 @@ spotless {
         trimTrailingWhitespace()
     }
     java {
-        palantirJavaFormat("2.85.0").formatJavadoc(true)
+        palantirJavaFormat("2.86.0").formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()
@@ -92,7 +93,6 @@ spotless {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.ADOPTIUM
     }
     withJavadocJar()
     withSourcesJar()
@@ -108,7 +108,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.20.0"
+    toolVersion = "7.21.0"
     ruleSetFiles = files("config/pmd/ruleset.xml")
     isIgnoreFailures = false
 }
@@ -121,6 +121,14 @@ spotbugs {
 
 licenseReport {
     allowedLicensesFile = file("config/dependency-license-report/allowed-licenses.json")
+    renderers =
+        if (isCi) {
+            arrayOf<ReportRenderer>(XmlReportRenderer(), InventoryMarkdownReportRenderer())
+        } else {
+            arrayOf<ReportRenderer>(
+                SimpleHtmlReportRenderer(),
+            )
+        }
 }
 
 publishing {
@@ -179,47 +187,61 @@ publishing {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.encoding = StandardCharsets.UTF_8.name()
+        options.encoding = UTF_8.name()
     }
     withType<ProcessResources>().configureEach {
-        filteringCharset = StandardCharsets.UTF_8.name()
+        filteringCharset = UTF_8.name()
     }
     withType<Test>().configureEach {
         useJUnitPlatform()
         failFast = isCi
+        reports {
+            html.required.set(!isCi)
+            junitXml.required.set(isCi)
+        }
         finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
         dependsOn(test)
         reports {
-            xml.required = isCi
+            html.required.set(!isCi)
+            xml.required.set(isCi)
         }
     }
     withType<Checkstyle>().configureEach {
         reports {
-            html.required = !isCi
-            xml.required = false
+            html.required.set(!isCi)
+            xml.required.set(isCi)
         }
     }
     withType<Pmd>().configureEach {
         reports {
-            html.required = !isCi
+            html.required.set(!isCi)
+            xml.required.set(isCi)
         }
     }
     withType<SpotBugsTask>().configureEach {
-        val basename = name.replace(Regex("([A-Z])"), "-$1").lowercase(Locale.US).trimStart('-')
-        reports.create("html") {
-            required = !isCi
-            outputLocation.set(
-                layout.buildDirectory.file("reports/spotbugs/$basename.html"),
-            )
+        val taskName = name
+        reports {
+            create("html") {
+                required.set(!isCi)
+                outputLocation.set(
+                    layout.buildDirectory.file("reports/spotbugs/$taskName.html"),
+                )
+            }
+            create("xml") {
+                required.set(isCi)
+                outputLocation.set(
+                    layout.buildDirectory.file("reports/spotbugs/$taskName.xml"),
+                )
+            }
         }
     }
     check {
-        dependsOn(buildHealth)
+        dependsOn(buildHealth, checkLicense)
     }
     wrapper {
-        gradleVersion = "9.3.0"
-        distributionType = DistributionType.ALL
+        gradleVersion = "8.14.4"
+        distributionType = ALL
     }
 }

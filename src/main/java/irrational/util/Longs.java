@@ -41,6 +41,6 @@ public final class Longs {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     public static long gcd(final long a, final long b) {
-        return b == 0L ? Math.absExact(a) : gcd(b, a % b);
+        return b == 0L ? (a == Long.MIN_VALUE ? 1L << 63 : Math.absExact(a)) : gcd(b, a % b);
     }
 }

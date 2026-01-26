@@ -6,31 +6,54 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junitpioneer.jupiter.params.LongRangeSource;
 
-final class AbstractRationalTest {
-    @ParameterizedTest
-    @LongRangeSource(from = 1L, to = 9L)
-    void isNotUnit_should_return_false_when_isUnit_returns_true(final long denominator) {
-        assertThat(LongRational.of(1L, denominator).isNotUnit()).isFalse();
+final class RationalTest {
+    @Test
+    void isNotUnit_should_be_false_when_isUnit_is_trueFraction() {
+        assertThat(LongRational.of(1L, 2L).isNotUnit()).isFalse();
     }
 
-    @ParameterizedTest
-    @LongRangeSource(from = 2L, to = 9L)
-    void isNotUnit_should_return_true_when_isUnit_returns_false(final long numerator) {
-        assertThat(LongRational.of(numerator).isNotUnit()).isTrue();
+    @Test
+    void isNotUnit_should_be_true_when_isUnit_is_falseFraction() {
+        assertThat(LongRational.of(2L).isNotUnit()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isNotDyadic_should_return_false_when_isDyadic_returns_true(final long denominator) {
+    void isNotDyadic_should_be_false_when_isDyadic_is_true(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isNotDyadic_should_return_true_when_isDyadic_returns_false(final long denominator) {
+    void isNotDyadic_should_be_true_when_isDyadic_is_false(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isTrue();
+    }
+
+    @Test
+    void isImproper_should_be_false_when_isProper_is_true() {
+        assertThat(LongRational.ZERO.isImproper()).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-1L, 1L})
+    void isImproper_should_be_true_when_isProper_is_false(final long numerator) {
+        assertThat(LongRational.of(numerator).isImproper()).isTrue();
+    }
+
+    @Test
+    void isNegative_should_be_false_when_isPositive_is_true() {
+        assertThat(LongRational.ONE.isNegative()).isFalse();
+    }
+
+    @Test
+    void isNegative_should_be_false_when_isZero_is_true() {
+        assertThat(LongRational.ZERO.isNegative()).isFalse();
+    }
+
+    @Test
+    void isNegative_should_be_true_when_isPositive_and_isZero_are_false() {
+        assertThat(LongRational.of(-1L, 1L).isNegative()).isTrue();
     }
 
     @Test

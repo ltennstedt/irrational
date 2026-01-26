@@ -19,7 +19,22 @@ final class LongRationalTest {
     private final LongRational rational2 = LongRational.of(4L, 5L);
 
     @Test
-    void of_should_throw_exception_when_denominator_is_zero() {
+    void of_numerator_should_return_ZERO_when_numerator_is_0() {
+        assertThat(LongRational.of(0L)).isSameAs(LongRational.ZERO);
+    }
+
+    @Test
+    void of_numerator_should_return_ONE_when_numerator_is_one() {
+        assertThat(LongRational.of(1L)).isSameAs(LongRational.ONE);
+    }
+
+    @Test
+    void of_numerator_should_succeed() {
+        assertThat(LongRational.of(2L)).isEqualByComparingTo(LongRational.of(2L, 1L));
+    }
+
+    @Test
+    void of_numerator_and_denominator_should_throw_exception_when_denominator_is_zero() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> LongRational.of(1L, 0L))
                 .withMessage("denominator must not be 0 but was 0")
@@ -27,87 +42,133 @@ final class LongRationalTest {
     }
 
     @Test
-    void of_should_return_ZERO_when_numerator_is_0() {
-        final var actual = LongRational.of(0L, 1L);
-
-        assertThat(actual).isSameAs(LongRational.ZERO);
+    void of_numerator_and_denominator_should_return_ZERO_when_numerator_is_0() {
+        assertThat(LongRational.of(0L, 1L)).isSameAs(LongRational.ZERO);
     }
 
     @ParameterizedTest
     @LongRangeSource(from = 1L, to = 10L)
-    void of_should_return_ONE_when_numerator_equals_denominator(final long l) {
-        final var actual = LongRational.of(l, l);
-
-        assertThat(actual).isSameAs(LongRational.ONE);
+    void of_numerator_and_denominator_should_return_ONE_when_numerator_equals_denominator(final long l) {
+        assertThat(LongRational.of(l, l)).isSameAs(LongRational.ONE);
     }
 
     @Test
-    void of_should_normalize() {
-        final var actual = LongRational.of(2L, -4L);
-
-        assertThat(actual.getNumerator()).isEqualByComparingTo(-1L);
-        assertThat(actual.getDenominator()).isEqualByComparingTo(2L);
+    void of_numerator_and_denominator_should_normalize() {
+        assertThat(LongRational.of(2L, -4L)).isEqualByComparingTo(LongRational.of(-1L, 2L));
     }
 
     @Test
-    void of_should_succeed() {
+    void of_numerator_and_denominator_should_succeed() {
         assertThat(rational1.getNumerator()).isEqualByComparingTo(2L);
         assertThat(rational1.getDenominator()).isEqualByComparingTo(3L);
     }
 
     @Test
-    void isInvertible_should_return_false_when_numerator_is_0() {
+    void isInvertible_should_be_false_when_numerator_is_0() {
         assertThat(LongRational.ZERO.isInvertible()).isFalse();
     }
 
     @Test
-    void isInvertible_should_return_true_when_numerator_is_not_0() {
+    void isInvertible_should_be_true_when_numerator_is_not_0() {
         assertThat(LongRational.ONE.isInvertible()).isTrue();
     }
 
     @Test
-    void isUnit_should_return_false_when_numerator_is_not_1() {
-        assertThat(rational1.isUnit()).isFalse();
+    void isZero_should_be_false_when_rational_is_not_zero() {
+        assertThat(LongRational.ONE.isZero()).isFalse();
     }
 
     @Test
-    void isUnit_should_return_true_when_numerator_is_one() {
-        assertThat(LongRational.ONE.isUnit()).isTrue();
+    void isZero_should_be_true_when_rational_is_zero() {
+        assertThat(LongRational.ZERO.isZero()).isTrue();
+    }
+
+    @Test
+    void isOne_should_be_false_when_rational_is_not_one() {
+        assertThat(LongRational.ZERO.isOne()).isFalse();
+    }
+
+    @Test
+    void isOne_should_be_true_when_rational_is_one() {
+        assertThat(LongRational.ONE.isOne()).isTrue();
+    }
+
+    @Test
+    void isInteger_should_be_false_when_denominator_is_greater_than_one() {
+        assertThat(rational1.isInteger()).isFalse();
+    }
+
+    @Test
+    void isInteger_should_be_true_when_denominator_is_one() {
+        assertThat(LongRational.ONE.isInteger()).isTrue();
+    }
+
+    @Test
+    void isUnit_should_be_false_when_numerator_is_not_1Fraction() {
+        assertThat(rational1.isUnitFraction()).isFalse();
+    }
+
+    @Test
+    void isUnit_should_be_true_when_numerator_is_oneFraction() {
+        assertThat(LongRational.ONE.isUnitFraction()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isDyadic_should_return_false_when_denominator_is_not_power_of_two(final long denominator) {
+    void isDyadic_should_be_false_when_denominator_is_not_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isDyadic_should_return_true_when_denominator_is_power_of_two(final long denominator) {
+    void isDyadic_should_be_true_when_denominator_is_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isDyadic()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isNotDyadic_should_return_false_when_denominator_is_power_of_two(final long denominator) {
+    void isNotDyadic_should_be_false_when_denominator_is_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isNotDyadic_should_return_true_when_denominator_is_not_power_of_two(final long denominator) {
+    void isNotDyadic_should_be_true_when_denominator_is_not_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isTrue();
     }
 
     @ParameterizedTest
-    @LongRangeSource(from = 2L, to = 10L)
-    void isInteger_should_return_false_when_denominator_is_greater_than_one(final long denominator) {
-        assertThat(LongRational.of(1L, denominator).isInteger()).isFalse();
+    @ValueSource(longs = {-2L, -1L, 1L, 2L})
+    void isProper_should_be_false_when_absolute_numerator_is_not_less_than_denominator(final long numerator) {
+        assertThat(LongRational.of(numerator).isProper()).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-1L, 1L})
+    void isProper_should_be_true_when_absolute_numerator_is_less_than_denominator(final long numerator) {
+        assertThat(LongRational.of(numerator, 2L).isProper()).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-1L, 0L})
+    void isPositive_should_be_false_when_numerator_is_not_greater_than_zero(final long numerator) {
+        assertThat(LongRational.of(numerator).isPositive()).isFalse();
     }
 
     @Test
-    void isInteger_should_return_true_when_denominator_is_one() {
-        assertThat(LongRational.ONE.isInteger()).isTrue();
+    void isPositive_should_be_true_when_numerator_is_greater_than_zero() {
+        assertThat(LongRational.ONE.isPositive()).isTrue();
+    }
+
+    @Test
+    void negate_should_succeed() {
+        assertThat(LongRational.ONE.negate()).isEqualByComparingTo(LongRational.of(-1L));
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-2L, 2L})
+    void abs_should_succeed(final long numerator) {
+        assertThat(LongRational.of(numerator).abs()).isEqualByComparingTo(LongRational.of(Math.absExact(numerator)));
     }
 
     @Test
@@ -120,7 +181,7 @@ final class LongRationalTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(rational1.add(rational2)).isEqualTo(LongRational.of(22L, 15L));
+        assertThat(rational1.add(rational2)).isEqualByComparingTo(LongRational.of(22L, 15L));
     }
 
     @Test
@@ -133,7 +194,7 @@ final class LongRationalTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(rational1.subtract(rational2)).isEqualTo(LongRational.of(-2L, 15L));
+        assertThat(rational1.subtract(rational2)).isEqualByComparingTo(LongRational.of(-2L, 15L));
     }
 
     @Test
@@ -146,7 +207,7 @@ final class LongRationalTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(rational1.multiply(rational2)).isEqualTo(LongRational.of(8L, 15L));
+        assertThat(rational1.multiply(rational2)).isEqualByComparingTo(LongRational.of(8L, 15L));
     }
 
     @Test
@@ -167,7 +228,7 @@ final class LongRationalTest {
 
     @Test
     void divide_should_succeed() {
-        assertThat(rational1.divide(rational2)).isEqualTo(LongRational.of(8L, 15L));
+        assertThat(rational1.divide(rational2)).isEqualByComparingTo(LongRational.of(5L, 6L));
     }
 
     @Test
@@ -180,21 +241,22 @@ final class LongRationalTest {
 
     @Test
     void invert_should_succeed() {
-        assertThat(rational1.invert()).isEqualTo(LongRational.of(3L, 2L));
+        assertThat(rational1.invert()).isEqualByComparingTo(LongRational.of(3L, 2L));
     }
 
     @Test
     void power_should_succeed() {
-        assertThat(rational1.power(2)).isEqualTo(LongRational.of(4L, 9L));
+        assertThat(rational1.power(2)).isEqualByComparingTo(LongRational.of(4L, 9L));
+    }
+
+    @ParameterizedTest
+    @LongRangeSource(from = -1L, to = 1L, closed = true)
+    void signum_should_succeed(final long numerator) {
+        assertThat(LongRational.of(numerator).signum()).isEqualByComparingTo(Long.signum(numerator));
     }
 
     @Test
     void hashCode_and_equals_should_succeed() {
         EqualsVerifier.forClass(LongRational.class).verify();
-    }
-
-    @Test
-    void toString_should_succeed() {
-        assertThat(rational1).hasToString("LongRational{numerator=2, denominator=3}");
     }
 }

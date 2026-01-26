@@ -1,27 +1,31 @@
 package irrational.number;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 /**
  * Base class for rational numbers
  *
  * @param <R> type of the rational number
  */
-abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractNumber<R> implements Comparable<R> {
+sealed interface Rational<R extends Rational<R>> extends Numeric<R>, Comparable<R> permits LongRational {
     /**
      * Indicates if this is a unit
      *
      * @return boolean
      */
-    public abstract boolean isUnit();
+    boolean isUnitFraction();
 
     /**
      * Indicates if this is not a unit
      *
      * @return boolean
      */
-    public final boolean isNotUnit() {
-        return !isUnit();
+    default boolean isNotUnit() {
+        return !isUnitFraction();
     }
 
     /**
@@ -29,14 +33,14 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      *
      * @return boolean
      */
-    public abstract boolean isDyadic();
+    boolean isDyadic();
 
     /**
      * Indicates if this is not dyadic
      *
      * @return boolean
      */
-    public final boolean isNotDyadic() {
+    default boolean isNotDyadic() {
         return !isDyadic();
     }
 
@@ -45,14 +49,14 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      *
      * @return boolean
      */
-    public abstract boolean isProper();
+    boolean isProper();
 
     /**
      * Indicates if this is improper
      *
      * @return boolean
      */
-    public final boolean isImproper() {
+    default boolean isImproper() {
         return !isProper();
     }
 
@@ -61,14 +65,14 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      *
      * @return boolean
      */
-    public abstract boolean isPositive();
+    boolean isPositive();
 
     /**
      * Indicates if this is negative
      *
      * @return boolean
      */
-    public final boolean isNegative() {
+    default boolean isNegative() {
         return !isPositive() && !isZero();
     }
 
@@ -77,23 +81,23 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      *
      * @return signum
      */
-    public abstract int signum();
+    int signum();
 
     /**
      * Returns the minimum
      *
      * @param other other
-     * @return boolean
+     * @return minimum
      */
-    public abstract R min(R other);
+    R min(R other);
 
     /**
      * Returns the maximum
      *
      * @param other other
-     * @return boolean
+     * @return maximum
      */
-    public abstract R max(R other);
+    R max(R other);
 
     /**
      * Returns if this is less than the other
@@ -102,8 +106,8 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      * @return boolean
      * @throws NullPointerException if other is null
      */
-    public final boolean isLessThan(final R other) {
-        Objects.requireNonNull(other, "other");
+    default boolean isLessThan(final R other) {
+        requireNonNull(other, "other");
         return compareTo(other) < 0;
     }
 
@@ -114,8 +118,8 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      * @return boolean
      * @throws NullPointerException if other is null
      */
-    public final boolean isLessThanOrEqualTo(final R other) {
-        Objects.requireNonNull(other, "other");
+    default boolean isLessThanOrEqualTo(final R other) {
+        requireNonNull(other, "other");
         return compareTo(other) <= 0;
     }
 
@@ -126,8 +130,8 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      * @return boolean
      * @throws NullPointerException if other is null
      */
-    public final boolean isGreaterThan(final R other) {
-        Objects.requireNonNull(other, "other");
+    default boolean isGreaterThan(final R other) {
+        requireNonNull(other, "other");
         return compareTo(other) > 0;
     }
 
@@ -138,8 +142,36 @@ abstract class AbstractRational<R extends AbstractRational<R>> extends AbstractN
      * @return boolean
      * @throws NullPointerException if other is null
      */
-    public final boolean isGreaterThanOrEqualTo(final R other) {
-        Objects.requireNonNull(other, "other");
+    default boolean isGreaterThanOrEqualTo(final R other) {
+        requireNonNull(other, "other");
         return compareTo(other) >= 0;
     }
+
+    /**
+     * Returns this as {@link BigDecimal}
+     *
+     * @param scale scale
+     * @param roundingMode {@link RoundingMode}
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when roundingMode is null
+     */
+    BigDecimal toBigDecimal(int scale, RoundingMode roundingMode);
+
+    /**
+     * Returns this as {@link BigDecimal}
+     *
+     * @param roundingMode {@link RoundingMode}
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when roundingMode is null
+     */
+    BigDecimal toBigDecimal(RoundingMode roundingMode);
+
+    /**
+     * Returns this as {@link BigDecimal}
+     *
+     * @param mathContext {@link MathContext}
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when mathContext is null
+     */
+    BigDecimal toBigDecimal(MathContext mathContext);
 }
