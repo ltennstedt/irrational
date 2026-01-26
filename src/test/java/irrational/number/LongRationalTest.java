@@ -56,57 +56,57 @@ final class LongRationalTest {
     }
 
     @Test
-    void isInvertible_should_return_false_when_numerator_is_0() {
+    void isInvertible_should_be_false_when_numerator_is_0() {
         assertThat(LongRational.ZERO.isInvertible()).isFalse();
     }
 
     @Test
-    void isInvertible_should_return_true_when_numerator_is_not_0() {
+    void isInvertible_should_be_true_when_numerator_is_not_0() {
         assertThat(LongRational.ONE.isInvertible()).isTrue();
     }
 
     @Test
-    void isUnit_should_return_false_when_numerator_is_not_1() {
+    void isUnit_should_be_false_when_numerator_is_not_1() {
         assertThat(rational1.isUnit()).isFalse();
     }
 
     @Test
-    void isUnit_should_return_true_when_numerator_is_one() {
+    void isUnit_should_be_true_when_numerator_is_one() {
         assertThat(LongRational.ONE.isUnit()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isDyadic_should_return_false_when_denominator_is_not_power_of_two(final long denominator) {
+    void isDyadic_should_be_false_when_denominator_is_not_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isDyadic_should_return_true_when_denominator_is_power_of_two(final long denominator) {
+    void isDyadic_should_be_true_when_denominator_is_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isDyadic()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isNotDyadic_should_return_false_when_denominator_is_power_of_two(final long denominator) {
+    void isNotDyadic_should_be_false_when_denominator_is_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isNotDyadic_should_return_true_when_denominator_is_not_power_of_two(final long denominator) {
+    void isNotDyadic_should_be_true_when_denominator_is_not_power_of_two(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isTrue();
     }
 
     @ParameterizedTest
     @LongRangeSource(from = 2L, to = 10L)
-    void isInteger_should_return_false_when_denominator_is_greater_than_one(final long denominator) {
+    void isInteger_should_be_false_when_denominator_is_greater_than_one(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isInteger()).isFalse();
     }
 
     @Test
-    void isInteger_should_return_true_when_denominator_is_one() {
+    void isInteger_should_be_true_when_denominator_is_one() {
         assertThat(LongRational.ONE.isInteger()).isTrue();
     }
 

@@ -6,31 +6,47 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.cartesian.CartesianTest;
+import org.junitpioneer.jupiter.cartesian.CartesianTest.Values;
 import org.junitpioneer.jupiter.params.LongRangeSource;
 
 final class AbstractRationalTest {
     @ParameterizedTest
     @LongRangeSource(from = 1L, to = 9L)
-    void isNotUnit_should_return_false_when_isUnit_returns_true(final long denominator) {
+    void isNotUnit_should_be_false_when_isUnit_is_true(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotUnit()).isFalse();
     }
 
     @ParameterizedTest
     @LongRangeSource(from = 2L, to = 9L)
-    void isNotUnit_should_return_true_when_isUnit_returns_false(final long numerator) {
+    void isNotUnit_should_be_true_when_isUnit_is_false(final long numerator) {
         assertThat(LongRational.of(numerator).isNotUnit()).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 2L, 4L, 8L})
-    void isNotDyadic_should_return_false_when_isDyadic_returns_true(final long denominator) {
+    void isNotDyadic_should_be_false_when_isDyadic_is_true(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isFalse();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {3L, 5L, 6L, 7L, 9L})
-    void isNotDyadic_should_return_true_when_isDyadic_returns_false(final long denominator) {
+    void isNotDyadic_should_be_true_when_isDyadic_is_false(final long denominator) {
         assertThat(LongRational.of(1L, denominator).isNotDyadic()).isTrue();
+    }
+
+    @CartesianTest
+    void isImproper_should_be_false_when_isProper_is_true(
+            @Values(longs = {-1L, 1L}) final long numerator,
+            @LongRangeSource(from = 2L, to = 9L) final long denominator) {
+        assertThat(LongRational.of(numerator, denominator).isImproper()).isFalse();
+    }
+
+    @CartesianTest
+    void isImproper_should_be_true_when_isProper_is_false(
+            @Values(longs = {-9L, 9L}) final long numerator,
+            @LongRangeSource(from = 1L, to = 9L) final long denominator) {
+        assertThat(LongRational.of(numerator, denominator).isImproper()).isTrue();
     }
 
     @Test

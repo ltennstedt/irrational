@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
-/** Immutable implementation of a rational number */
+/** Immutable implementation of a rational number based on long */
 public final class LongRational extends AbstractRational<LongRational> {
     /** Comparator */
     public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
@@ -109,7 +109,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public boolean isProper() {
-        return Math.absExact(numerator) < Math.absExact(denominator);
+        return Math.absExact(numerator) < denominator;
     }
 
     @Override

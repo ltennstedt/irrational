@@ -6,7 +6,7 @@ jspecify = "1.0.0"
 junit = "6.0.2"
 junit-pioneer = "2.3.0"
 spotbugs = "6.4.8"
-spotless = "8.2.0"
+spotless = "8.2.1"
 task-tree = "4.0.1"
 version-catalog-update = "1.0.1"
 

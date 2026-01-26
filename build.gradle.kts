@@ -14,14 +14,12 @@ plugins {
     alias(libs.plugins.version.catalog.update)
     alias(libs.plugins.dependency.license.report)
     alias(libs.plugins.task.tree)
-    `project-report`
-    `build-dashboard`
 }
 
 group = "irrational"
 version = "0.1.0-SNAPSHOT"
 
-val isCi = System.getenv("CI") != null
+val isCi = providers.environmentVariable("CI").isPresent
 if (isCi) {
     logger.lifecycle("Environment variable CI is set.")
     gradle.startParameter.apply {
@@ -92,7 +90,6 @@ spotless {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.ADOPTIUM
     }
     withJavadocJar()
     withSourcesJar()
@@ -187,36 +184,50 @@ tasks {
     withType<Test>().configureEach {
         useJUnitPlatform()
         failFast = isCi
+        reports {
+            html.required = !isCi
+            junitXml.required = isCi
+        }
         finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
         dependsOn(test)
         reports {
+            html.required = !isCi
             xml.required = isCi
         }
     }
     withType<Checkstyle>().configureEach {
         reports {
             html.required = !isCi
-            xml.required = false
+            xml.required = isCi
         }
     }
     withType<Pmd>().configureEach {
         reports {
             html.required = !isCi
+            xml.required = isCi
         }
     }
     withType<SpotBugsTask>().configureEach {
         val basename = name.replace(Regex("([A-Z])"), "-$1").lowercase(Locale.US).trimStart('-')
-        reports.create("html") {
-            required = !isCi
-            outputLocation.set(
-                layout.buildDirectory.file("reports/spotbugs/$basename.html"),
-            )
+        reports {
+            create("html") {
+                required = !isCi
+                outputLocation.set(
+                    layout.buildDirectory.file("reports/spotbugs/$basename.html"),
+                )
+            }
+            create("xml") {
+                required = isCi
+                outputLocation.set(
+                    layout.buildDirectory.file("reports/spotbugs/$basename.xml"),
+                )
+            }
         }
     }
     check {
-        dependsOn(buildHealth)
+        dependsOn(buildHealth, checkLicense)
     }
     wrapper {
         gradleVersion = "9.3.0"
