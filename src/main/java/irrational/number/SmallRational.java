@@ -7,16 +7,16 @@ import java.util.Comparator;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
-/** Immutable implementation of a rational number */
-public final class LongRational extends AbstractRational<LongRational> {
+/** Immutable implementation of a rational number based on long */
+public final class SmallRational implements Rational<SmallRational> {
     /** Comparator */
-    public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
+    public static final Comparator<SmallRational> COMPARATOR = Comparable::compareTo;
 
     /** 0 */
-    public static final LongRational ZERO = new LongRational(0L, 1L);
+    public static final SmallRational ZERO = new SmallRational(0L, 1L);
 
     /** 1 */
-    public static final LongRational ONE = new LongRational(1L, 1L);
+    public static final SmallRational ONE = new SmallRational(1L, 1L);
 
     /** Numerator */
     private final long numerator;
@@ -32,7 +32,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws IllegalArgumentException when denominator is 0
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    private LongRational(final long numerator, final long denominator) {
+    private SmallRational(final long numerator, final long denominator) {
         if (denominator == 0) {
             throw new IllegalArgumentException("denominator must not be 0 but was " + denominator);
         }
@@ -49,7 +49,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @return LongRational
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public static LongRational of(final long numerator) {
+    public static SmallRational of(final long numerator) {
         return of(numerator, 1L);
     }
 
@@ -62,14 +62,14 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws IllegalArgumentException when denominator is 0
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public static LongRational of(final long numerator, final long denominator) {
+    public static SmallRational of(final long numerator, final long denominator) {
         if (numerator == 0L) {
             return ZERO;
         }
         if (numerator == denominator) {
             return ONE;
         }
-        return new LongRational(numerator, denominator);
+        return new SmallRational(numerator, denominator);
     }
 
     @Override
@@ -109,7 +109,7 @@ public final class LongRational extends AbstractRational<LongRational> {
      */
     @Override
     public boolean isProper() {
-        return Math.absExact(numerator) < Math.absExact(denominator);
+        return Math.absExact(numerator) < denominator;
     }
 
     @Override
@@ -123,8 +123,8 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational negate() {
-        return new LongRational(Math.negateExact(numerator), denominator);
+    public SmallRational negate() {
+        return new SmallRational(Math.negateExact(numerator), denominator);
     }
 
     /**
@@ -133,8 +133,8 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational abs() {
-        return new LongRational(Math.absExact(numerator), Math.absExact(denominator));
+    public SmallRational abs() {
+        return new SmallRational(Math.absExact(numerator), Math.absExact(denominator));
     }
 
     /**
@@ -143,9 +143,9 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational add(final LongRational summand) {
+    public SmallRational add(final SmallRational summand) {
         Objects.requireNonNull(summand, "summand");
-        return new LongRational(
+        return new SmallRational(
                 Math.addExact(
                         Math.multiplyExact(summand.getDenominator(), numerator),
                         Math.multiplyExact(denominator, summand.getNumerator())),
@@ -158,9 +158,9 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational subtract(final LongRational subtrahend) {
+    public SmallRational subtract(final SmallRational subtrahend) {
         Objects.requireNonNull(subtrahend, "subtrahend");
-        return new LongRational(
+        return new SmallRational(
                 Math.subtractExact(
                         Math.multiplyExact(subtrahend.getDenominator(), numerator),
                         Math.multiplyExact(denominator, subtrahend.getNumerator())),
@@ -173,9 +173,9 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational multiply(final LongRational multiplier) {
+    public SmallRational multiply(final SmallRational multiplier) {
         Objects.requireNonNull(multiplier, "multiplier");
-        return new LongRational(
+        return new SmallRational(
                 Math.multiplyExact(numerator, multiplier.getNumerator()),
                 Math.multiplyExact(denominator, multiplier.getDenominator()));
     }
@@ -186,22 +186,22 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational divide(final LongRational divisor) {
+    public SmallRational divide(final SmallRational divisor) {
         Objects.requireNonNull(divisor, "divisor");
         if (divisor.isNotInvertible()) {
             throw new IllegalArgumentException("divisor must be invertible but was " + divisor);
         }
-        return new LongRational(
+        return new SmallRational(
                 Math.multiplyExact(numerator, divisor.getNumerator()),
                 Math.multiplyExact(denominator, divisor.getDenominator()));
     }
 
     @Override
-    public LongRational invert() {
+    public SmallRational invert() {
         if (isNotInvertible()) {
             throw new IllegalStateException("this must be invertible but was " + this);
         }
-        return new LongRational(denominator, numerator);
+        return new SmallRational(denominator, numerator);
     }
 
     /**
@@ -210,8 +210,8 @@ public final class LongRational extends AbstractRational<LongRational> {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
-    public LongRational power(final int exponent) {
-        return new LongRational((long) Longs.power(numerator, exponent), (long) Longs.power(denominator, exponent));
+    public SmallRational power(final int exponent) {
+        return new SmallRational((long) Longs.power(numerator, exponent), (long) Longs.power(denominator, exponent));
     }
 
     @Override
@@ -220,13 +220,13 @@ public final class LongRational extends AbstractRational<LongRational> {
     }
 
     @Override
-    public LongRational min(final LongRational other) {
+    public SmallRational min(final SmallRational other) {
         Objects.requireNonNull(other, "other");
         return isLessThanOrEqualTo(other) ? this : other;
     }
 
     @Override
-    public LongRational max(final LongRational other) {
+    public SmallRational max(final SmallRational other) {
         Objects.requireNonNull(other, "other");
         return isGreaterThanOrEqualTo(other) ? this : other;
     }
@@ -237,7 +237,7 @@ public final class LongRational extends AbstractRational<LongRational> {
     }
 
     @Override
-    public int compareTo(final LongRational other) {
+    public int compareTo(final SmallRational other) {
         Objects.requireNonNull(other, "other");
         return Long.compare(other.getDenominator() * numerator, denominator * other.getNumerator());
     }
@@ -252,7 +252,7 @@ public final class LongRational extends AbstractRational<LongRational> {
         if (this == object) {
             return true;
         }
-        if (!(object instanceof final LongRational that)) {
+        if (!(object instanceof final SmallRational that)) {
             return false;
         }
         return numerator == that.getNumerator() && denominator == that.getDenominator();

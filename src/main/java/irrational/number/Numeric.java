@@ -8,20 +8,20 @@ import java.math.BigInteger;
  *
  * @param <N> type of the number
  */
-abstract class AbstractNumber<N extends AbstractNumber<N>> {
+interface Numeric<N extends Numeric<N>> {
     /**
      * Indicates if this is invertible
      *
      * @return boolean
      */
-    public abstract boolean isInvertible();
+    boolean isInvertible();
 
     /**
      * Indicates if this is not invertible
      *
      * @return boolean
      */
-    public final boolean isNotInvertible() {
+    default boolean isNotInvertible() {
         return !isInvertible();
     }
 
@@ -30,14 +30,14 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      *
      * @return boolean
      */
-    public abstract boolean isInteger();
+    boolean isInteger();
 
     /**
      * Indicates if this is not an element of the ring of integers
      *
      * @return boolean
      */
-    public final boolean isNotInteger() {
+    default boolean isNotInteger() {
         return !isInteger();
     }
 
@@ -46,28 +46,28 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      *
      * @return boolean
      */
-    public abstract boolean isZero();
+    boolean isZero();
 
     /**
      * Indicates if this is 1
      *
      * @return boolean
      */
-    public abstract boolean isOne();
+    boolean isOne();
 
     /**
      * Returns the negated number
      *
      * @return negated number
      */
-    public abstract N negate();
+    N negate();
 
     /**
      * Returns the absolute value
      *
      * @return absolute value
      */
-    public abstract N abs();
+    N abs();
 
     /**
      * Returns the sum of this and the summand
@@ -76,7 +76,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return sum
      * @throws NullPointerException when summand is null
      */
-    public abstract N add(N summand);
+    N add(N summand);
 
     /**
      * Returns the difference of this and the subtrahend
@@ -85,7 +85,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return difference
      * @throws NullPointerException when subtrahend is null
      */
-    public abstract N subtract(N subtrahend);
+    N subtract(N subtrahend);
 
     /**
      * Returns the product of this and the multiplier
@@ -94,7 +94,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return product
      * @throws NullPointerException when multiplier is null
      */
-    public abstract N multiply(N multiplier);
+    N multiply(N multiplier);
 
     /**
      * Returns the quotient of this and the divisor
@@ -104,7 +104,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @throws NullPointerException when divisor is null
      * @throws IllegalArgumentException when divisor is not invertible
      */
-    public abstract N divide(N divisor);
+    N divide(N divisor);
 
     /**
      * Returns the inverted number
@@ -112,7 +112,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return inverted number
      * @throws IllegalStateException when this is not invertible
      */
-    public abstract N invert();
+    N invert();
 
     /**
      * Returns this by the power of exponent
@@ -120,7 +120,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @param exponent exponent
      * @return power
      */
-    public abstract N power(int exponent);
+    N power(int exponent);
 
     /**
      * Returns the byte value
@@ -128,7 +128,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return byte
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public final int toByte() {
+    default int toByte() {
         return toBigDecimal().byteValueExact();
     }
 
@@ -138,7 +138,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return short
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public final int toShort() {
+    default int toShort() {
         return toBigDecimal().shortValueExact();
     }
 
@@ -148,7 +148,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return int
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public final int toInt() {
+    default int toInt() {
         return toBigDecimal().intValueExact();
     }
 
@@ -158,7 +158,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return long
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public final long toLong() {
+    default long toLong() {
         return toBigDecimal().longValueExact();
     }
 
@@ -167,7 +167,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      *
      * @return float
      */
-    public final float toFloat() {
+    default float toFloat() {
         return toBigDecimal().floatValue();
     }
 
@@ -176,7 +176,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      *
      * @return double
      */
-    public final double toDouble() {
+    default double toDouble() {
         return toBigDecimal().doubleValue();
     }
 
@@ -186,7 +186,7 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      * @return {@link BigInteger}
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
-    public final BigInteger toBigInteger() {
+    default BigInteger toBigInteger() {
         return toBigDecimal().toBigIntegerExact();
     }
 
@@ -195,5 +195,5 @@ abstract class AbstractNumber<N extends AbstractNumber<N>> {
      *
      * @return {@link BigDecimal}
      */
-    public abstract BigDecimal toBigDecimal();
+    BigDecimal toBigDecimal();
 }
