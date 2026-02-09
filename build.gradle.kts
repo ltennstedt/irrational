@@ -3,8 +3,8 @@ import com.github.jk1.license.render.ReportRenderer
 import com.github.jk1.license.render.SimpleHtmlReportRenderer
 import com.github.jk1.license.render.XmlReportRenderer
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.ALL
-import java.nio.charset.StandardCharsets.UTF_8
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+import java.nio.charset.StandardCharsets
 
 plugins {
     alias(libs.plugins.spotless)
@@ -22,14 +22,14 @@ plugins {
 group = "io.github.irrational"
 version = "0.1.0-SNAPSHOT"
 
-val isCi = providers.environmentVariable("CI").isPresent
-if (isCi) {
+val isCi: Provider<Boolean> =
+    providers
+        .environmentVariable("CI")
+        .map { it.equals("true", ignoreCase = true) }
+        .orElse(false)
+
+if (isCi.get()) {
     logger.lifecycle("Environment variable CI is set.")
-    gradle.startParameter.apply {
-        consoleOutput = ConsoleOutput.Plain
-        showStacktrace = ShowStacktrace.ALWAYS
-        warningMode = WarningMode.Fail
-    }
 }
 
 repositories {
@@ -42,7 +42,6 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.pioneer)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.equalsverifier)
     testRuntimeOnly(libs.junit.platform)
 }
 
@@ -52,13 +51,16 @@ dependencyLocking {
 
 spotless {
     kotlinGradle {
-        ktlint("1.8.0")
+        ktlint(libs.versions.ktlint.get())
         endWithNewline()
         leadingTabsToSpaces()
         trimTrailingWhitespace()
     }
     java {
-        palantirJavaFormat("2.86.0").formatJavadoc(true)
+        palantirJavaFormat(
+            libs.versions.palantir.java.format
+                .get(),
+        ).formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()
@@ -83,7 +85,7 @@ spotless {
     }
     flexmark {
         target("**/*.md")
-        flexmark("0.64.8")
+        flexmark(libs.versions.flexmark.get())
         endWithNewline()
         leadingTabsToSpaces()
         trimTrailingWhitespace()
@@ -99,22 +101,22 @@ java {
 }
 
 jacoco {
-    toolVersion = "0.8.14"
+    toolVersion = libs.versions.jacoco.get()
 }
 
 checkstyle {
-    toolVersion = "12.3.1"
+    toolVersion = libs.versions.checkstyle.get()
     isIgnoreFailures = false
 }
 
 pmd {
-    toolVersion = "7.21.0"
+    toolVersion = libs.versions.pmd.get()
     ruleSetFiles = files("config/pmd/ruleset.xml")
     isIgnoreFailures = false
 }
 
 spotbugs {
-    toolVersion = "4.9.8"
+    toolVersion.set(libs.versions.spotbugsLibrary)
     excludeFilter = file("config/spotbugs/exclude-filter.xml")
     ignoreFailures = false
 }
@@ -122,7 +124,7 @@ spotbugs {
 licenseReport {
     allowedLicensesFile = file("config/dependency-license-report/allowed-licenses.json")
     renderers =
-        if (isCi) {
+        if (isCi.get()) {
             arrayOf<ReportRenderer>(XmlReportRenderer(), InventoryMarkdownReportRenderer())
         } else {
             arrayOf<ReportRenderer>(
@@ -132,6 +134,16 @@ licenseReport {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "github"
+            url = uri("https://maven.pkg.github.com/ltennstedt/irrational/")
+            credentials {
+                username = providers.environmentVariable("GITHUB_ACTOR").orNull
+                password = providers.environmentVariable("GITHUB_TOKEN").orNull
+            }
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
@@ -171,52 +183,52 @@ publishing {
                     url = "https://github.com/ltennstedt/irrational/actions/"
                 }
             }
-            repositories {
-                maven {
-                    name = "github"
-                    url = uri("https://maven.pkg.github.com/ltennstedt/irrational/")
-                    credentials {
-                        username = System.getenv("GITHUB_ACTOR")
-                        password = System.getenv("GITHUB_TOKEN")
-                    }
-                }
-            }
         }
+    }
+}
+
+versionCatalogUpdate {
+    keep {
+        keepUnusedVersions = true
     }
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.encoding = UTF_8.name()
+        options.encoding = StandardCharsets.UTF_8.name()
     }
     withType<ProcessResources>().configureEach {
-        filteringCharset = UTF_8.name()
+        filteringCharset = StandardCharsets.UTF_8.name()
     }
     withType<Test>().configureEach {
         useJUnitPlatform()
-        failFast = isCi
+        failFast = isCi.get()
         reports {
-            html.required.set(!isCi)
+            html.required.set(isCi.map { !it })
             junitXml.required.set(isCi)
         }
-        finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
         dependsOn(test)
         reports {
-            html.required.set(!isCi)
+            html.required.set(isCi.map { !it })
             xml.required.set(isCi)
         }
     }
+    withType<Jar>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
     withType<Checkstyle>().configureEach {
+        exclude("**/module-info.java")
         reports {
-            html.required.set(!isCi)
+            html.required.set(isCi.map { !it })
             xml.required.set(isCi)
         }
     }
     withType<Pmd>().configureEach {
         reports {
-            html.required.set(!isCi)
+            html.required.set(isCi.map { !it })
             xml.required.set(isCi)
         }
     }
@@ -224,7 +236,7 @@ tasks {
         val taskName = name
         reports {
             create("html") {
-                required.set(!isCi)
+                required.set(isCi.map { !it })
                 outputLocation.set(
                     layout.buildDirectory.file("reports/spotbugs/$taskName.html"),
                 )
@@ -238,10 +250,10 @@ tasks {
         }
     }
     check {
-        dependsOn(buildHealth, checkLicense)
+        dependsOn(jacocoTestReport, buildHealth, checkLicense)
     }
     wrapper {
-        gradleVersion = "8.14.4"
-        distributionType = ALL
+        gradleVersion = project.providers.gradleProperty("gradleVersion").get()
+        distributionType = DistributionType.ALL
     }
 }

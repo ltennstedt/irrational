@@ -1,4 +1,4 @@
-package irrational.util;
+package io.github.ltennstedt.irrational.util;
 
 import java.util.stream.IntStream;
 

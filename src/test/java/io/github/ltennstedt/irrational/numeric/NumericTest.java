@@ -1,4 +1,4 @@
-package irrational.number;
+package io.github.ltennstedt.irrational.numeric;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

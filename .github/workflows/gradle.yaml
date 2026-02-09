@@ -1,5 +1,5 @@
 ---
-name: Java CI with gradle
+name: Java CI with Gradle
 "on":
   push:
     branches:
@@ -40,11 +40,13 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v5
       with:
-        gradle-version: 8.14.4
+        gradle-version: 9.3.1
     - name: Building
       env:
+        GRADLE_OPTS: |
+          -Dorg.gradle.console=plain -Dorg.gradle.logging.stacktrace=all -Dorg.gradle.warning.mode=fail
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      run: gradle clean build publish
+      run: gradle --console plain -s --warning-mode fail clean build publish
     - name: DeepSource
       env:
         DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"

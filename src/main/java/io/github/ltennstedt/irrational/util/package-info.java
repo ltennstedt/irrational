@@ -1,5 +1,5 @@
 /** This package provides utilities */
 @NullMarked
-package irrational.util;
+package io.github.ltennstedt.irrational.util;
 
 import org.jspecify.annotations.NullMarked;
