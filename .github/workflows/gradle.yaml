@@ -43,8 +43,10 @@ jobs:
         gradle-version: 8.14.4
     - name: Building
       env:
+        GRADLE_OPTS: |
+          -Dorg.gradle.console=plain -Dorg.gradle.logging.stacktrace=all -Dorg.gradle.warning.mode=fail
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      run: gradle clean build publish
+      run: gradle --console plain -s --warning-mode fail clean build publish
     - name: DeepSource
       env:
         DEEPSOURCE_DSN: "${{ secrets.DEEPSOURCE_DSN }}"

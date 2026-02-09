@@ -1,19 +1,22 @@
-package irrational.number;
+package irrational.numeric;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.params.LongRangeSource;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(CONCURRENT)
 final class LongRationalTest {
     private final LongRational rational1 = LongRational.of(2L, 3L);
     private final LongRational rational2 = LongRational.of(4L, 5L);
@@ -59,8 +62,8 @@ final class LongRationalTest {
 
     @Test
     void of_numerator_and_denominator_should_succeed() {
-        assertThat(rational1.getNumerator()).isEqualByComparingTo(2L);
-        assertThat(rational1.getDenominator()).isEqualByComparingTo(3L);
+        assertThat(rational1.numerator()).isEqualByComparingTo(2L);
+        assertThat(rational1.denominator()).isEqualByComparingTo(3L);
     }
 
     @Test
@@ -222,7 +225,7 @@ final class LongRationalTest {
     void divide_should_throw_exception_when_divisor_is_not_invertible() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> rational1.divide(LongRational.ZERO))
-                .withMessage("divisor must be invertible but was LongRational{numerator=0, denominator=1}")
+                .withMessage("divisor must be invertible but was LongRational[numerator=0, denominator=1]")
                 .withNoCause();
     }
 
@@ -235,7 +238,7 @@ final class LongRationalTest {
     void invert_should_throw_exception_when_this_is_not_invertible() {
         assertThatIllegalStateException()
                 .isThrownBy(LongRational.ZERO::invert)
-                .withMessage("this must be invertible but was LongRational{numerator=0, denominator=1}")
+                .withMessage("this must be invertible but was LongRational[numerator=0, denominator=1]")
                 .withNoCause();
     }
 
@@ -256,7 +259,65 @@ final class LongRationalTest {
     }
 
     @Test
-    void hashCode_and_equals_should_succeed() {
-        EqualsVerifier.forClass(LongRational.class).verify();
+    void min_should_throw_Exception_when_other_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> LongRational.ZERO.min(null))
+                .withMessage("other")
+                .withNoCause();
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+            0, 1, 0
+            0, 0, 0
+            1, 0, 0
+        """)
+    void min_should_succeed(final long numerator, final long otherNumerator, final long expeced) {
+        assertThat(LongRational.of(numerator).min(LongRational.of(otherNumerator)))
+                .isSameAs(LongRational.of(expeced));
+    }
+
+    @Test
+    void max_should_throw_Exception_when_other_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> LongRational.ZERO.max(null))
+                .withMessage("other")
+                .withNoCause();
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+            1, 0, 1
+            0, 0, 0
+            0, 1, 1
+        """)
+    void max_should_succeed(final long numerator, final long otherNumerator, final long expeced) {
+        assertThat(LongRational.of(numerator).max(LongRational.of(otherNumerator)))
+                .isSameAs(LongRational.of(expeced));
+    }
+
+    @Test
+    void increment_should_succeed() {
+        assertThat(LongRational.ZERO.increment()).isSameAs(LongRational.ONE);
+    }
+
+    @Test
+    void decrement_should_succeed() {
+        assertThat(LongRational.ONE.decrement()).isSameAs(LongRational.ZERO);
+    }
+
+    @Test
+    void toBigDecimal_with_scale_and_roundingMode_should_succeed() {
+        assertThat(LongRational.of(1L, 3L).toBigDecimal(2, RoundingMode.UP)).isEqualTo(new BigDecimal("0.34"));
+    }
+
+    @Test
+    void toBigDecimal_with_roundingMode_should_succeed() {
+        assertThat(LongRational.of(1L, 3L).toBigDecimal(RoundingMode.UP)).isOne();
+    }
+
+    @Test
+    void toBigDecimal_with_mathContext_should_succeed() {
+        assertThat(LongRational.of(1L, 3L).toBigDecimal(MathContext.DECIMAL32)).isEqualTo(new BigDecimal("0.3333333"));
     }
 }

@@ -1,12 +1,12 @@
-package irrational.number;
+package irrational.numeric;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(CONCURRENT)
 final class NumericTest {
     @Test
     void isNotInvertible_should_be_false_isInvertible_is_true() {

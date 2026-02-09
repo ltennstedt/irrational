@@ -1,7 +1,6 @@
 [versions]
 assertj = "3.27.7"
 dependency-license-report = "3.0.1"
-equalsverifier = "4.3.1"
 jspecify = "1.0.0"
 junit = "6.0.2"
 junit-pioneer = "2.3.0"
@@ -19,7 +18,6 @@ version-catalog-update = { id = "nl.littlerobots.version-catalog-update", versio
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-equalsverifier = { module = "nl.jqno.equalsverifier:equalsverifier", version.ref = "equalsverifier" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }

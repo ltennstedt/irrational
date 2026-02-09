@@ -1,12 +1,15 @@
-package irrational.number;
+package irrational.numeric;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@Execution(CONCURRENT)
 final class RationalTest {
     @Test
     void isNotUnit_should_be_false_when_isUnit_is_trueFraction() {

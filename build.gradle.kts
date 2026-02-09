@@ -3,8 +3,8 @@ import com.github.jk1.license.render.ReportRenderer
 import com.github.jk1.license.render.SimpleHtmlReportRenderer
 import com.github.jk1.license.render.XmlReportRenderer
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.ALL
-import java.nio.charset.StandardCharsets.UTF_8
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+import java.nio.charset.StandardCharsets
 
 plugins {
     alias(libs.plugins.spotless)
@@ -25,11 +25,6 @@ version = "0.1.0-SNAPSHOT"
 val isCi = providers.environmentVariable("CI").isPresent
 if (isCi) {
     logger.lifecycle("Environment variable CI is set.")
-    gradle.startParameter.apply {
-        consoleOutput = ConsoleOutput.Plain
-        showStacktrace = ShowStacktrace.ALWAYS
-        warningMode = WarningMode.Fail
-    }
 }
 
 repositories {
@@ -42,7 +37,6 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.pioneer)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.equalsverifier)
     testRuntimeOnly(libs.junit.platform)
 }
 
@@ -58,7 +52,7 @@ spotless {
         trimTrailingWhitespace()
     }
     java {
-        palantirJavaFormat("2.86.0").formatJavadoc(true)
+        palantirJavaFormat("2.87.0").formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()
@@ -132,6 +126,16 @@ licenseReport {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "github"
+            url = uri("https://maven.pkg.github.com/ltennstedt/irrational/")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
@@ -171,66 +175,59 @@ publishing {
                     url = "https://github.com/ltennstedt/irrational/actions/"
                 }
             }
-            repositories {
-                maven {
-                    name = "github"
-                    url = uri("https://maven.pkg.github.com/ltennstedt/irrational/")
-                    credentials {
-                        username = System.getenv("GITHUB_ACTOR")
-                        password = System.getenv("GITHUB_TOKEN")
-                    }
-                }
-            }
         }
     }
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.encoding = UTF_8.name()
+        options.encoding = StandardCharsets.UTF_8.name()
     }
     withType<ProcessResources>().configureEach {
-        filteringCharset = UTF_8.name()
+        filteringCharset = StandardCharsets.UTF_8.name()
     }
     withType<Test>().configureEach {
         useJUnitPlatform()
         failFast = isCi
         reports {
-            html.required.set(!isCi)
-            junitXml.required.set(isCi)
+            html.required = !isCi
+            junitXml.required = isCi
         }
-        finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
         dependsOn(test)
         reports {
-            html.required.set(!isCi)
-            xml.required.set(isCi)
+            html.required = !isCi
+            xml.required = isCi
         }
+    }
+    withType<Jar>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
     }
     withType<Checkstyle>().configureEach {
         reports {
-            html.required.set(!isCi)
-            xml.required.set(isCi)
+            html.required = !isCi
+            xml.required = isCi
         }
     }
     withType<Pmd>().configureEach {
         reports {
-            html.required.set(!isCi)
-            xml.required.set(isCi)
+            html.required = !isCi
+            xml.required = isCi
         }
     }
     withType<SpotBugsTask>().configureEach {
         val taskName = name
         reports {
             create("html") {
-                required.set(!isCi)
+                required = !isCi
                 outputLocation.set(
                     layout.buildDirectory.file("reports/spotbugs/$taskName.html"),
                 )
             }
             create("xml") {
-                required.set(isCi)
+                required = isCi
                 outputLocation.set(
                     layout.buildDirectory.file("reports/spotbugs/$taskName.xml"),
                 )
@@ -238,10 +235,10 @@ tasks {
         }
     }
     check {
-        dependsOn(buildHealth, checkLicense)
+        dependsOn(jacocoTestReport, buildHealth, checkLicense)
     }
     wrapper {
-        gradleVersion = "8.14.4"
-        distributionType = ALL
+        gradleVersion = project.providers.gradleProperty("gradleVersion").get()
+        distributionType = DistributionType.ALL
     }
 }

@@ -1,4 +1,4 @@
-package irrational.number;
+package irrational.numeric;
 
 import static java.util.Objects.requireNonNull;
 
@@ -11,7 +11,8 @@ import java.math.RoundingMode;
  *
  * @param <R> type of the rational number
  */
-sealed interface Rational<R extends Rational<R>> extends Numeric<R>, Comparable<R> permits LongRational {
+public sealed interface Rational<R extends Rational<R>> extends Numeric<R>, Comparable<R>
+        permits LongRational, BigRational {
     /**
      * Indicates if this is a unit
      *
@@ -122,6 +123,20 @@ sealed interface Rational<R extends Rational<R>> extends Numeric<R>, Comparable<
         requireNonNull(other, "other");
         return compareTo(other) <= 0;
     }
+
+    /**
+     * Returns the increment
+     *
+     * @return increment
+     */
+    R increment();
+
+    /**
+     * Returns the decrement
+     *
+     * @return decrement
+     */
+    R decrement();
 
     /**
      * Returns if this is greater than the other

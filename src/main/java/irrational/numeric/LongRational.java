@@ -1,4 +1,4 @@
-package irrational.number;
+package irrational.numeric;
 
 import static java.util.Objects.requireNonNull;
 
@@ -8,8 +8,13 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Comparator;
 
-/** Immutable implementation of a rational number based on long */
-public final class LongRational implements Rational<LongRational> {
+/**
+ * Immutable implementation of a rational number based on long
+ *
+ * @param numerator numerator
+ * @param denominator denominator
+ */
+public record LongRational(long numerator, long denominator) implements Rational<LongRational> {
     /** Comparator */
     public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
 
@@ -18,12 +23,6 @@ public final class LongRational implements Rational<LongRational> {
 
     /** 1 */
     public static final LongRational ONE = new LongRational(1L, 1L);
-
-    /** Numerator */
-    private final long numerator;
-
-    /** Denominator */
-    private final long denominator;
 
     /**
      * All arguments constructor
@@ -35,19 +34,16 @@ public final class LongRational implements Rational<LongRational> {
      * @see #of(long)
      * @see #of(long, long)
      */
-    public LongRational(final long numerator, final long denominator) {
+    public LongRational {
         if (denominator == 0) {
             throw new IllegalArgumentException("denominator must not be 0 but was " + denominator);
         }
         final var gcd = Longs.gcd(numerator, denominator);
-        final var reducedNumerator = numerator / gcd;
-        final var reducedDenominator = denominator / gcd;
+        numerator /= gcd;
+        denominator /= gcd;
         if (denominator < 0L) {
-            this.numerator = Math.negateExact(reducedNumerator);
-            this.denominator = Math.negateExact(reducedDenominator);
-        } else {
-            this.numerator = reducedNumerator;
-            this.denominator = reducedDenominator;
+            numerator = Math.negateExact(numerator);
+            denominator = Math.negateExact(denominator);
         }
     }
 
@@ -239,6 +235,26 @@ public final class LongRational implements Rational<LongRational> {
         return isGreaterThanOrEqualTo(other) ? this : other;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ArithmeticException when an arithmetic overflow occurs
+     */
+    @Override
+    public LongRational increment() {
+        return add(ONE);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ArithmeticException when an arithmetic overflow occurs
+     */
+    @Override
+    public LongRational decrement() {
+        return subtract(ONE);
+    }
+
     @Override
     public BigDecimal toBigDecimal(final int scale, final RoundingMode roundingMode) {
         requireNonNull(roundingMode, "roundingMode");
@@ -258,8 +274,9 @@ public final class LongRational implements Rational<LongRational> {
     }
 
     /**
-     * {@inheritDoc}
+     * Compares this to other
      *
+     * @return int
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     @Override
@@ -267,44 +284,5 @@ public final class LongRational implements Rational<LongRational> {
         requireNonNull(other, "other");
         return Long.compare(
                 Math.multiplyExact(numerator, other.denominator), Math.multiplyExact(other.numerator, denominator));
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * Long.hashCode(numerator) + Long.hashCode(denominator);
-    }
-
-    @Override
-    public boolean equals(final Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (!(object instanceof LongRational that)) {
-            return false;
-        }
-        return numerator == that.numerator && denominator == that.denominator;
-    }
-
-    @Override
-    public String toString() {
-        return "LongRational{numerator=%s, denominator=%s}".formatted(numerator, denominator);
-    }
-
-    /**
-     * Numerator
-     *
-     * @return numerator
-     */
-    public long getNumerator() {
-        return numerator;
-    }
-
-    /**
-     * Denominator
-     *
-     * @return denominator
-     */
-    public long getDenominator() {
-        return denominator;
     }
 }

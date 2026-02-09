@@ -1,11 +1,11 @@
-package irrational.number;
+package irrational.numeric;
 
 /**
  * Base class for numbers
  *
  * @param <N> type of the number
  */
-sealed interface Numeric<N extends Numeric<N>> permits Rational {
+public sealed interface Numeric<N extends Numeric<N>> permits Rational {
     /**
      * Indicates if this is invertible
      *

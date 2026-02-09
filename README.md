@@ -26,10 +26,13 @@ far from completion so that APIs are unstable and subject to change.
 
 ### Building
 
-To successfully build the project, a local installation of JDK 17 and [Gradle](https://gradle.org/) is required.
-The specific Gradle version can be found
-in [settings.gradle.kts](https://github.com/ltennstedt/irrational/blob/main/settings.gradle.kts#L6). The wrapper task is
-also configured accordingly as an alternative.
+To successfully build the project, a local installation of a JDK and [Gradle](https://gradle.org/) is required.
+The specific versions can be found as follows:
+
+* For Gradle in [gradle.properties](https://github.com/ltennstedt/irrational/blob/main/gradle.properties#L1)
+* For Java in [build.gradle.kts](https://github.com/ltennstedt/irrational/blob/main/build.gradle.kts#L90)
+
+The wrapper task is configured accordingly.
 
 ### Design goals
 
@@ -44,6 +47,7 @@ also configured accordingly as an alternative.
 * Single source of truth
 * Parameter validation and fast failing
 * Builders for vectors and matrices
+* Prefer [records](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html) over classes
 * Language ergonomics via thin adapters for [Kotlin](https://kotlinlang.org/) and [Groovy](https://groovy-lang.org/)
 * Informative [JavaDoc](https://docs.oracle.com/en/java/javase/17/javadoc/javadoc.html), [KDoc](https://kotlinlang.org/docs/kotlin-doc.html)
   and [GroovyDoc](https://groovy-lang.org/groovydoc.html)
