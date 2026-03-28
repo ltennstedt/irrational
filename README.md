@@ -34,7 +34,7 @@ is found locally.
 ./gradlew build
 
 # Windows
-./gradle.bat build
+./gradlew.bat build
 ```
 
 ### Design goals

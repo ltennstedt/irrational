@@ -1,0 +1,24 @@
+package io.github.ltennstedt.irrational.core.numeric;
+
+/**
+ * Base interface for complex numbers
+ *
+ * @param <C> type of the complex number
+ */
+public sealed interface Complex<C extends Complex<C, P>, P extends Polar<P, C>> extends Numeric<C>
+        permits DoubleComplex {
+    /**
+     * Returns the conjugated complex number
+     *
+     * @return conjugated complex number
+     */
+    C conjugate();
+
+    /**
+     * Returns this as polar form
+     *
+     * @return {@link DoublePolar}
+     * @throws ArithmeticException when radial is 0
+     */
+    P toPolar();
+}
