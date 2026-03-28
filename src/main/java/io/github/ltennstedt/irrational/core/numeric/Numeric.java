@@ -5,7 +5,7 @@ package io.github.ltennstedt.irrational.core.numeric;
  *
  * @param <N> type of the number
  */
-public sealed interface Numeric<N extends Numeric<N>> permits Rational {
+public sealed interface Numeric<N extends Numeric<N>> permits Complex, Polar, Rational {
     /**
      * Indicates if this is invertible
      *
