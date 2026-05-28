@@ -15,6 +15,6 @@ public final class Doubles {
      * @return boolean
      */
     public static boolean isNear(final double x, final double y) {
-        return Math.abs(x - y) < EPSILON;
+        return StrictMath.abs(x - y) < EPSILON;
     }
 }

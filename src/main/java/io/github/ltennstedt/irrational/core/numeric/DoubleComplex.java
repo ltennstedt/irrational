@@ -49,11 +49,12 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
         }
         if (radius < 0D) {
             final var normalizedRadius = -radius;
-            final var normalizedArgument = argument + Math.PI;
+            final var normalizedArgument = argument + StrictMath.PI;
             return new DoubleComplex(
-                    normalizedRadius * Math.cos(normalizedArgument), normalizedRadius * Math.sin(normalizedArgument));
+                    normalizedRadius * StrictMath.cos(normalizedArgument),
+                    normalizedRadius * StrictMath.sin(normalizedArgument));
         }
-        return new DoubleComplex(radius * Math.cos(argument), radius * Math.sin(argument));
+        return new DoubleComplex(radius * StrictMath.cos(argument), radius * StrictMath.sin(argument));
     }
 
     private static double normalizeZero(final double d) {
@@ -108,7 +109,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
         if (!divisor.isInvertible()) {
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
-        if (Double.compare(Math.abs(divisor.real), Math.abs(divisor.imaginary)) >= 0) {
+        if (Double.compare(Math.abs(divisor.real), StrictMath.abs(divisor.imaginary)) >= 0) {
             final var r = divisor.imaginary / divisor.real;
             final var d = divisor.real + divisor.imaginary * r;
             return new DoubleComplex((real + imaginary * r) / d, (imaginary - real * r) / d);
@@ -125,7 +126,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
             if (!isInvertible()) {
                 throw new ArithmeticException("this must be invertible but was " + this);
             }
-            return reciprocal().pow(Math.negateExact(exponent));
+            return reciprocal().pow(StrictMath.negateExact(exponent));
         }
         if (exponent == 0) {
             return ONE;
@@ -171,7 +172,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
      * @return absolute value
      */
     public double abs() {
-        return Math.hypot(real, imaginary);
+        return StrictMath.hypot(real, imaginary);
     }
 
     /**
@@ -180,7 +181,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
      * @return argument
      */
     public double arg() {
-        return Math.atan2(imaginary, real);
+        return StrictMath.atan2(imaginary, real);
     }
 
     /**
