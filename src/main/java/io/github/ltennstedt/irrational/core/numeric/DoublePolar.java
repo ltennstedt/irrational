@@ -10,6 +10,7 @@ import java.util.Objects;
  * @param angular angular
  */
 public record DoublePolar(double radial, double angular) implements Polar<DoublePolar, DoubleComplex> {
+    /** 0 */
     public static final DoublePolar ZERO = new DoublePolar(0D, 0D);
 
     /**
@@ -20,7 +21,7 @@ public record DoublePolar(double radial, double angular) implements Polar<Double
      */
     public DoublePolar {
         if (radial < 0D) {
-            radial = Math.abs(radial);
+            radial = StrictMath.abs(radial);
             angular += Math.PI;
         }
         angular = normalizeAngle(angular);
@@ -36,7 +37,7 @@ public record DoublePolar(double radial, double angular) implements Polar<Double
     public static DoublePolar ofComplex(final DoubleComplex complex) {
         Objects.requireNonNull(complex, "complex");
         final var radial = complex.abs();
-        return new DoublePolar(radial, Math.atan2(complex.imaginary(), complex.real()));
+        return new DoublePolar(radial, StrictMath.atan2(complex.imaginary(), complex.real()));
     }
 
     @Override
@@ -61,7 +62,7 @@ public record DoublePolar(double radial, double angular) implements Polar<Double
 
     @Override
     public DoublePolar pow(final int exponent) {
-        return new DoublePolar(Math.pow(radial, exponent), exponent * angular);
+        return new DoublePolar(StrictMath.pow(radial, exponent), exponent * angular);
     }
 
     @Override
@@ -71,16 +72,16 @@ public record DoublePolar(double radial, double angular) implements Polar<Double
 
     @Override
     public DoublePolar negate() {
-        return new DoublePolar(radial, normalizeAngle(angular + Math.PI));
+        return new DoublePolar(radial, normalizeAngle(angular + StrictMath.PI));
     }
 
     @Override
     public DoubleComplex toComplex() {
-        return new DoubleComplex(radial * Math.cos(angular), radial * Math.sin(angular));
+        return new DoubleComplex(radial * StrictMath.cos(angular), radial * StrictMath.sin(angular));
     }
 
     private double normalizeAngle(final double angle) {
-        final var mod = 2 * Math.PI;
+        final var mod = 2 * StrictMath.PI;
         return (angle % mod + mod) % mod;
     }
 }

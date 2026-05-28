@@ -72,7 +72,13 @@
     <rule ref="category/java/codestyle.xml/IdenticalCatchBranches"/>
     <rule ref="category/java/codestyle.xml/LambdaCanBeMethodReference"/>
     <rule ref="category/java/codestyle.xml/LocalVariableCouldBeFinal"/>
-    <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions"/>
+    <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions">
+        <properties>
+            <property name="localVarPattern" value="[a-z][a-zA-Z0-9_]*" />
+            <property name="finalVarPattern" value="[a-z][a-zA-Z0-9_]*" />
+            <property name="catchParameterPattern" value="[a-z][a-zA-Z0-9_]*" />
+        </properties>
+    </rule>
     <rule ref="category/java/codestyle.xml/MethodArgumentCouldBeFinal"/>
     <rule ref="category/java/codestyle.xml/ModifierOrder"/>
     <rule ref="category/java/codestyle.xml/NoPackage"/>
@@ -187,7 +193,6 @@
     <rule ref="category/java/performance.xml/AvoidArrayLoops"/>
     <rule ref="category/java/performance.xml/AvoidCalendarDateCreation"/>
     <rule ref="category/java/performance.xml/AvoidFileStream"/>
-    <rule ref="category/java/performance.xml/AvoidInstantiatingObjectsInLoops"/>
     <rule ref="category/java/performance.xml/BigIntegerInstantiation"/>
     <rule ref="category/java/performance.xml/ConsecutiveAppendsShouldReuse"/>
     <rule ref="category/java/performance.xml/ConsecutiveLiteralAppends"/>

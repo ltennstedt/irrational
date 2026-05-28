@@ -39,8 +39,8 @@ public record LongRational(long numerator, long denominator) implements Rational
         numerator /= gcd;
         denominator /= gcd;
         if (denominator < 0L) {
-            numerator = Math.negateExact(numerator);
-            denominator = Math.negateExact(denominator);
+            numerator = StrictMath.negateExact(numerator);
+            denominator = StrictMath.negateExact(denominator);
         }
     }
 
@@ -61,13 +61,13 @@ public record LongRational(long numerator, long denominator) implements Rational
 
     @Override
     public boolean isDyadic() {
-        return (denominator & Math.decrementExact(denominator)) == 0L;
+        return (denominator & StrictMath.decrementExact(denominator)) == 0L;
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
     @Override
     public boolean isProper() {
-        return Math.absExact(numerator) < denominator;
+        return StrictMath.absExact(numerator) < denominator;
     }
 
     @Override
@@ -78,7 +78,7 @@ public record LongRational(long numerator, long denominator) implements Rational
     /** @throws ArithmeticException when an arithmetic overflow occurs */
     @Override
     public LongRational negate() {
-        return new LongRational(Math.negateExact(numerator), denominator);
+        return new LongRational(StrictMath.negateExact(numerator), denominator);
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -86,10 +86,10 @@ public record LongRational(long numerator, long denominator) implements Rational
     public LongRational add(final LongRational summand) {
         requireNonNull(summand, "summand");
         return new LongRational(
-                Math.addExact(
-                        Math.multiplyExact(summand.denominator, numerator),
-                        Math.multiplyExact(denominator, summand.numerator)),
-                Math.multiplyExact(denominator, summand.denominator));
+                StrictMath.addExact(
+                        StrictMath.multiplyExact(summand.denominator, numerator),
+                        StrictMath.multiplyExact(denominator, summand.numerator)),
+                StrictMath.multiplyExact(denominator, summand.denominator));
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -97,10 +97,10 @@ public record LongRational(long numerator, long denominator) implements Rational
     public LongRational subtract(final LongRational subtrahend) {
         requireNonNull(subtrahend, "subtrahend");
         return new LongRational(
-                Math.subtractExact(
-                        Math.multiplyExact(subtrahend.denominator, numerator),
-                        Math.multiplyExact(denominator, subtrahend.numerator)),
-                Math.multiplyExact(denominator, subtrahend.denominator));
+                StrictMath.subtractExact(
+                        StrictMath.multiplyExact(subtrahend.denominator, numerator),
+                        StrictMath.multiplyExact(denominator, subtrahend.numerator)),
+                StrictMath.multiplyExact(denominator, subtrahend.denominator));
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -108,8 +108,8 @@ public record LongRational(long numerator, long denominator) implements Rational
     public LongRational multiply(final LongRational multiplier) {
         requireNonNull(multiplier, "multiplier");
         return new LongRational(
-                Math.multiplyExact(numerator, multiplier.numerator),
-                Math.multiplyExact(denominator, multiplier.denominator));
+                StrictMath.multiplyExact(numerator, multiplier.numerator),
+                StrictMath.multiplyExact(denominator, multiplier.denominator));
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -120,7 +120,8 @@ public record LongRational(long numerator, long denominator) implements Rational
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
         return new LongRational(
-                Math.multiplyExact(numerator, divisor.denominator), Math.multiplyExact(denominator, divisor.numerator));
+                StrictMath.multiplyExact(numerator, divisor.denominator),
+                StrictMath.multiplyExact(denominator, divisor.numerator));
     }
 
     @Override
@@ -129,7 +130,7 @@ public record LongRational(long numerator, long denominator) implements Rational
             if (!isInvertible()) {
                 throw new ArithmeticException("this must be invertible but was " + this);
             }
-            return reciprocal().pow(Math.negateExact(exponent));
+            return reciprocal().pow(StrictMath.negateExact(exponent));
         }
         if (exponent == 0) {
             return ONE;
@@ -178,7 +179,7 @@ public record LongRational(long numerator, long denominator) implements Rational
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     public LongRational abs() {
-        return new LongRational(Math.absExact(numerator), denominator);
+        return new LongRational(StrictMath.absExact(numerator), denominator);
     }
 
     @Override
@@ -209,6 +210,7 @@ public record LongRational(long numerator, long denominator) implements Rational
     public int compareTo(final LongRational other) {
         requireNonNull(other, "other");
         return Long.compare(
-                Math.multiplyExact(numerator, other.denominator), Math.multiplyExact(other.numerator, denominator));
+                StrictMath.multiplyExact(numerator, other.denominator),
+                StrictMath.multiplyExact(other.numerator, denominator));
     }
 }
