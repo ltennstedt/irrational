@@ -51,10 +51,10 @@ final class DoubleComplexTest {
         0,         -Infinity, argument, -Infinity
         0,          Infinity, argument,  Infinity
         """)
-    void ofPolarCoordinates_should_throw_exception(
+    void ofPolar_should_throw_exception(
             final double radius, final double argument, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(() -> DoubleComplex.ofPolarCoordinates(radius, argument))
+                .isThrownBy(() -> DoubleComplex.ofPolar(radius, argument))
                 .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part));
     }
 
@@ -70,9 +70,9 @@ final class DoubleComplexTest {
          1,   1, -1,  0
          1, 1.5,  0, -1
         """)
-    void ofPolarCoordinates_should_succeed(
+    void ofPolar_should_succeed(
             final double radius, final double factor, final double expectedReal, final double expectedImaginary) {
-        final var actual = DoubleComplex.ofPolarCoordinates(radius, factor * Math.PI);
+        final var actual = DoubleComplex.ofPolar(radius, factor * Math.PI);
 
         assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
         assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);

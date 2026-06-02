@@ -41,7 +41,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
      * @throws ArithmeticException when radius is NaN or infinite
      * @throws ArithmeticException when argument is NaN or infinite
      */
-    public static DoubleComplex ofPolarCoordinates(final double radius, final double argument) {
+    public static DoubleComplex ofPolar(final double radius, final double argument) {
         check(radius, "radius");
         check(argument, "argument");
         if (Doubles.isNear(radius, 0D)) {
@@ -55,6 +55,19 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
                     normalizedRadius * StrictMath.sin(normalizedArgument));
         }
         return new DoubleComplex(radius * StrictMath.cos(argument), radius * StrictMath.sin(argument));
+    }
+
+    /**
+     * Static factory method
+     *
+     * @param polar {@link DoublePolar}
+     * @return {@link DoubleComplex}
+     * @throws ArithmeticException when radius is NaN or infinite
+     * @throws ArithmeticException when argument is NaN or infinite
+     */
+    public static DoubleComplex ofPolar(final DoublePolar polar) {
+        Objects.requireNonNull(polar, "polar");
+        return ofPolar(polar.radial(), polar.angular());
     }
 
     private static double normalizeZero(final double d) {

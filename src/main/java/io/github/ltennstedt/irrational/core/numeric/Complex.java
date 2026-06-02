@@ -6,7 +6,7 @@ package io.github.ltennstedt.irrational.core.numeric;
  * @param <C> type of the complex number
  */
 public sealed interface Complex<C extends Complex<C, P>, P extends Polar<P, C>> extends Numeric<C>
-        permits DoubleComplex {
+        permits DoubleComplex, BigComplex {
     /**
      * Returns the conjugated complex number
      *

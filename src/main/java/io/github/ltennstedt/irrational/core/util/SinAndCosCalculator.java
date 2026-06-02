@@ -16,6 +16,17 @@ public final class SinAndCosCalculator {
     private SinAndCosCalculator() {}
 
     /**
+     * Returns sine of x
+     *
+     * @param x x
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when x is null
+     */
+    public static BigDecimal sin(final BigDecimal x) {
+        return sin(x, Constants.DEFAULT_MATH_CONTEXT);
+    }
+
+    /**
      * Returns sine of x based on given mathContext
      *
      * @param x x
@@ -43,6 +54,17 @@ public final class SinAndCosCalculator {
                     default -> throw new IllegalStateException("k must be 0, 1, 2 or 3 but was " + quadrant);
                 })
                 .round(mathContext);
+    }
+
+    /**
+     * Returns cosine of x
+     *
+     * @param x x
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when x is null
+     */
+    public static BigDecimal cos(final BigDecimal x) {
+        return cos(x, Constants.DEFAULT_MATH_CONTEXT);
     }
 
     /**
