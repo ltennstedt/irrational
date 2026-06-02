@@ -26,7 +26,8 @@ public final class AtanCalculator {
         if (x.signum() == 0) {
             return BigDecimal.ZERO;
         }
-        final var guard = new MathContext(Math.addExact(mathContext.getPrecision(), 90), mathContext.getRoundingMode());
+        final var guard =
+                new MathContext(StrictMath.addExact(mathContext.getPrecision(), 90), mathContext.getRoundingMode());
         if (x.signum() < 0) {
             return atan(x.negate(guard), mathContext).negate(mathContext);
         }
@@ -45,6 +46,20 @@ public final class AtanCalculator {
             result = p.multiply(x, guard);
         }
         return result.round(mathContext);
+    }
+
+    /**
+     * Returns two-argument arctangent of x and y
+     *
+     * @param x x
+     * @param y y
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when x is null
+     * @throws NullPointerException when y is null
+     * @throws IllegalArgumentException when x and y are 0
+     */
+    public static BigDecimal atan2(final BigDecimal y, final BigDecimal x) {
+        return atan2(y, x, Constants.DEFAULT_MATH_CONTEXT);
     }
 
     /**

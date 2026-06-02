@@ -64,8 +64,8 @@ final class DoublePolarTest {
     void multiply_should_succeed() {
         final var actual = new DoublePolar(10D, 4D).multiply(new DoublePolar(5D, 1D));
 
-        assertThat(actual.radial()).isCloseTo(50D, withinEpsilon);
-        assertThat(actual.angular()).isCloseTo(5D, withinEpsilon);
+        assertThat(actual.radius()).isCloseTo(50D, withinEpsilon);
+        assertThat(actual.angle()).isCloseTo(5D, withinEpsilon);
     }
 
     @Test
@@ -80,7 +80,7 @@ final class DoublePolarTest {
     void divide_should_throw_exception_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new DoublePolar(10D, 4D).divide(new DoublePolar(0D, 0D)))
-                .withMessage("divisor must be invertible but was DoublePolar[radial=0.0, angular=0.0]")
+                .withMessage("divisor must be invertible but was DoublePolar[radius=0.0, angle=0.0]")
                 .withNoCause();
     }
 
@@ -88,32 +88,32 @@ final class DoublePolarTest {
     void divide_should_succeed() {
         final var actual = new DoublePolar(10D, 4D).divide(new DoublePolar(5D, 1D));
 
-        assertThat(actual.radial()).isCloseTo(2D, withinEpsilon);
-        assertThat(actual.angular()).isCloseTo(3D, withinEpsilon);
+        assertThat(actual.radius()).isCloseTo(2D, withinEpsilon);
+        assertThat(actual.angle()).isCloseTo(3D, withinEpsilon);
     }
 
     @Test
     void pow_should_succeed() {
         final var actual = new DoublePolar(3D, 0.523598776D).pow(2);
 
-        assertThat(actual.radial()).isCloseTo(9D, withinEpsilon);
-        assertThat(actual.angular()).isCloseTo(1.047197552D, withinEpsilon);
+        assertThat(actual.radius()).isCloseTo(9D, withinEpsilon);
+        assertThat(actual.angle()).isCloseTo(1.047197552D, withinEpsilon);
     }
 
     @Test
     void reciprocal_should_succeed() {
         final var actual = new DoublePolar(10D, 0.523598776D).reciprocal();
 
-        assertThat(actual.radial()).isCloseTo(0.1D, withinEpsilon);
-        assertThat(actual.angular()).isCloseTo(5.75958653118D, withinEpsilon);
+        assertThat(actual.radius()).isCloseTo(0.1D, withinEpsilon);
+        assertThat(actual.angle()).isCloseTo(5.75958653118D, withinEpsilon);
     }
 
     @Test
     void negate_should_succeed() {
-        final var actual = new DoublePolar(1D, Math.PI).negate();
+        final var actual = new DoublePolar(1D, StrictMath.PI).negate();
 
-        assertThat(actual.radial()).isEqualTo(1D);
-        assertThat(actual.angular()).isCloseTo(0D, withinEpsilon);
+        assertThat(actual.radius()).isEqualTo(1D);
+        assertThat(actual.angle()).isCloseTo(0D, withinEpsilon);
     }
 
     @Test

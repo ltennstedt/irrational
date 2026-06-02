@@ -11,7 +11,27 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 final class SinAndCosCalculatorTest {
     @Test
-    void sin_should_throw_Exception_when_x_is_null() {
+    void sin_without_MathContext_should_throw_Exception_when_x_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> SinAndCosCalculator.sin(null))
+                .withMessage("x")
+                .withNoCause();
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+        0, 0
+        0.5, 1
+        1, 0
+        1.5, -1
+        2, 0
+        """)
+    void sin_without_MathContext_should_succeed(final BigDecimal factor, final BigDecimal expected) {
+        assertThat(SinAndCosCalculator.sin(factor.multiply(Constants.BIG_PI))).isEqualByComparingTo(expected);
+    }
+
+    @Test
+    void sin_with_MathContext_should_throw_Exception_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.sin(null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -19,7 +39,7 @@ final class SinAndCosCalculatorTest {
     }
 
     @Test
-    void sin_should_throw_Exception_when_mathContext_is_null() {
+    void sin_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.sin(BigDecimal.ZERO, null))
                 .withMessage("mathContext")
@@ -34,14 +54,34 @@ final class SinAndCosCalculatorTest {
         1.5, -1
         2, 0
         """)
-    void sin_should_succeed(final BigDecimal factor, final BigDecimal expected) {
+    void sin_with_MathContext_should_succeed(final BigDecimal factor, final BigDecimal expected) {
         assertThat(SinAndCosCalculator.sin(
                         factor.multiply(PiCalculator.pi(MathContext.DECIMAL128)), MathContext.DECIMAL128))
                 .isEqualByComparingTo(expected);
     }
 
     @Test
-    void cos_should_throw_Exception_when_x_is_null() {
+    void cos_without_MathContext_should_throw_Exception_when_x_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> SinAndCosCalculator.cos(null))
+                .withMessage("x")
+                .withNoCause();
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+        0, 1
+        0.5, 0
+        1, -1
+        1.5, 0
+        2, 1
+        """)
+    void cos_without_MathContext_should_succeed(final BigDecimal factor, final BigDecimal expected) {
+        assertThat(SinAndCosCalculator.cos(factor.multiply(Constants.BIG_PI))).isEqualByComparingTo(expected);
+    }
+
+    @Test
+    void cos_with_MathContext_should_throw_Exception_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.cos(null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -49,7 +89,7 @@ final class SinAndCosCalculatorTest {
     }
 
     @Test
-    void cos_should_throw_Exception_when_mathContext_is_null() {
+    void cos_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.cos(BigDecimal.ZERO, null))
                 .withMessage("mathContext")
@@ -64,7 +104,7 @@ final class SinAndCosCalculatorTest {
         1.5, 0
         2, 1
         """)
-    void cos_should_succeed(final BigDecimal factor, final BigDecimal expected) {
+    void cos_with_MathContext_should_succeed(final BigDecimal factor, final BigDecimal expected) {
         assertThat(SinAndCosCalculator.cos(
                         factor.multiply(PiCalculator.pi(MathContext.DECIMAL128)), MathContext.DECIMAL128))
                 .isEqualByComparingTo(expected);

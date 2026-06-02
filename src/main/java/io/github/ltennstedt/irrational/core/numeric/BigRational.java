@@ -1,12 +1,11 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
-import static java.util.Objects.requireNonNull;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Immutable implementation of a rational number based on BigInteger
@@ -30,8 +29,12 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
      * @param numerator numerator
      * @param denominator denominator
      * @throws ArithmeticException when denominator is 0
+     * @throws NullPointerException when numerator is null
+     * @throws NullPointerException when denominator is null
      */
     public BigRational {
+        Objects.requireNonNull(numerator, "numerator");
+        Objects.requireNonNull(denominator, "denominator");
         if (denominator.equals(BigInteger.ZERO)) {
             throw new ArithmeticException("denominator must not be 0 but was " + denominator);
         }
@@ -81,7 +84,7 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public BigRational add(final BigRational summand) {
-        requireNonNull(summand, "summand");
+        Objects.requireNonNull(summand, "summand");
         return new BigRational(
                 summand.denominator.multiply(numerator).add(denominator.multiply(summand.numerator)),
                 denominator.multiply(summand.denominator));
@@ -89,7 +92,7 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public BigRational subtract(final BigRational subtrahend) {
-        requireNonNull(subtrahend, "subtrahend");
+        Objects.requireNonNull(subtrahend, "subtrahend");
         return new BigRational(
                 subtrahend.denominator.multiply(numerator).subtract(denominator.multiply(subtrahend.numerator)),
                 denominator.multiply(subtrahend.denominator));
@@ -97,13 +100,13 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public BigRational multiply(final BigRational multiplier) {
-        requireNonNull(multiplier, "multiplier");
+        Objects.requireNonNull(multiplier, "multiplier");
         return new BigRational(numerator.multiply(multiplier.numerator), denominator.multiply(multiplier.denominator));
     }
 
     @Override
     public BigRational divide(final BigRational divisor) {
-        requireNonNull(divisor, "divisor");
+        Objects.requireNonNull(divisor, "divisor");
         if (!divisor.isInvertible()) {
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
@@ -116,7 +119,7 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
             if (!isInvertible()) {
                 throw new ArithmeticException("this must be invertible but was " + this);
             }
-            return reciprocal().pow(Math.negateExact(exponent));
+            return reciprocal().pow(StrictMath.negateExact(exponent));
         }
         if (exponent == 0) {
             return ONE;
@@ -147,13 +150,13 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public BigRational min(final BigRational other) {
-        requireNonNull(other, "other");
+        Objects.requireNonNull(other, "other");
         return compareTo(other) <= 0 ? this : other;
     }
 
     @Override
     public BigRational max(final BigRational other) {
-        requireNonNull(other, "other");
+        Objects.requireNonNull(other, "other");
         return compareTo(other) >= 0 ? this : other;
     }
 
@@ -168,19 +171,19 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public BigDecimal toBigDecimal(final int scale, final RoundingMode roundingMode) {
-        requireNonNull(roundingMode, "roundingMode");
+        Objects.requireNonNull(roundingMode, "roundingMode");
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), scale, roundingMode);
     }
 
     @Override
     public BigDecimal toBigDecimal(final RoundingMode roundingMode) {
-        requireNonNull(roundingMode, "roundingMode");
+        Objects.requireNonNull(roundingMode, "roundingMode");
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), roundingMode);
     }
 
     @Override
     public BigDecimal toBigDecimal(final MathContext mathContext) {
-        requireNonNull(mathContext, "mathContext");
+        Objects.requireNonNull(mathContext, "mathContext");
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), mathContext);
     }
 
@@ -191,7 +194,7 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
      */
     @Override
     public int compareTo(final BigRational other) {
-        requireNonNull(other, "other");
+        Objects.requireNonNull(other, "other");
         return numerator.multiply(other.denominator).compareTo(denominator.multiply(other.numerator));
     }
 }

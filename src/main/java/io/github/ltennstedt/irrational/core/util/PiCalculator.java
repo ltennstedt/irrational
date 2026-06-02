@@ -19,7 +19,8 @@ public final class PiCalculator {
      */
     public static BigDecimal pi(final MathContext mathContext) {
         Objects.requireNonNull(mathContext, "mathContext");
-        final var guard = new MathContext(Math.addExact(mathContext.getPrecision(), 10), mathContext.getRoundingMode());
+        final var guard =
+                new MathContext(StrictMath.addExact(mathContext.getPrecision(), 10), mathContext.getRoundingMode());
         var a_k = BigDecimal.ONE;
         BigDecimal b_k;
         var a_sum = BigDecimal.ONE;

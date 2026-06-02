@@ -28,7 +28,8 @@ final class DoubleComplexTest {
     void new_should_throw_exception(final double real, final double imaginary, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new DoubleComplex(real, imaginary))
-                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part));
+                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
+                .withNoCause();
     }
 
     @ParameterizedTest
@@ -44,18 +45,19 @@ final class DoubleComplexTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        NaN,       0,         radius,  NaN
-        -Infinity, 0,         radius,  -Infinity
-        Infinity,  0,         radius,   Infinity
-        0,         NaN,       argument, NaN
-        0,         -Infinity, argument, -Infinity
-        0,          Infinity, argument,  Infinity
+         NaN,       0,        radius, NaN
+        -Infinity,  0,        radius, Infinity
+         Infinity,  0,        radius, Infinity
+         0,         NaN,      angle,  NaN
+         0,        -Infinity, angle,  NaN
+         0,         Infinity, angle,  NaN
         """)
-    void ofPolarCoordinates_should_throw_exception(
+    void ofPolar_should_throw_exception(
             final double radius, final double argument, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(() -> DoubleComplex.ofPolarCoordinates(radius, argument))
-                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part));
+                .isThrownBy(() -> DoubleComplex.ofPolar(new DoublePolar(radius, argument)))
+                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
+                .withNoCause();
     }
 
     @ParameterizedTest
@@ -70,9 +72,9 @@ final class DoubleComplexTest {
          1,   1, -1,  0
          1, 1.5,  0, -1
         """)
-    void ofPolarCoordinates_should_succeed(
+    void ofPolar_should_succeed(
             final double radius, final double factor, final double expectedReal, final double expectedImaginary) {
-        final var actual = DoubleComplex.ofPolarCoordinates(radius, factor * Math.PI);
+        final var actual = DoubleComplex.ofPolar(new DoublePolar(radius, factor * StrictMath.PI));
 
         assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
         assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
@@ -242,5 +244,20 @@ final class DoubleComplexTest {
     @Test
     void arg_should_succeed() {
         assertThat(DoubleComplex.ONE.arg()).isCloseTo(0D, withinEpsilon);
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+         1,  0, 1, 0
+         0,  1, 1, 0.5
+        -1,  0, 1, 1
+         0, -1, 1, 1.5
+        """)
+    void toPolar_should_succeed(
+            final double real, final double imaginary, final double expectedRadius, final double expectedFactor) {
+        final var polar = new DoubleComplex(real, imaginary).toPolar();
+
+        assertThat(polar.radius()).isCloseTo(expectedRadius, withinEpsilon);
+        assertThat(polar.angle()).isCloseTo(expectedFactor * StrictMath.PI, withinEpsilon);
     }
 }

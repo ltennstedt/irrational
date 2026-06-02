@@ -35,26 +35,20 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
     /**
      * Static factory method
      *
-     * @param radius radius
-     * @param argument argument
+     * @param polar {@link DoublePolar}
      * @return {@link DoubleComplex}
      * @throws ArithmeticException when radius is NaN or infinite
      * @throws ArithmeticException when argument is NaN or infinite
      */
-    public static DoubleComplex ofPolarCoordinates(final double radius, final double argument) {
-        check(radius, "radius");
-        check(argument, "argument");
-        if (Doubles.isNear(radius, 0D)) {
+    public static DoubleComplex ofPolar(final DoublePolar polar) {
+        Objects.requireNonNull(polar, "polar");
+        check(polar.radius(), "radius");
+        check(polar.angle(), "angle");
+        if (Doubles.isNear(polar.radius(), 0D)) {
             return ZERO;
         }
-        if (radius < 0D) {
-            final var normalizedRadius = -radius;
-            final var normalizedArgument = argument + StrictMath.PI;
-            return new DoubleComplex(
-                    normalizedRadius * StrictMath.cos(normalizedArgument),
-                    normalizedRadius * StrictMath.sin(normalizedArgument));
-        }
-        return new DoubleComplex(radius * StrictMath.cos(argument), radius * StrictMath.sin(argument));
+        return new DoubleComplex(
+                polar.radius() * StrictMath.cos(polar.angle()), polar.radius() * StrictMath.sin(polar.angle()));
     }
 
     private static double normalizeZero(final double d) {
@@ -109,7 +103,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
         if (!divisor.isInvertible()) {
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
-        if (Double.compare(Math.abs(divisor.real), StrictMath.abs(divisor.imaginary)) >= 0) {
+        if (Double.compare(StrictMath.abs(divisor.real), StrictMath.abs(divisor.imaginary)) >= 0) {
             final var r = divisor.imaginary / divisor.real;
             final var d = divisor.real + divisor.imaginary * r;
             return new DoubleComplex((real + imaginary * r) / d, (imaginary - real * r) / d);
@@ -120,6 +114,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
         }
     }
 
+    /** @throws ArithmeticException when an arithmetic overflow occurs */
     @Override
     public DoubleComplex pow(final int exponent) {
         if (exponent < 0) {
@@ -188,7 +183,7 @@ public record DoubleComplex(double real, double imaginary) implements Complex<Do
      * Returns this as polar form
      *
      * @return {@link DoublePolar}
-     * @throws ArithmeticException when radial is 0
+     * @throws ArithmeticException when radius is 0
      */
     @Override
     public DoublePolar toPolar() {

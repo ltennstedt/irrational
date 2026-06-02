@@ -16,6 +16,17 @@ public final class SinAndCosCalculator {
     private SinAndCosCalculator() {}
 
     /**
+     * Returns sine of x
+     *
+     * @param x x
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when x is null
+     */
+    public static BigDecimal sin(final BigDecimal x) {
+        return sin(x, Constants.DEFAULT_MATH_CONTEXT);
+    }
+
+    /**
      * Returns sine of x based on given mathContext
      *
      * @param x x
@@ -27,11 +38,14 @@ public final class SinAndCosCalculator {
     public static BigDecimal sin(final BigDecimal x, final MathContext mathContext) {
         Objects.requireNonNull(x, "x");
         Objects.requireNonNull(mathContext, "mathContext");
-        final var pi = PiCalculator.pi(mathContext);
-        final var guard =
-                new MathContext(Math.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
+        final var pi =
+                mathContext.equals(Constants.DEFAULT_MATH_CONTEXT) ? Constants.BIG_PI : PiCalculator.pi(mathContext);
+        final var guard = new MathContext(
+                StrictMath.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
         final var reducedAngle = x.remainder(BigDecimal.valueOf(2L).multiply(pi, guard), guard);
-        final var halfPi = pi.divide(BigDecimal.valueOf(2L), guard);
+        final var halfPi = mathContext.equals(Constants.DEFAULT_MATH_CONTEXT)
+                ? Constants.HALF_BIG_PI
+                : pi.divide(BigDecimal.valueOf(2L), guard);
         final var quadrantIndexRaw = reducedAngle.divide(halfPi, 0, RoundingMode.HALF_EVEN);
         final var quadrant = quadrantIndexRaw.intValueExact() & 3;
         final var localAngle = reducedAngle.subtract(halfPi.multiply(quadrantIndexRaw, guard), guard);
@@ -46,6 +60,17 @@ public final class SinAndCosCalculator {
     }
 
     /**
+     * Returns cosine of x
+     *
+     * @param x x
+     * @return {@link BigDecimal}
+     * @throws NullPointerException when x is null
+     */
+    public static BigDecimal cos(final BigDecimal x) {
+        return cos(x, Constants.DEFAULT_MATH_CONTEXT);
+    }
+
+    /**
      * Returns cosine of x based on given mathContext
      *
      * @param x x
@@ -57,11 +82,14 @@ public final class SinAndCosCalculator {
     public static BigDecimal cos(final BigDecimal x, final MathContext mathContext) {
         Objects.requireNonNull(x, "x");
         Objects.requireNonNull(mathContext, "mathContext");
-        final var pi = PiCalculator.pi(mathContext);
-        final var guard =
-                new MathContext(Math.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
+        final var pi =
+                mathContext.equals(Constants.DEFAULT_MATH_CONTEXT) ? Constants.BIG_PI : PiCalculator.pi(mathContext);
+        final var guard = new MathContext(
+                StrictMath.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
         final var reducedAngle = x.remainder(BigDecimal.valueOf(2L).multiply(pi, guard), guard);
-        final var halfPi = pi.divide(BigDecimal.valueOf(2L), guard);
+        final var halfPi = mathContext.equals(Constants.DEFAULT_MATH_CONTEXT)
+                ? Constants.HALF_BIG_PI
+                : pi.divide(BigDecimal.valueOf(2L), guard);
         final var quadrantIndexRaw = reducedAngle.divide(halfPi, 0, RoundingMode.HALF_EVEN);
         final var quadrant = quadrantIndexRaw.intValueExact() & 3;
         final var localAngle = reducedAngle.subtract(halfPi.multiply(quadrantIndexRaw, guard), guard);
@@ -75,16 +103,6 @@ public final class SinAndCosCalculator {
                 .round(mathContext);
     }
 
-    private static BigDecimal cosReduced(final BigDecimal x, final MathContext mathContext) {
-        final var z = x.multiply(x, mathContext);
-        final var coefficients = cosCoefficients(mathContext);
-        var p = coefficients.get(coefficients.size() - 1);
-        for (var i = coefficients.size() - 2; i >= 0; i--) {
-            p = p.multiply(z, mathContext).add(coefficients.get(i), mathContext);
-        }
-        return BigDecimal.ONE.add(z.multiply(p, mathContext), mathContext);
-    }
-
     private static BigDecimal sinReduced(final BigDecimal x, final MathContext mathContext) {
         final var z = x.multiply(x, mathContext);
         final var coefficients = sinCoefficients(mathContext);
@@ -92,7 +110,7 @@ public final class SinAndCosCalculator {
         for (var i = coefficients.size() - 2; i > -1; i--) {
             p = p.multiply(z, mathContext).add(coefficients.get(i), mathContext);
         }
-        return p.multiply(x, mathContext);
+        return x.multiply(BigDecimal.ONE.add(z.multiply(p, mathContext), mathContext), mathContext);
     }
 
     private static List<BigDecimal> sinCoefficients(final MathContext mathContext) {
@@ -106,12 +124,22 @@ public final class SinAndCosCalculator {
         return List.copyOf(coefficients);
     }
 
-    private static List<BigDecimal> cosCoefficients(final MathContext mc) {
+    private static BigDecimal cosReduced(final BigDecimal x, final MathContext mathContext) {
+        final var z = x.multiply(x, mathContext);
+        final var coefficients = cosCoefficients(mathContext);
+        var p = coefficients.get(coefficients.size() - 1);
+        for (var i = coefficients.size() - 2; i >= 0; i--) {
+            p = p.multiply(z, mathContext).add(coefficients.get(i), mathContext);
+        }
+        return BigDecimal.ONE.add(z.multiply(p, mathContext), mathContext);
+    }
+
+    private static List<BigDecimal> cosCoefficients(final MathContext mathContext) {
         final var coefficients = new ArrayList<BigDecimal>(MAX_COEFFICIENTS);
         var product = BigInteger.ONE;
         for (var k = 1; k < MAX_COEFFICIENTS; k++) {
             product = product.multiply(BigInteger.valueOf(2L * k - 1)).multiply(BigInteger.valueOf(2L * k));
-            final var candidate = BigDecimal.ONE.divide(new BigDecimal(product), mc);
+            final var candidate = BigDecimal.ONE.divide(new BigDecimal(product), mathContext);
             coefficients.add((k & 1) == 1 ? candidate.negate() : candidate);
         }
         return List.copyOf(coefficients);

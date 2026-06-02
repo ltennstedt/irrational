@@ -124,6 +124,7 @@ public record LongRational(long numerator, long denominator) implements Rational
                 StrictMath.multiplyExact(denominator, divisor.numerator));
     }
 
+    /** @throws ArithmeticException when an arithmetic overflow occurs */
     @Override
     public LongRational pow(final int exponent) {
         if (exponent < 0) {
