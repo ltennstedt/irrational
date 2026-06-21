@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @param <C> type of the complex number
  */
-public sealed interface Polar<P extends Polar<P, C>, C extends Complex<C, P>> extends Numeric<P>
+public sealed interface Polar<P extends Polar<P, C>, C extends Complex<C, ?, P>> extends Numeric<P, P>
         permits DoublePolar, BigPolar {
     @Override
     default boolean isInvertible() {

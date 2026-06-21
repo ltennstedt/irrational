@@ -9,7 +9,7 @@ import java.math.RoundingMode;
  *
  * @param <R> type of the rational number
  */
-public sealed interface Rational<R extends Rational<R>> extends Numeric<R>, Comparable<R>
+public sealed interface Rational<R extends Rational<R>> extends Numeric<R, R>, Comparable<R>
         permits LongRational, BigRational {
     /**
      * Indicates if this is a unit

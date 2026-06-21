@@ -63,7 +63,7 @@ public sealed interface MathContextNumeric<N extends MathContextNumeric<N>> perm
     N divide(N divisor, MathContext mathContext);
 
     /**
-     * Returns this by the power of exponent
+     * Returns this raised by the power of exponent
      *
      * @param exponent exponent
      * @param mathContext {@link MathContext}

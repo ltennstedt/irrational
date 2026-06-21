@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param imaginary imaginary part
  */
 public record BigComplex(BigDecimal real, BigDecimal imaginary)
-        implements MathContextNumeric<BigComplex>, Complex<BigComplex, BigPolar> {
+        implements MathContextNumeric<BigComplex>, Complex<BigComplex, BigComplex, BigPolar> {
     /** 0 */
     public static final BigComplex ZERO = new BigComplex(BigDecimal.ZERO, BigDecimal.ZERO);
 

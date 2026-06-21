@@ -1,67 +1,32 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
-import io.github.ltennstedt.irrational.core.util.Doubles;
 import java.util.Objects;
+import java.util.Set;
 
 /**
- * Immutable implementation of a complex number based on double
+ * Immutable implementation of a Gaussian number based on long
  *
  * @param real real part
  * @param imaginary imaginary part
  */
-public record DoubleComplex(double real, double imaginary)
-        implements Complex<DoubleComplex, DoubleComplex, DoublePolar> {
+public record LongGaussian(long real, long imaginary) implements Complex<LongGaussian, DoubleComplex, DoublePolar> {
     /** 0 */
-    public static final DoubleComplex ZERO = new DoubleComplex(0D, 0D);
+    public static final LongGaussian ZERO = new LongGaussian(0L, 0L);
 
     /** 1 */
-    public static final DoubleComplex ONE = new DoubleComplex(1D, 0D);
+    public static final LongGaussian ONE = new LongGaussian(1L, 0L);
 
     /** i */
-    public static final DoubleComplex I = new DoubleComplex(0D, 1D);
+    public static final LongGaussian I = new LongGaussian(0L, 1L);
 
-    /**
-     * Canonical constructor
-     *
-     * @param real real part
-     * @param imaginary imaginary part
-     * @throws ArithmeticException when real is NaN or infinite
-     * @throws ArithmeticException when imaginary is NaN or infinite
-     */
-    public DoubleComplex {
-        real = normalizeZero(check(real, "real"));
-        imaginary = normalizeZero(check(imaginary, "imaginary"));
-    }
+    /** -1 */
+    public static final LongGaussian MINUS_ONE = new LongGaussian(-1L, 0L);
 
-    /**
-     * Static factory method
-     *
-     * @param polar {@link DoublePolar}
-     * @return {@link DoubleComplex}
-     * @throws ArithmeticException when radius is NaN or infinite
-     * @throws ArithmeticException when argument is NaN or infinite
-     */
-    public static DoubleComplex ofPolar(final DoublePolar polar) {
-        Objects.requireNonNull(polar, "polar");
-        check(polar.radius(), "radius");
-        check(polar.angle(), "angle");
-        if (Doubles.isNear(polar.radius(), 0D)) {
-            return ZERO;
-        }
-        return new DoubleComplex(
-                polar.radius() * StrictMath.cos(polar.angle()), polar.radius() * StrictMath.sin(polar.angle()));
-    }
+    /** -i */
+    public static final LongGaussian MINUS_I = new LongGaussian(0L, -1L);
 
-    private static double normalizeZero(final double d) {
-        return d == 0D ? 0D : d;
-    }
-
-    private static double check(final double d, final String name) {
-        if (Double.isNaN(d) || Double.isInfinite(d)) {
-            throw new ArithmeticException("%s must not be NaN and must be finite but was %s".formatted(name, d));
-        }
-        return d;
-    }
+    /** Units */
+    public static final Set<LongGaussian> UNITS = Set.of(ONE, I, MINUS_ONE, MINUS_I);
 
     @Override
     public boolean isInvertible() {
@@ -70,46 +35,55 @@ public record DoubleComplex(double real, double imaginary)
 
     @Override
     public boolean isZero() {
-        return Doubles.isNear(norm(), 0D);
+        return real == 0L && imaginary == 0L;
+    }
+
+    /**
+     * Returns if this is a unit
+     *
+     * @return boolean
+     */
+    public boolean isUnit() {
+        return UNITS.contains(this);
     }
 
     @Override
-    public DoubleComplex negate() {
-        return new DoubleComplex(-real, -imaginary);
+    public LongGaussian negate() {
+        return new LongGaussian(-real, -imaginary);
     }
 
     @Override
-    public DoubleComplex add(final DoubleComplex summand) {
+    public LongGaussian add(final LongGaussian summand) {
         Objects.requireNonNull(summand, "summand");
-        return new DoubleComplex(real + summand.real, imaginary + summand.imaginary);
+        return new LongGaussian(real + summand.real, imaginary + summand.imaginary);
     }
 
     @Override
-    public DoubleComplex subtract(final DoubleComplex subtrahend) {
+    public LongGaussian subtract(final LongGaussian subtrahend) {
         Objects.requireNonNull(subtrahend, "subtrahend");
-        return new DoubleComplex(real - subtrahend.real, imaginary - subtrahend.imaginary);
+        return new LongGaussian(real - subtrahend.real, imaginary - subtrahend.imaginary);
     }
 
     @Override
-    public DoubleComplex multiply(final DoubleComplex multiplier) {
+    public LongGaussian multiply(final LongGaussian multiplier) {
         Objects.requireNonNull(multiplier, "multiplier");
-        return new DoubleComplex(
+        return new LongGaussian(
                 real * multiplier.real - imaginary * multiplier.imaginary,
                 real * multiplier.imaginary + imaginary * multiplier.real);
     }
 
     @Override
-    public DoubleComplex divide(final DoubleComplex divisor) {
+    public DoubleComplex divide(final LongGaussian divisor) {
         Objects.requireNonNull(divisor, "divisor");
         if (!divisor.isInvertible()) {
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
         if (Double.compare(StrictMath.abs(divisor.real), StrictMath.abs(divisor.imaginary)) >= 0) {
-            final var r = divisor.imaginary / divisor.real;
+            final var r = (double) divisor.imaginary / divisor.real;
             final var d = divisor.real + divisor.imaginary * r;
             return new DoubleComplex((real + imaginary * r) / d, (imaginary - real * r) / d);
         } else {
-            final var r = divisor.real / divisor.imaginary;
+            final var r = (double) divisor.real / divisor.imaginary;
             final var d = divisor.imaginary + divisor.real * r;
             return new DoubleComplex((real * r + imaginary) / d, (imaginary * r - real) / d);
         }
@@ -125,17 +99,17 @@ public record DoubleComplex(double real, double imaginary)
             return reciprocal().pow(StrictMath.negateExact(exponent));
         }
         if (exponent == 0) {
-            return ONE;
+            return DoubleComplex.ONE;
         }
         if (exponent == 1) {
-            return this;
+            return toComplex();
         }
         if (isZero()) {
-            return ZERO;
+            return DoubleComplex.ZERO;
         }
         final var half = pow(exponent / 2);
         final var squared = half.multiply(half);
-        return (exponent & 1) == 0 ? squared : multiply(squared);
+        return (exponent & 1) == 0 ? squared : toComplex().multiply(squared);
     }
 
     @Override
@@ -148,8 +122,8 @@ public record DoubleComplex(double real, double imaginary)
     }
 
     @Override
-    public DoubleComplex conjugate() {
-        return new DoubleComplex(real, -imaginary);
+    public LongGaussian conjugate() {
+        return new LongGaussian(real, -imaginary);
     }
 
     /**
@@ -181,6 +155,15 @@ public record DoubleComplex(double real, double imaginary)
     }
 
     /**
+     * Returns this as {@link DoubleComplex}
+     *
+     * @return {@link DoubleComplex}
+     */
+    public DoubleComplex toComplex() {
+        return new DoubleComplex(real, imaginary);
+    }
+
+    /**
      * Returns this as polar form
      *
      * @return {@link DoublePolar}
@@ -188,6 +171,6 @@ public record DoubleComplex(double real, double imaginary)
      */
     @Override
     public DoublePolar toPolar() {
-        return DoublePolar.ofComplex(this);
+        return DoublePolar.ofComplex(toComplex());
     }
 }
