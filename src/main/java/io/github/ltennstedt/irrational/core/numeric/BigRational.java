@@ -78,11 +78,6 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
     }
 
     @Override
-    public BigRational negate() {
-        return new BigRational(numerator.negate(), denominator);
-    }
-
-    @Override
     public BigRational add(final BigRational summand) {
         Objects.requireNonNull(summand, "summand");
         return new BigRational(
@@ -111,6 +106,11 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
             throw new ArithmeticException("divisor must be invertible but was " + divisor);
         }
         return new BigRational(numerator.multiply(divisor.denominator), denominator.multiply(divisor.numerator));
+    }
+
+    @Override
+    public BigRational negate() {
+        return new BigRational(numerator.negate(), denominator);
     }
 
     @Override

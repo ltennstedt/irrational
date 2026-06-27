@@ -14,7 +14,8 @@ import java.util.Comparator;
  * @param numerator numerator
  * @param denominator denominator
  */
-public record LongRational(long numerator, long denominator) implements Rational<LongRational> {
+public record LongRational(long numerator, long denominator)
+        implements Rational<LongRational>, PrimitiveNumeric<LongRational, LongRational> {
     /** Comparator */
     public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
 
@@ -77,12 +78,6 @@ public record LongRational(long numerator, long denominator) implements Rational
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
     @Override
-    public LongRational negate() {
-        return new LongRational(StrictMath.negateExact(numerator), denominator);
-    }
-
-    /** @throws ArithmeticException when an arithmetic overflow occurs */
-    @Override
     public LongRational add(final LongRational summand) {
         requireNonNull(summand, "summand");
         return new LongRational(
@@ -122,6 +117,12 @@ public record LongRational(long numerator, long denominator) implements Rational
         return new LongRational(
                 StrictMath.multiplyExact(numerator, divisor.denominator),
                 StrictMath.multiplyExact(denominator, divisor.numerator));
+    }
+
+    /** @throws ArithmeticException when an arithmetic overflow occurs */
+    @Override
+    public LongRational negate() {
+        return new LongRational(StrictMath.negateExact(numerator), denominator);
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */

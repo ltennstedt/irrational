@@ -108,11 +108,6 @@ final class BigRationalTest {
     }
 
     @Test
-    void negate_should_succeed() {
-        assertThat(BigRational.ONE.negate()).isEqualTo(new BigRational(BigInteger.ONE.negate(), BigInteger.ONE));
-    }
-
-    @Test
     void add_should_throw_exception_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.add(null))
@@ -174,6 +169,11 @@ final class BigRationalTest {
     void divide_should_succeed() {
         assertThat(rational1.divide(rational2))
                 .isEqualTo(new BigRational(BigInteger.valueOf(5L), BigInteger.valueOf(6L)));
+    }
+
+    @Test
+    void negate_should_succeed() {
+        assertThat(BigRational.ONE.negate()).isEqualTo(new BigRational(BigInteger.ONE.negate(), BigInteger.ONE));
     }
 
     @Test

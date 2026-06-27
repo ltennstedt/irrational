@@ -13,8 +13,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 final class LongGaussianTest {
     private final Offset<Double> withinEpsilon = within(Doubles.EPSILON);
-    private final LongGaussian complex1 = new LongGaussian(1L, 2L);
-    private final LongGaussian complex2 = new LongGaussian(3L, 4L);
+    private final LongGaussian gaussian1 = new LongGaussian(1L, 2L);
+    private final LongGaussian gaussian2 = new LongGaussian(3L, 4L);
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -68,7 +68,7 @@ final class LongGaussianTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(complex1.add(complex2)).isEqualTo(new LongGaussian(4L, 6L));
+        assertThat(gaussian1.add(gaussian2)).isEqualTo(new LongGaussian(4L, 6L));
     }
 
     @Test
@@ -81,7 +81,7 @@ final class LongGaussianTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(complex1.subtract(complex2)).isEqualTo(new LongGaussian(-2L, -2L));
+        assertThat(gaussian1.subtract(gaussian2)).isEqualTo(new LongGaussian(-2L, -2L));
     }
 
     @Test
@@ -94,7 +94,7 @@ final class LongGaussianTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(complex1.multiply(complex2)).isEqualTo(new LongGaussian(-5L, 10L));
+        assertThat(gaussian1.multiply(gaussian2)).isEqualTo(new LongGaussian(-5L, 10L));
     }
 
     @Test
@@ -122,6 +122,11 @@ final class LongGaussianTest {
             final long real, final long imaginary, final double expectedReal, final double expectedImaginary) {
         assertThat(new LongGaussian(1L, 3L).divide(new LongGaussian(real, imaginary)))
                 .isEqualTo(new DoubleComplex(expectedReal, expectedImaginary));
+    }
+
+    @Test
+    void negate_should_succeed() {
+        assertThat(gaussian1.negate()).isEqualTo(new LongGaussian(-1L, -2L));
     }
 
     @Test
@@ -177,18 +182,13 @@ final class LongGaussianTest {
     }
 
     @Test
-    void negate_should_succeed() {
-        assertThat(complex1.negate()).isEqualTo(new LongGaussian(-1L, -2L));
-    }
-
-    @Test
     void conjugate_should_succeed() {
-        assertThat(complex1.conjugate()).isEqualTo(new LongGaussian(1L, -2L));
+        assertThat(gaussian1.conjugate()).isEqualTo(new LongGaussian(1L, -2L));
     }
 
     @Test
     void norm_should_succeed() {
-        assertThat(complex1.norm()).isCloseTo(5D, withinEpsilon);
+        assertThat(gaussian1.norm()).isCloseTo(5D, withinEpsilon);
     }
 
     @ParameterizedTest
@@ -203,20 +203,5 @@ final class LongGaussianTest {
     @Test
     void arg_should_succeed() {
         assertThat(LongGaussian.ONE.arg()).isCloseTo(0D, withinEpsilon);
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-         1,  0, 1, 0
-         0,  1, 1, 0.5
-        -1,  0, 1, 1
-         0, -1, 1, 1.5
-        """)
-    void toPolar_should_succeed(
-            final long real, final long imaginary, final double expectedRadius, final double expectedFactor) {
-        final var polar = new LongGaussian(real, imaginary).toPolar();
-
-        assertThat(polar.radius()).isCloseTo(expectedRadius, withinEpsilon);
-        assertThat(polar.angle()).isCloseTo(expectedFactor * StrictMath.PI, withinEpsilon);
     }
 }

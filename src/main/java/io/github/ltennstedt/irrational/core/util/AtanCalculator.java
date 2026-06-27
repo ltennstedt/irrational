@@ -49,20 +49,6 @@ public final class AtanCalculator {
     }
 
     /**
-     * Returns two-argument arctangent of x and y
-     *
-     * @param x x
-     * @param y y
-     * @return {@link BigDecimal}
-     * @throws NullPointerException when x is null
-     * @throws NullPointerException when y is null
-     * @throws IllegalArgumentException when x and y are 0
-     */
-    public static BigDecimal atan2(final BigDecimal y, final BigDecimal x) {
-        return atan2(y, x, Constants.DEFAULT_MATH_CONTEXT);
-    }
-
-    /**
      * Returns two-argument arctangent of x and y based on given mathContext
      *
      * @param x x

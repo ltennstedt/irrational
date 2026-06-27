@@ -107,11 +107,6 @@ final class LongRationalTest {
     }
 
     @Test
-    void negate_should_succeed() {
-        assertThat(LongRational.ONE.negate()).isEqualTo(new LongRational(-1L, 1L));
-    }
-
-    @Test
     void add_should_throw_exception_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.add(null))
@@ -169,6 +164,11 @@ final class LongRationalTest {
     @Test
     void divide_should_succeed() {
         assertThat(rational1.divide(rational2)).isEqualTo(new LongRational(5L, 6L));
+    }
+
+    @Test
+    void negate_should_succeed() {
+        assertThat(LongRational.ONE.negate()).isEqualTo(new LongRational(-1L, 1L));
     }
 
     @Test

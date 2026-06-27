@@ -9,7 +9,8 @@ import java.util.Set;
  * @param real real part
  * @param imaginary imaginary part
  */
-public record LongGaussian(long real, long imaginary) implements Complex<LongGaussian, DoubleComplex, DoublePolar> {
+public record LongGaussian(long real, long imaginary)
+        implements Complex<LongGaussian, DoubleComplex>, PrimitiveNumeric<LongGaussian, DoubleComplex> {
     /** 0 */
     public static final LongGaussian ZERO = new LongGaussian(0L, 0L);
 
@@ -48,11 +49,6 @@ public record LongGaussian(long real, long imaginary) implements Complex<LongGau
     }
 
     @Override
-    public LongGaussian negate() {
-        return new LongGaussian(-real, -imaginary);
-    }
-
-    @Override
     public LongGaussian add(final LongGaussian summand) {
         Objects.requireNonNull(summand, "summand");
         return new LongGaussian(real + summand.real, imaginary + summand.imaginary);
@@ -87,6 +83,11 @@ public record LongGaussian(long real, long imaginary) implements Complex<LongGau
             final var d = divisor.imaginary + divisor.real * r;
             return new DoubleComplex((real * r + imaginary) / d, (imaginary * r - real) / d);
         }
+    }
+
+    @Override
+    public LongGaussian negate() {
+        return new LongGaussian(-real, -imaginary);
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -161,16 +162,5 @@ public record LongGaussian(long real, long imaginary) implements Complex<LongGau
      */
     public DoubleComplex toComplex() {
         return new DoubleComplex(real, imaginary);
-    }
-
-    /**
-     * Returns this as polar form
-     *
-     * @return {@link DoublePolar}
-     * @throws ArithmeticException when radius is 0
-     */
-    @Override
-    public DoublePolar toPolar() {
-        return DoublePolar.ofComplex(toComplex());
     }
 }

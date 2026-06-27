@@ -45,17 +45,17 @@ final class DoubleComplexTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-         NaN,       0,        radius, NaN
-        -Infinity,  0,        radius, Infinity
-         Infinity,  0,        radius, Infinity
-         0,         NaN,      angle,  NaN
-         0,        -Infinity, angle,  NaN
-         0,         Infinity, angle,  NaN
+         NaN,       0,        radius,  NaN
+        -Infinity,  0,        radius, -Infinity
+         Infinity,  0,        radius,  Infinity
+         0,         NaN,      angle,   NaN
+         0,        -Infinity, angle,  -Infinity
+         0,         Infinity, angle,   Infinity
         """)
     void ofPolar_should_throw_exception(
             final double radius, final double argument, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(() -> DoubleComplex.ofPolar(new DoublePolar(radius, argument)))
+                .isThrownBy(() -> DoubleComplex.ofPolar(radius, argument))
                 .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
                 .withNoCause();
     }
@@ -74,7 +74,7 @@ final class DoubleComplexTest {
         """)
     void ofPolar_should_succeed(
             final double radius, final double factor, final double expectedReal, final double expectedImaginary) {
-        final var actual = DoubleComplex.ofPolar(new DoublePolar(radius, factor * StrictMath.PI));
+        final var actual = DoubleComplex.ofPolar(radius, factor * StrictMath.PI);
 
         assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
         assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
@@ -166,6 +166,11 @@ final class DoubleComplexTest {
     }
 
     @Test
+    void negate_should_succeed() {
+        assertThat(complex1.negate()).isEqualTo(new DoubleComplex(-1D, -2D));
+    }
+
+    @Test
     void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> DoubleComplex.ZERO.pow(-1))
@@ -218,11 +223,6 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void negate_should_succeed() {
-        assertThat(complex1.negate()).isEqualTo(new DoubleComplex(-1D, -2D));
-    }
-
-    @Test
     void conjugate_should_succeed() {
         assertThat(complex1.conjugate()).isEqualTo(new DoubleComplex(1D, -2D));
     }
@@ -244,20 +244,5 @@ final class DoubleComplexTest {
     @Test
     void arg_should_succeed() {
         assertThat(DoubleComplex.ONE.arg()).isCloseTo(0D, withinEpsilon);
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-         1,  0, 1, 0
-         0,  1, 1, 0.5
-        -1,  0, 1, 1
-         0, -1, 1, 1.5
-        """)
-    void toPolar_should_succeed(
-            final double real, final double imaginary, final double expectedRadius, final double expectedFactor) {
-        final var polar = new DoubleComplex(real, imaginary).toPolar();
-
-        assertThat(polar.radius()).isCloseTo(expectedRadius, withinEpsilon);
-        assertThat(polar.angle()).isCloseTo(expectedFactor * StrictMath.PI, withinEpsilon);
     }
 }

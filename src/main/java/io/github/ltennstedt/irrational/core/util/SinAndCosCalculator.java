@@ -16,17 +16,6 @@ public final class SinAndCosCalculator {
     private SinAndCosCalculator() {}
 
     /**
-     * Returns sine of x
-     *
-     * @param x x
-     * @return {@link BigDecimal}
-     * @throws NullPointerException when x is null
-     */
-    public static BigDecimal sin(final BigDecimal x) {
-        return sin(x, Constants.DEFAULT_MATH_CONTEXT);
-    }
-
-    /**
      * Returns sine of x based on given mathContext
      *
      * @param x x
@@ -38,14 +27,11 @@ public final class SinAndCosCalculator {
     public static BigDecimal sin(final BigDecimal x, final MathContext mathContext) {
         Objects.requireNonNull(x, "x");
         Objects.requireNonNull(mathContext, "mathContext");
-        final var pi =
-                mathContext.equals(Constants.DEFAULT_MATH_CONTEXT) ? Constants.BIG_PI : PiCalculator.pi(mathContext);
+        final var pi = PiCalculator.pi(mathContext);
         final var guard = new MathContext(
                 StrictMath.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
         final var reducedAngle = x.remainder(BigDecimal.valueOf(2L).multiply(pi, guard), guard);
-        final var halfPi = mathContext.equals(Constants.DEFAULT_MATH_CONTEXT)
-                ? Constants.HALF_BIG_PI
-                : pi.divide(BigDecimal.valueOf(2L), guard);
+        final var halfPi = pi.divide(BigDecimal.valueOf(2L), guard);
         final var quadrantIndexRaw = reducedAngle.divide(halfPi, 0, RoundingMode.HALF_EVEN);
         final var quadrant = quadrantIndexRaw.intValueExact() & 3;
         final var localAngle = reducedAngle.subtract(halfPi.multiply(quadrantIndexRaw, guard), guard);
@@ -60,17 +46,6 @@ public final class SinAndCosCalculator {
     }
 
     /**
-     * Returns cosine of x
-     *
-     * @param x x
-     * @return {@link BigDecimal}
-     * @throws NullPointerException when x is null
-     */
-    public static BigDecimal cos(final BigDecimal x) {
-        return cos(x, Constants.DEFAULT_MATH_CONTEXT);
-    }
-
-    /**
      * Returns cosine of x based on given mathContext
      *
      * @param x x
@@ -82,14 +57,11 @@ public final class SinAndCosCalculator {
     public static BigDecimal cos(final BigDecimal x, final MathContext mathContext) {
         Objects.requireNonNull(x, "x");
         Objects.requireNonNull(mathContext, "mathContext");
-        final var pi =
-                mathContext.equals(Constants.DEFAULT_MATH_CONTEXT) ? Constants.BIG_PI : PiCalculator.pi(mathContext);
+        final var pi = PiCalculator.pi(mathContext);
         final var guard = new MathContext(
                 StrictMath.addExact(mathContext.getPrecision(), GUARD_DIGITS), mathContext.getRoundingMode());
         final var reducedAngle = x.remainder(BigDecimal.valueOf(2L).multiply(pi, guard), guard);
-        final var halfPi = mathContext.equals(Constants.DEFAULT_MATH_CONTEXT)
-                ? Constants.HALF_BIG_PI
-                : pi.divide(BigDecimal.valueOf(2L), guard);
+        final var halfPi = pi.divide(BigDecimal.valueOf(2L), guard);
         final var quadrantIndexRaw = reducedAngle.divide(halfPi, 0, RoundingMode.HALF_EVEN);
         final var quadrant = quadrantIndexRaw.intValueExact() & 3;
         final var localAngle = reducedAngle.subtract(halfPi.multiply(quadrantIndexRaw, guard), guard);

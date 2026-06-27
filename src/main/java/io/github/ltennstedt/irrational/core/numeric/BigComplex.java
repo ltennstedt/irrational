@@ -1,7 +1,6 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
 import io.github.ltennstedt.irrational.core.util.AtanCalculator;
-import io.github.ltennstedt.irrational.core.util.Constants;
 import io.github.ltennstedt.irrational.core.util.SinAndCosCalculator;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -14,7 +13,7 @@ import java.util.Objects;
  * @param imaginary imaginary part
  */
 public record BigComplex(BigDecimal real, BigDecimal imaginary)
-        implements MathContextNumeric<BigComplex>, Complex<BigComplex, BigComplex, BigPolar> {
+        implements BigNumeric<BigComplex, BigComplex>, MathContextNumeric<BigComplex>, Complex<BigComplex, BigComplex> {
     /** 0 */
     public static final BigComplex ZERO = new BigComplex(BigDecimal.ZERO, BigDecimal.ZERO);
 
@@ -40,38 +39,21 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     /**
      * Static factory method
      *
-     * @param polar {@link BigPolar}
-     * @return {@link BigComplex}
-     * @throws NullPointerException when polar is null
-     */
-    public static BigComplex ofPolar(final BigPolar polar) {
-        Objects.requireNonNull(polar, "polar");
-        if (polar.radius().signum() == 0) {
-            return ZERO;
-        }
-        return new BigComplex(
-                polar.radius().multiply(SinAndCosCalculator.cos(polar.angle())),
-                polar.radius().multiply(SinAndCosCalculator.sin(polar.angle())));
-    }
-
-    /**
-     * Static factory method
-     *
-     * @param polar {@link BigPolar}
+     * @param radius radius
+     * @param angle angle
      * @param mathContext {@link MathContext}
      * @return {@link BigComplex}
-     * @throws NullPointerException when polar is null
+     * @throws NullPointerException when radius is null
+     * @throws NullPointerException when angle is null
      * @throws NullPointerException when mathContext is null
      */
-    public static BigComplex ofPolar(final BigPolar polar, final MathContext mathContext) {
-        Objects.requireNonNull(polar, "polar");
+    public static BigComplex ofPolar(final BigDecimal radius, final BigDecimal angle, final MathContext mathContext) {
+        Objects.requireNonNull(radius, "radius");
+        Objects.requireNonNull(angle, "angle");
         Objects.requireNonNull(mathContext, "mathContext");
-        if (polar.radius().signum() == 0) {
-            return ZERO;
-        }
         return new BigComplex(
-                polar.radius().multiply(SinAndCosCalculator.cos(polar.angle(), mathContext), mathContext),
-                polar.radius().multiply(SinAndCosCalculator.sin(polar.angle(), mathContext), mathContext));
+                radius.multiply(SinAndCosCalculator.cos(angle, mathContext), mathContext),
+                radius.multiply(SinAndCosCalculator.sin(angle, mathContext), mathContext));
     }
 
     @Override
@@ -82,17 +64,6 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     @Override
     public boolean isZero() {
         return real.signum() == 0 && imaginary.signum() == 0;
-    }
-
-    @Override
-    public BigComplex negate() {
-        return new BigComplex(real.negate(), imaginary.negate());
-    }
-
-    @Override
-    public BigComplex negate(final MathContext mathContext) {
-        Objects.requireNonNull(mathContext, "mathContext");
-        return new BigComplex(real.negate(mathContext), imaginary.negate(mathContext));
     }
 
     @Override
@@ -142,27 +113,6 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     }
 
     @Override
-    public BigComplex divide(final BigComplex divisor) {
-        Objects.requireNonNull(divisor, "divisor");
-        if (!divisor.isInvertible()) {
-            throw new ArithmeticException("divisor must be invertible but was " + divisor);
-        }
-        if (divisor.real.abs().compareTo(divisor.imaginary.abs()) >= 0) {
-            final var r = divisor.imaginary.divide(divisor.real, Constants.DEFAULT_MATH_CONTEXT);
-            final var d = divisor.real.add(divisor.imaginary.multiply(r));
-            return new BigComplex(
-                    real.add(imaginary.multiply(r)).divide(d, Constants.DEFAULT_MATH_CONTEXT),
-                    imaginary.subtract(real.multiply(r)).divide(d, Constants.DEFAULT_MATH_CONTEXT));
-        } else {
-            final var r = divisor.real.divide(divisor.imaginary, Constants.DEFAULT_MATH_CONTEXT);
-            final var d = divisor.imaginary.add(divisor.real.multiply(r));
-            return new BigComplex(
-                    real.multiply(r).add(imaginary).divide(d, Constants.DEFAULT_MATH_CONTEXT),
-                    imaginary.multiply(r).subtract(real).divide(d, Constants.DEFAULT_MATH_CONTEXT));
-        }
-    }
-
-    @Override
     public BigComplex divide(final BigComplex divisor, final MathContext mathContext) {
         Objects.requireNonNull(divisor, "divisor");
         Objects.requireNonNull(mathContext, "mathContext");
@@ -190,25 +140,14 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     }
 
     @Override
-    public BigComplex pow(final int exponent) {
-        if (exponent < 0) {
-            if (!isInvertible()) {
-                throw new ArithmeticException("this must be invertible but was " + this);
-            }
-            return reciprocal().pow(StrictMath.negateExact(exponent));
-        }
-        if (exponent == 0) {
-            return ONE;
-        }
-        if (exponent == 1) {
-            return this;
-        }
-        if (isZero()) {
-            return ZERO;
-        }
-        final var half = pow(exponent / 2);
-        final var squared = half.multiply(half);
-        return (exponent & 1) == 0 ? squared : multiply(squared);
+    public BigComplex negate() {
+        return new BigComplex(real.negate(), imaginary.negate());
+    }
+
+    @Override
+    public BigComplex negate(final MathContext mathContext) {
+        Objects.requireNonNull(mathContext, "mathContext");
+        return new BigComplex(real.negate(mathContext), imaginary.negate(mathContext));
     }
 
     @Override
@@ -232,17 +171,6 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
         final var half = pow(exponent / 2, mathContext);
         final var squared = half.multiply(half, mathContext);
         return (exponent & 1) == 0 ? squared : multiply(squared, mathContext);
-    }
-
-    @Override
-    public BigComplex reciprocal() {
-        if (!isInvertible()) {
-            throw new ArithmeticException("this must be invertible but was " + this);
-        }
-        final var norm = norm();
-        return new BigComplex(
-                real.divide(norm, Constants.DEFAULT_MATH_CONTEXT),
-                imaginary.negate().divide(norm, Constants.DEFAULT_MATH_CONTEXT));
     }
 
     @Override
@@ -297,30 +225,12 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     /**
      * Returns the absolute value
      *
-     * @return absolute value
-     */
-    public BigDecimal abs() {
-        return norm().sqrt(Constants.DEFAULT_MATH_CONTEXT);
-    }
-
-    /**
-     * Returns the absolute value
-     *
      * @param mathContext {@link MathContext}
      * @return absolute value
      * @throws NullPointerException when mathContext is null
      */
     public BigDecimal abs(final MathContext mathContext) {
         return norm(mathContext).sqrt(mathContext);
-    }
-
-    /**
-     * Returns the argument
-     *
-     * @return argument
-     */
-    public BigDecimal arg() {
-        return AtanCalculator.atan2(imaginary, real);
     }
 
     /**
@@ -333,23 +243,5 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
     public BigDecimal arg(final MathContext mathContext) {
         Objects.requireNonNull(mathContext, "mathContext");
         return AtanCalculator.atan2(imaginary, real, mathContext);
-    }
-
-    @Override
-    public BigPolar toPolar() {
-        return BigPolar.ofComplex(this);
-    }
-
-    /**
-     * Returns this as polar form
-     *
-     * @param mathContext {@link MathContext}
-     * @return {@link BigPolar}
-     * @throws NullPointerException when mathContext is null
-     * @throws ArithmeticException when radius is 0
-     */
-    public BigPolar toPolar(final MathContext mathContext) {
-        Objects.requireNonNull(mathContext, "mathContext");
-        return BigPolar.ofComplex(this, mathContext);
     }
 }

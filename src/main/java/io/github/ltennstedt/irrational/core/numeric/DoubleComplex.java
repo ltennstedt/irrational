@@ -10,7 +10,7 @@ import java.util.Objects;
  * @param imaginary imaginary part
  */
 public record DoubleComplex(double real, double imaginary)
-        implements Complex<DoubleComplex, DoubleComplex, DoublePolar> {
+        implements Complex<DoubleComplex, DoubleComplex>, PrimitiveNumeric<DoubleComplex, DoubleComplex> {
     /** 0 */
     public static final DoubleComplex ZERO = new DoubleComplex(0D, 0D);
 
@@ -36,20 +36,17 @@ public record DoubleComplex(double real, double imaginary)
     /**
      * Static factory method
      *
-     * @param polar {@link DoublePolar}
-     * @return {@link DoubleComplex}
-     * @throws ArithmeticException when radius is NaN or infinite
-     * @throws ArithmeticException when argument is NaN or infinite
+     * @param radius radius
+     * @param angle angle
+     * @return {@link BigComplex}
+     * @throws NullPointerException when radius is null
+     * @throws NullPointerException when angle is null
      */
-    public static DoubleComplex ofPolar(final DoublePolar polar) {
-        Objects.requireNonNull(polar, "polar");
-        check(polar.radius(), "radius");
-        check(polar.angle(), "angle");
-        if (Doubles.isNear(polar.radius(), 0D)) {
-            return ZERO;
-        }
+    public static DoubleComplex ofPolar(final double radius, final double angle) {
+        final var normalizedRadius = normalizeZero(check(radius, "radius"));
+        final var normalizedAngle = normalizeZero(check(angle, "angle"));
         return new DoubleComplex(
-                polar.radius() * StrictMath.cos(polar.angle()), polar.radius() * StrictMath.sin(polar.angle()));
+                normalizedRadius * StrictMath.cos(normalizedAngle), normalizedRadius * StrictMath.sin(normalizedAngle));
     }
 
     private static double normalizeZero(final double d) {
@@ -71,11 +68,6 @@ public record DoubleComplex(double real, double imaginary)
     @Override
     public boolean isZero() {
         return Doubles.isNear(norm(), 0D);
-    }
-
-    @Override
-    public DoubleComplex negate() {
-        return new DoubleComplex(-real, -imaginary);
     }
 
     @Override
@@ -113,6 +105,11 @@ public record DoubleComplex(double real, double imaginary)
             final var d = divisor.imaginary + divisor.real * r;
             return new DoubleComplex((real * r + imaginary) / d, (imaginary * r - real) / d);
         }
+    }
+
+    @Override
+    public DoubleComplex negate() {
+        return new DoubleComplex(-real, -imaginary);
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -178,16 +175,5 @@ public record DoubleComplex(double real, double imaginary)
      */
     public double arg() {
         return StrictMath.atan2(imaginary, real);
-    }
-
-    /**
-     * Returns this as polar form
-     *
-     * @return {@link DoublePolar}
-     * @throws ArithmeticException when radius is 0
-     */
-    @Override
-    public DoublePolar toPolar() {
-        return DoublePolar.ofComplex(this);
     }
 }

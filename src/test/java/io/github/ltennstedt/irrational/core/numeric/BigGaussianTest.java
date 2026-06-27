@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 
-import io.github.ltennstedt.irrational.core.util.Constants;
-import io.github.ltennstedt.irrational.core.util.PiCalculator;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -119,39 +117,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_without_MathContext_should_throw_exception_when_divisor_is_null() {
-        assertThatNullPointerException()
-                .isThrownBy(() -> BigGaussian.ZERO.divide(null))
-                .withMessage("divisor")
-                .withNoCause();
-    }
-
-    @Test
-    void divide_without_MathContext_should_throw_exception_when_divisor_is_not_invertible() {
-        assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(() -> BigGaussian.ONE.divide(BigGaussian.ZERO))
-                .withMessage("divisor must be invertible but was BigComplex[real=0, imaginary=0]")
-                .withNoCause();
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-        1, 3, 1, 0
-        2, 1, 1, 1
-        """)
-    void divide_without_MathContext_should_succeed(
-            final BigInteger real,
-            final BigInteger imaginary,
-            final BigDecimal expectedReal,
-            final BigDecimal expectedImaginary) {
-        final var actual =
-                new BigGaussian(BigInteger.ONE, BigInteger.valueOf(3L)).divide(new BigGaussian(real, imaginary));
-        assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
-    }
-
-    @Test
-    void divide_with_MathContext_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_exception_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.divide(null, MathContext.DECIMAL32))
                 .withMessage("divisor")
@@ -159,7 +125,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void divide_should_throw_exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.divide(BigGaussian.ONE, null))
                 .withMessage("mathContext")
@@ -167,7 +133,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_with_MathContext_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_exception_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ONE.divide(BigGaussian.ZERO, MathContext.DECIMAL32))
                 .withMessage("divisor must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -179,7 +145,7 @@ final class BigGaussianTest {
         1, 3, 1, 0
         2, 1, 1, 1
         """)
-    void divide_with_MathContext_should_succeed(
+    void divide_should_succeed(
             final BigInteger real,
             final BigInteger imaginary,
             final BigDecimal expectedReal,
@@ -192,36 +158,12 @@ final class BigGaussianTest {
     }
 
     @Test
-    void pow_without_MathContext_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
-        assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(() -> BigGaussian.ZERO.pow(-1))
-                .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
-                .withNoCause();
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-        2, 1, -1,   0.4, -0.2
-        0, 1,  0,   1,    0
-        2, 3,  1,   2,    3
-        0, 0,  2,   0,    0
-        0, 1,  2,  -1,    0
-        2, 3,  3, -46,    9
-        """)
-    void pow_without_MathContext_should_succeed(
-            final BigInteger real,
-            final BigInteger imaginary,
-            final int exponent,
-            final BigDecimal expectedReal,
-            final BigDecimal expectedImaginary) {
-        final var actual = new BigGaussian(real, imaginary).pow(exponent);
-
-        assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isEqualByComparingTo(expectedImaginary);
+    void negate_should_succeed() {
+        assertThat(gaussian1.negate()).isEqualTo(new BigGaussian(BigInteger.valueOf(-1L), BigInteger.valueOf(-2L)));
     }
 
     @Test
-    void pow_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void pow_should_throw_exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.pow(0, null))
                 .withMessage("mathContext")
@@ -229,7 +171,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void pow_with_MathContext_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ZERO.pow(-1, MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -245,7 +187,7 @@ final class BigGaussianTest {
         0, 1,  2,  -1,    0
         2, 3,  3, -46,    9
         """)
-    void pow_with_MathContext_should_succeed(
+    void pow_should_succeed(
             final BigInteger real,
             final BigInteger imaginary,
             final int exponent,
@@ -258,33 +200,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void reciprocal_without_MathContext_should_throw_exception_when_this_not_invertible() {
-        assertThatExceptionOfType(ArithmeticException.class)
-                .isThrownBy(BigGaussian.ZERO::reciprocal)
-                .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
-                .withNoCause();
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-         1,  0,  1,  0
-         0,  1,  0, -1
-        -1,  0, -1,  0
-         0, -1,  0,  1
-        """)
-    void reciprocal_without_MathContext_should_succeed(
-            final BigInteger real,
-            final BigInteger imaginary,
-            final BigDecimal expectedReal,
-            final BigDecimal expectedImaginary) {
-        final var actual = new BigGaussian(real, imaginary).reciprocal();
-
-        assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isEqualByComparingTo(expectedImaginary);
-    }
-
-    @Test
-    void reciprocal_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void reciprocal_should_throw_exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.reciprocal(null))
                 .withMessage("mathContext")
@@ -292,7 +208,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void reciprocal_with_MathContext_should_throw_exception_when_this_not_invertible() {
+    void reciprocal_should_throw_exception_when_this_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ZERO.reciprocal(MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -306,7 +222,7 @@ final class BigGaussianTest {
         -1,  0, -1,  0
          0, -1,  0,  1
         """)
-    void reciprocal_with_MathContext_should_succeed(
+    void reciprocal_should_succeed(
             final BigInteger real,
             final BigInteger imaginary,
             final BigDecimal expectedReal,
@@ -315,11 +231,6 @@ final class BigGaussianTest {
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
         assertThat(actual.imaginary()).isEqualByComparingTo(expectedImaginary);
-    }
-
-    @Test
-    void negate_should_succeed() {
-        assertThat(gaussian1.negate()).isEqualTo(new BigGaussian(BigInteger.valueOf(-1L), BigInteger.valueOf(-2L)));
     }
 
     @Test
@@ -332,18 +243,8 @@ final class BigGaussianTest {
         assertThat(gaussian1.norm()).isEqualTo(BigInteger.valueOf(5L));
     }
 
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-        2, 0, 2
-        0, 3, 3
-        """)
-    void abs_without_MathContext_should_succeed(
-            final BigInteger real, final BigInteger imaginary, final BigDecimal expected) {
-        assertThat(new BigGaussian(real, imaginary).abs()).isEqualByComparingTo(expected);
-    }
-
     @Test
-    void abs_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
+    void abs_should_throw_Exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ONE.abs(null))
                 .withMessage("mathContext")
@@ -355,18 +256,12 @@ final class BigGaussianTest {
         2, 0, 2
         0, 3, 3
         """)
-    void abs_with_MathContext_should_succeed(
-            final BigInteger real, final BigInteger imaginary, final BigDecimal expected) {
+    void abs_should_succeed(final BigInteger real, final BigInteger imaginary, final BigDecimal expected) {
         assertThat(new BigGaussian(real, imaginary).abs(MathContext.DECIMAL32)).isEqualByComparingTo(expected);
     }
 
     @Test
-    void arg_without_MathContext_should_succeed() {
-        assertThat(BigGaussian.ONE.arg()).isZero();
-    }
-
-    @Test
-    void arg_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
+    void arg_should_throw_Exception_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ONE.arg(null))
                 .withMessage("mathContext")
@@ -374,44 +269,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void arg_with_MathContext_should_succeed() {
+    void arg_should_succeed() {
         assertThat(BigGaussian.ONE.arg(MathContext.DECIMAL32)).isZero();
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-         1,  0, 1, 0
-         0,  1, 1, 0.5
-        -1,  0, 1, 1
-         0, -1, 1, 1.5
-        """)
-    void toPolar_without_MathContext_should_succeed(
-            final BigInteger real,
-            final BigInteger imaginary,
-            final BigDecimal expectedRadius,
-            final BigDecimal expectedFactor) {
-        final var polar = new BigGaussian(real, imaginary).toPolar();
-
-        assertThat(polar.radius()).isEqualByComparingTo(expectedRadius);
-        assertThat(polar.angle()).isCloseTo(expectedFactor.multiply(Constants.BIG_PI), withinEpsilon);
-    }
-
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-         1,  0, 1, 0
-         0,  1, 1, 0.5
-        -1,  0, 1, 1
-         0, -1, 1, 1.5
-        """)
-    void toPolar_with_MathContext_should_succeed(
-            final BigInteger real,
-            final BigInteger imaginary,
-            final BigDecimal expectedRadius,
-            final BigDecimal expectedFactor) {
-        final var polar = new BigGaussian(real, imaginary).toPolar(MathContext.DECIMAL32);
-
-        assertThat(polar.radius()).isEqualByComparingTo(expectedRadius);
-        assertThat(polar.angle())
-                .isCloseTo(expectedFactor.multiply(PiCalculator.pi(MathContext.DECIMAL32)), withinEpsilon);
     }
 }

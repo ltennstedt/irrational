@@ -65,6 +65,32 @@ public sealed interface Rational<R extends Rational<R>> extends Numeric<R, R>, C
     int signum();
 
     /**
+     * Returns the quotient of this and the divisor
+     *
+     * @param divisor divisor
+     * @return quotient
+     * @throws NullPointerException when divisor is null
+     * @throws ArithmeticException when divisor is not invertible
+     */
+    R divide(R divisor);
+
+    /**
+     * Returns this raised by the power of exponent
+     *
+     * @param exponent exponent
+     * @return power
+     */
+    R pow(int exponent);
+
+    /**
+     * Returns the reciprocal
+     *
+     * @return reciprocal
+     * @throws ArithmeticException when this is not invertible
+     */
+    R reciprocal();
+
+    /**
      * Returns the minimum
      *
      * @param other other

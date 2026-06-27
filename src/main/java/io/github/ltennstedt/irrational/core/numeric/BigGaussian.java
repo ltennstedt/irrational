@@ -1,7 +1,6 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
 import io.github.ltennstedt.irrational.core.util.AtanCalculator;
-import io.github.ltennstedt.irrational.core.util.Constants;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -14,7 +13,8 @@ import java.util.Set;
  * @param real real part
  * @param imaginary imaginary part
  */
-public record BigGaussian(BigInteger real, BigInteger imaginary) implements Complex<BigGaussian, BigComplex, BigPolar> {
+public record BigGaussian(BigInteger real, BigInteger imaginary)
+        implements Complex<BigGaussian, BigComplex>, BigNumeric<BigGaussian, BigComplex> {
     /** 0 */
     public static final BigGaussian ZERO = new BigGaussian(BigInteger.ZERO, BigInteger.ZERO);
 
@@ -66,11 +66,6 @@ public record BigGaussian(BigInteger real, BigInteger imaginary) implements Comp
     }
 
     @Override
-    public BigGaussian negate() {
-        return new BigGaussian(real.negate(), imaginary.negate());
-    }
-
-    @Override
     public BigGaussian add(final BigGaussian summand) {
         Objects.requireNonNull(summand, "summand");
         return new BigGaussian(real.add(summand.real), imaginary.add(summand.imaginary));
@@ -91,57 +86,24 @@ public record BigGaussian(BigInteger real, BigInteger imaginary) implements Comp
     }
 
     @Override
-    public BigComplex divide(final BigGaussian divisor) {
-        Objects.requireNonNull(divisor, "divisor");
-        return toComplex().divide(divisor.toComplex());
-    }
-
-    /**
-     * Returns the quotient of this and the divisor
-     *
-     * @param divisor divisor
-     * @param mathContext {@link MathContext}
-     * @return quotient
-     * @throws NullPointerException when divisor is null
-     * @throws NullPointerException when mathContext is null
-     * @throws ArithmeticException when divisor is not invertible
-     */
     public BigComplex divide(final BigGaussian divisor, final MathContext mathContext) {
         Objects.requireNonNull(divisor, "divisor");
         return toComplex().divide(divisor.toComplex(), mathContext);
     }
 
     @Override
-    public BigComplex pow(final int exponent) {
-        return toComplex().pow(exponent);
+    public BigGaussian negate() {
+        return new BigGaussian(real.negate(), imaginary.negate());
     }
 
-    /**
-     * Returns this raised by the power of exponent
-     *
-     * @param exponent exponent
-     * @param mathContext {@link MathContext}
-     * @return power
-     * @throws NullPointerException when mathContext is null
-     */
+    @Override
     public BigComplex pow(final int exponent, final MathContext mathContext) {
         return toComplex().pow(exponent, mathContext);
     }
 
     @Override
-    public BigComplex reciprocal() {
-        return toComplex().reciprocal();
-    }
-
-    /**
-     * Returns the reciprocal
-     *
-     * @param mathContext {@link MathContext}
-     * @return reciprocal
-     * @throws NullPointerException when mathContext is null
-     * @throws ArithmeticException when this is not invertible
-     */
     public BigComplex reciprocal(final MathContext mathContext) {
+        Objects.requireNonNull(mathContext, "mathContext");
         return toComplex().reciprocal(mathContext);
     }
 
@@ -162,15 +124,6 @@ public record BigGaussian(BigInteger real, BigInteger imaginary) implements Comp
     /**
      * Returns the absolute value
      *
-     * @return absolute value
-     */
-    public BigDecimal abs() {
-        return new BigDecimal(norm()).sqrt(Constants.DEFAULT_MATH_CONTEXT);
-    }
-
-    /**
-     * Returns the absolute value
-     *
      * @param mathContext {@link MathContext}
      * @return absolute value
      * @throws NullPointerException when mathContext is null
@@ -178,15 +131,6 @@ public record BigGaussian(BigInteger real, BigInteger imaginary) implements Comp
     public BigDecimal abs(final MathContext mathContext) {
         Objects.requireNonNull(mathContext, "mathContext");
         return new BigDecimal(norm()).sqrt(mathContext);
-    }
-
-    /**
-     * Returns the argument
-     *
-     * @return argument
-     */
-    public BigDecimal arg() {
-        return AtanCalculator.atan2(new BigDecimal(imaginary), new BigDecimal(real));
     }
 
     /**
@@ -208,23 +152,5 @@ public record BigGaussian(BigInteger real, BigInteger imaginary) implements Comp
      */
     public BigComplex toComplex() {
         return new BigComplex(new BigDecimal(real), new BigDecimal(imaginary));
-    }
-
-    @Override
-    public BigPolar toPolar() {
-        return BigPolar.ofComplex(toComplex());
-    }
-
-    /**
-     * Returns this as polar form
-     *
-     * @param mathContext {@link MathContext}
-     * @return {@link BigPolar}
-     * @throws NullPointerException when mathContext is null
-     * @throws ArithmeticException when radius is 0
-     */
-    public BigPolar toPolar(final MathContext mathContext) {
-        Objects.requireNonNull(mathContext, "mathContext");
-        return BigPolar.ofComplex(toComplex(), mathContext);
     }
 }

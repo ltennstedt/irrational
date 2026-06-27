@@ -5,7 +5,7 @@ package io.github.ltennstedt.irrational.core.numeric;
  *
  * @param <N> type of the number
  */
-public sealed interface Numeric<N extends Numeric<N, Q>, Q extends Numeric<Q, Q>> permits Complex, Polar, Rational {
+public sealed interface Numeric<N extends Numeric<N, Q>, Q extends Numeric<Q, Q>> permits Complex, Rational {
     /**
      * Indicates if this is invertible
      *
@@ -19,13 +19,6 @@ public sealed interface Numeric<N extends Numeric<N, Q>, Q extends Numeric<Q, Q>
      * @return boolean
      */
     boolean isZero();
-
-    /**
-     * Returns the negated number
-     *
-     * @return negated number
-     */
-    N negate();
 
     /**
      * Returns the sum of this and the summand
@@ -55,28 +48,9 @@ public sealed interface Numeric<N extends Numeric<N, Q>, Q extends Numeric<Q, Q>
     N multiply(N multiplier);
 
     /**
-     * Returns the quotient of this and the divisor
+     * Returns the negated number
      *
-     * @param divisor divisor
-     * @return quotient
-     * @throws NullPointerException when divisor is null
-     * @throws ArithmeticException when divisor is not invertible
+     * @return negated number
      */
-    Q divide(N divisor);
-
-    /**
-     * Returns this raised by the power of exponent
-     *
-     * @param exponent exponent
-     * @return power
-     */
-    Q pow(int exponent);
-
-    /**
-     * Returns the reciprocal
-     *
-     * @return reciprocal
-     * @throws ArithmeticException when this is not invertible
-     */
-    Q reciprocal();
+    N negate();
 }
