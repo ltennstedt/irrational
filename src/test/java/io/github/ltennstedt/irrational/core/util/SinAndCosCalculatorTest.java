@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 final class SinAndCosCalculatorTest {
     @Test
-    void sin_should_throw_Exception_when_x_is_null() {
+    void sin_should_throw_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.sin(null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -19,7 +19,7 @@ final class SinAndCosCalculatorTest {
     }
 
     @Test
-    void sin_should_throw_Exception_when_mathContext_is_null() {
+    void sin_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.sin(BigDecimal.ZERO, null))
                 .withMessage("mathContext")
@@ -41,7 +41,7 @@ final class SinAndCosCalculatorTest {
     }
 
     @Test
-    void cos_should_throw_Exception_when_x_is_null() {
+    void cos_should_throw_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.cos(null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -49,7 +49,7 @@ final class SinAndCosCalculatorTest {
     }
 
     @Test
-    void cos_should_throw_Exception_when_mathContext_is_null() {
+    void cos_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> SinAndCosCalculator.cos(BigDecimal.ZERO, null))
                 .withMessage("mathContext")

@@ -58,7 +58,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan_should_throw_Exception_when_x_is_null() {
+    void atan_should_throw_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> AtanCalculator.atan(null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -66,7 +66,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan_should_throw_Exception_when_mathContext_is_null() {
+    void atan_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> AtanCalculator.atan(BigDecimal.ZERO, null))
                 .withMessage("mathContext")
@@ -81,7 +81,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan2_should_throw_Exception_when_y_is_null() {
+    void atan2_should_throw_when_y_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> AtanCalculator.atan2(null, BigDecimal.ZERO, MathContext.DECIMAL128))
                 .withMessage("y")
@@ -89,7 +89,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan2_should_throw_Exception_when_x_is_null() {
+    void atan2_should_throw_when_x_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> AtanCalculator.atan2(BigDecimal.ZERO, null, MathContext.DECIMAL128))
                 .withMessage("x")
@@ -97,7 +97,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan2_should_throw_Exception_when_mathContext_is_null() {
+    void atan2_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> AtanCalculator.atan2(BigDecimal.ONE, BigDecimal.ONE, null))
                 .withMessage("mathContext")
@@ -105,7 +105,7 @@ final class AtanCalculatorTest {
     }
 
     @Test
-    void atan2_should_throw_Exception_when_x_and_y_are_0() {
+    void atan2_should_throw_when_x_and_y_are_0() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> AtanCalculator.atan2(BigDecimal.ZERO, BigDecimal.ZERO, MathContext.DECIMAL128))
                 .withMessage("x and y must not both be 0")
@@ -114,8 +114,8 @@ final class AtanCalculatorTest {
 
     @ParameterizedTest
     @MethodSource("atan2Source")
-    void atan2_should_succeed(final BigDecimal x, final BigDecimal y, final BigDecimal expected) {
-        assertThat(AtanCalculator.atan2(x, y, MathContext.DECIMAL128))
+    void atan2_should_succeed(final BigDecimal y, final BigDecimal x, final BigDecimal expected) {
+        assertThat(AtanCalculator.atan2(y, x, MathContext.DECIMAL128))
                 .isCloseTo(expected.multiply(PI), within(BigDecimal.ONE.scaleByPowerOfTen(-2)));
     }
 }

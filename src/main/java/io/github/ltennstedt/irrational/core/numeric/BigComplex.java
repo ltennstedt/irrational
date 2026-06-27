@@ -230,6 +230,7 @@ public record BigComplex(BigDecimal real, BigDecimal imaginary)
      * @throws NullPointerException when mathContext is null
      */
     public BigDecimal abs(final MathContext mathContext) {
+        Objects.requireNonNull(mathContext, "mathContext");
         return norm(mathContext).sqrt(mathContext);
     }
 

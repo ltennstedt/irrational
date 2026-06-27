@@ -19,7 +19,7 @@ final class LongRationalTest {
     private final LongRational rational2 = new LongRational(4L, 5L);
 
     @Test
-    void new_should_throw_exception_when_denominator_is_0() {
+    void new_should_throw_when_denominator_is_0() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new LongRational(1L, 0L))
                 .withMessage("denominator must not be 0 but was 0")
@@ -107,7 +107,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void add_should_throw_exception_when_summand_is_null() {
+    void add_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.add(null))
                 .withMessage("summand")
@@ -120,7 +120,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void subtract_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -133,7 +133,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void multiply_should_throw_exception_when_multiplier_is_null() {
+    void multiply_should_throw_when_multiplier_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -146,7 +146,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.divide(null))
                 .withMessage("divisor")
@@ -154,7 +154,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> LongRational.ONE.divide(LongRational.ZERO))
                 .withMessage("divisor must be invertible but was LongRational[numerator=0, denominator=1]")
@@ -172,7 +172,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> LongRational.ZERO.pow(-1))
                 .withMessage("this must be invertible but was LongRational[numerator=0, denominator=1]")
@@ -199,7 +199,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_is_not_invertible() {
+    void reciprocal_should_throw_when_this_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(LongRational.ZERO::reciprocal)
                 .withMessage("this must be invertible but was LongRational[numerator=0, denominator=1]")
@@ -218,7 +218,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void min_should_throw_Exception_when_other_is_null() {
+    void min_should_throw_when_other_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.min(null))
                 .withMessage("other")
@@ -237,7 +237,7 @@ final class LongRationalTest {
     }
 
     @Test
-    void max_should_throw_Exception_when_other_is_null() {
+    void max_should_throw_when_other_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongRational.ZERO.max(null))
                 .withMessage("other")

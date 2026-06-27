@@ -23,7 +23,7 @@ final class BigComplexTest {
          , 1, real
         1,  , imaginary
         """)
-    void new_should_throw_exception_when_any_argument_is_null(
+    void new_should_throw_when_any_argument_is_null(
             final BigDecimal real, final BigDecimal imaginary, final String message) {
         assertThatNullPointerException()
                 .isThrownBy(() -> new BigComplex(real, imaginary))
@@ -51,7 +51,7 @@ final class BigComplexTest {
         1,  , precision=0 roundingMode=HALF_EVEN, angle
         1, 1,                                   , mathContext
         """)
-    void ofPolar_should_throw_exception_when_any_argument_is_null(
+    void ofPolar_should_throw_when_any_argument_is_null(
             final BigDecimal radius, final BigDecimal angle, final MathContext mathContext, final String message) {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ofPolar(radius, angle, mathContext))
@@ -105,7 +105,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void add_without_MathContext_should_throw_exception_when_summand_is_null() {
+    void add_without_MathContext_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.add(null))
                 .withMessage("summand")
@@ -118,7 +118,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void add_with_MathContext_should_throw_exception_when_summand_is_null() {
+    void add_with_MathContext_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.add(null, MathContext.DECIMAL32))
                 .withMessage("summand")
@@ -126,7 +126,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void add_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void add_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.add(BigComplex.ZERO, null))
                 .withMessage("mathContext")
@@ -140,7 +140,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void subtract_without_MathContext_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_without_MathContext_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -154,7 +154,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void subtract_with_MathContext_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_with_MathContext_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.subtract(null, MathContext.DECIMAL32))
                 .withMessage("subtrahend")
@@ -162,7 +162,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void subtract_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void subtract_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.subtract(BigComplex.ZERO, null))
                 .withMessage("mathContext")
@@ -176,7 +176,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void multiply_without_MathContext_should_throw_exception_when_factor_is_null() {
+    void multiply_without_MathContext_should_throw_when_factor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -189,7 +189,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void multiply_with_MathContext_should_throw_exception_when_factor_is_null() {
+    void multiply_with_MathContext_should_throw_when_factor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.multiply(null, MathContext.DECIMAL32))
                 .withMessage("multiplier")
@@ -197,7 +197,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void multiply_with_MathContext_should_throw_exception_when_mathContext_is_null() {
+    void multiply_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.multiply(BigComplex.ZERO, null))
                 .withMessage("mathContext")
@@ -211,7 +211,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.divide(null, MathContext.DECIMAL32))
                 .withMessage("divisor")
@@ -219,7 +219,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_mathContext_is_null() {
+    void divide_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.divide(BigComplex.ONE, null))
                 .withMessage("mathContext")
@@ -227,7 +227,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigComplex.ONE.divide(BigComplex.ZERO, MathContext.DECIMAL32))
                 .withMessage("divisor must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -257,7 +257,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void negate_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
+    void negate_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.negate(null))
                 .withMessage("mathContext")
@@ -271,7 +271,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_mathContext_is_null() {
+    void pow_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.pow(0, null))
                 .withMessage("mathContext")
@@ -279,7 +279,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigComplex.ZERO.pow(-1, MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -308,7 +308,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_mathContext_is_null() {
+    void reciprocal_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ZERO.reciprocal(null))
                 .withMessage("mathContext")
@@ -316,7 +316,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_not_invertible() {
+    void reciprocal_should_throw_when_this_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigComplex.ZERO.reciprocal(MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -347,7 +347,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void conjugate_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
+    void conjugate_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ONE.conjugate(null))
                 .withMessage("mathContext")
@@ -366,7 +366,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void norm_with_MathContext_should_throw_Exception_when_mathContext_is_null() {
+    void norm_with_MathContext_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ONE.norm(null))
                 .withMessage("mathContext")
@@ -379,7 +379,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void abs_should_throw_Exception_when_mathContext_is_null() {
+    void abs_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ONE.abs(null))
                 .withMessage("mathContext")
@@ -396,7 +396,7 @@ final class BigComplexTest {
     }
 
     @Test
-    void arg_should_throw_Exception_when_mathContext_is_null() {
+    void arg_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigComplex.ONE.arg(null))
                 .withMessage("mathContext")

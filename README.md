@@ -15,6 +15,8 @@ irrational is a mathematical library for the JVM which will provide implementati
   and [BigInteger](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html))
 * Complex numbers (`double`
   and [BigDecimal](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html))
+* Quaternions (`double`
+  and [BigDecimal](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html))
 * Vectors (`double`
   and [BigDecimal](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html))
 * Matrices (`double`
@@ -30,7 +32,7 @@ The Gradle Wrapper is provided to build this project. A JDK will be downloaded a
 is found locally.
 
 ```shell
-# Unix
+# Unix-like
 ./gradlew build
 
 # Windows
@@ -52,8 +54,8 @@ is found locally.
 * Builders for vectors and matrices
 * Prefer [records](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html) over classes
 * Language ergonomics via thin adapters for [Kotlin](https://kotlinlang.org/) and [Groovy](https://groovy-lang.org/)
-  *
-  Informative [Javadoc](https://docs.oracle.com/en/java/javase/17/javadoc/javadoc.html), [KDoc](https://kotlinlang.org/docs/kotlin-doc.html)
+* Informative [Javadoc](https://docs.oracle.com/en/java/javase/17/javadoc/javadoc.html),
+  [KDoc](https://kotlinlang.org/docs/kotlin-doc.html)
   and [GroovyDoc](https://groovy-lang.org/groovydoc.html)
 * High code quality ensured
   by [Spotless](https://github.com/diffplug/spotless), [Checkstyle](https://checkstyle.sourceforge.io/), [PMD](https://pmd.github.io/), [SpotBugs](https://spotbugs.github.io/), [Detekt](https://detekt.dev/), [CodeNarc](https://codenarc.org/), [SonarQube for IDE](https://www.sonarsource.com/products/sonarqube/ide/)

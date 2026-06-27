@@ -7,7 +7,7 @@ import java.math.MathContext;
  *
  * @param <N> type of the number
  */
-public sealed interface MathContextNumeric<N extends MathContextNumeric<N>> permits BigComplex {
+public sealed interface MathContextNumeric<N extends MathContextNumeric<N>> permits BigComplex, BigQuaternion {
     /**
      * Returns the negated number
      *

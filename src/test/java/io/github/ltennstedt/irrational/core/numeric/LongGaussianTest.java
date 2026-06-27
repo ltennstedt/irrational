@@ -59,7 +59,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void add_should_throw_exception_when_summand_is_null() {
+    void add_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongGaussian.ZERO.add(null))
                 .withMessage("summand")
@@ -72,7 +72,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void subtract_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongGaussian.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -85,7 +85,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void multiply_should_throw_exception_when_factor_is_null() {
+    void multiply_should_throw_when_factor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongGaussian.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -98,7 +98,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> LongGaussian.ZERO.divide(null))
                 .withMessage("divisor")
@@ -106,7 +106,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> LongGaussian.ONE.divide(LongGaussian.ZERO))
                 .withMessage("divisor must be invertible but was LongGaussian[real=0, imaginary=0]")
@@ -130,7 +130,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> LongGaussian.ZERO.pow(-1))
                 .withMessage("this must be invertible but was LongGaussian[real=0, imaginary=0]")
@@ -159,7 +159,7 @@ final class LongGaussianTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_not_invertible() {
+    void reciprocal_should_throw_when_this_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(LongGaussian.ZERO::reciprocal)
                 .withMessage("this must be invertible but was LongGaussian[real=0, imaginary=0]")

@@ -29,8 +29,8 @@ public record DoubleComplex(double real, double imaginary)
      * @throws ArithmeticException when imaginary is NaN or infinite
      */
     public DoubleComplex {
-        real = normalizeZero(check(real, "real"));
-        imaginary = normalizeZero(check(imaginary, "imaginary"));
+        real = Doubles.normalizeZero(Doubles.check(real, "real"));
+        imaginary = Doubles.normalizeZero(Doubles.check(imaginary, "imaginary"));
     }
 
     /**
@@ -43,21 +43,10 @@ public record DoubleComplex(double real, double imaginary)
      * @throws NullPointerException when angle is null
      */
     public static DoubleComplex ofPolar(final double radius, final double angle) {
-        final var normalizedRadius = normalizeZero(check(radius, "radius"));
-        final var normalizedAngle = normalizeZero(check(angle, "angle"));
+        final var normalizedRadius = Doubles.normalizeZero(Doubles.check(radius, "radius"));
+        final var normalizedAngle = Doubles.normalizeZero(Doubles.check(angle, "angle"));
         return new DoubleComplex(
                 normalizedRadius * StrictMath.cos(normalizedAngle), normalizedRadius * StrictMath.sin(normalizedAngle));
-    }
-
-    private static double normalizeZero(final double d) {
-        return d == 0D ? 0D : d;
-    }
-
-    private static double check(final double d, final String name) {
-        if (Double.isNaN(d) || Double.isInfinite(d)) {
-            throw new ArithmeticException("%s must not be NaN and must be finite but was %s".formatted(name, d));
-        }
-        return d;
     }
 
     @Override

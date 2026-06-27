@@ -20,7 +20,7 @@ final class BigRationalTest {
     private final BigRational rational2 = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
 
     @Test
-    void new_should_throw_exception_when_denominator_is_zero() {
+    void new_should_throw_when_denominator_is_zero() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new BigRational(BigInteger.ONE, BigInteger.ZERO))
                 .withMessage("denominator must not be 0 but was 0")
@@ -108,7 +108,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void add_should_throw_exception_when_summand_is_null() {
+    void add_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.add(null))
                 .withMessage("summand")
@@ -122,7 +122,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void subtract_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -136,7 +136,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void multiply_should_throw_exception_when_multiplier_is_null() {
+    void multiply_should_throw_when_multiplier_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -150,7 +150,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.divide(null))
                 .withMessage("divisor")
@@ -158,7 +158,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigRational.ONE.divide(BigRational.ZERO))
                 .withMessage("divisor must be invertible but was BigRational[numerator=0, denominator=1]")
@@ -177,7 +177,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigRational.ZERO.pow(-1))
                 .withMessage("this must be invertible but was BigRational[numerator=0, denominator=1]")
@@ -204,7 +204,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_is_not_invertible() {
+    void reciprocal_should_throw_when_this_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(BigRational.ZERO::reciprocal)
                 .withMessage("this must be invertible but was BigRational[numerator=0, denominator=1]")
@@ -224,7 +224,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void min_should_throw_Exception_when_other_is_null() {
+    void min_should_throw_when_other_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.min(null))
                 .withMessage("other")
@@ -243,7 +243,7 @@ final class BigRationalTest {
     }
 
     @Test
-    void max_should_throw_Exception_when_other_is_null() {
+    void max_should_throw_when_other_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigRational.ZERO.max(null))
                 .withMessage("other")

@@ -23,7 +23,7 @@ final class BigGaussianTest {
          , 1, real
         1,  , imaginary
         """)
-    void new_should_throw_exception_when_any_argument_is_null(
+    void new_should_throw_when_any_argument_is_null(
             final BigInteger real, final BigInteger imaginary, final String message) {
         assertThatNullPointerException()
                 .isThrownBy(() -> new BigGaussian(real, imaginary))
@@ -77,7 +77,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void add_should_throw_exception_when_summand_is_null() {
+    void add_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.add(null))
                 .withMessage("summand")
@@ -90,7 +90,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void subtract_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -104,7 +104,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void multiply_should_throw_exception_when_factor_is_null() {
+    void multiply_should_throw_when_factor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -117,7 +117,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.divide(null, MathContext.DECIMAL32))
                 .withMessage("divisor")
@@ -125,7 +125,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_mathContext_is_null() {
+    void divide_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.divide(BigGaussian.ONE, null))
                 .withMessage("mathContext")
@@ -133,7 +133,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ONE.divide(BigGaussian.ZERO, MathContext.DECIMAL32))
                 .withMessage("divisor must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -163,7 +163,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_mathContext_is_null() {
+    void pow_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.pow(0, null))
                 .withMessage("mathContext")
@@ -171,7 +171,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ZERO.pow(-1, MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -200,7 +200,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_mathContext_is_null() {
+    void reciprocal_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ZERO.reciprocal(null))
                 .withMessage("mathContext")
@@ -208,7 +208,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_not_invertible() {
+    void reciprocal_should_throw_when_this_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> BigGaussian.ZERO.reciprocal(MathContext.DECIMAL32))
                 .withMessage("this must be invertible but was BigComplex[real=0, imaginary=0]")
@@ -244,7 +244,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void abs_should_throw_Exception_when_mathContext_is_null() {
+    void abs_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ONE.abs(null))
                 .withMessage("mathContext")
@@ -261,7 +261,7 @@ final class BigGaussianTest {
     }
 
     @Test
-    void arg_should_throw_Exception_when_mathContext_is_null() {
+    void arg_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> BigGaussian.ONE.arg(null))
                 .withMessage("mathContext")

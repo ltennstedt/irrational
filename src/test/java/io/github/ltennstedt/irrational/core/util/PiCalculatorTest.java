@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 final class PiCalculatorTest {
     @Test
-    void pi_should_throw_Exception_when_mathContext_is_null() {
+    void pi_should_throw_when_mathContext_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> PiCalculator.pi(null))
                 .withMessage("mathContext")

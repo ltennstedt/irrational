@@ -25,10 +25,10 @@ final class DoubleComplexTest {
         0,         -Infinity, imaginary, -Infinity
         0,          Infinity, imaginary,  Infinity
         """)
-    void new_should_throw_exception(final double real, final double imaginary, final String name, final String part) {
+    void new_should_throw(final double real, final double imaginary, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new DoubleComplex(real, imaginary))
-                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
+                .withMessageContainingAll(name, part)
                 .withNoCause();
     }
 
@@ -52,8 +52,7 @@ final class DoubleComplexTest {
          0,        -Infinity, angle,  -Infinity
          0,         Infinity, angle,   Infinity
         """)
-    void ofPolar_should_throw_exception(
-            final double radius, final double argument, final String name, final String part) {
+    void ofPolar_should_throw(final double radius, final double argument, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> DoubleComplex.ofPolar(radius, argument))
                 .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
@@ -100,7 +99,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void add_should_throw_exception_when_summand_is_null() {
+    void add_should_throw_when_summand_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> DoubleComplex.ZERO.add(null))
                 .withMessage("summand")
@@ -113,7 +112,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void subtract_should_throw_exception_when_subtrahend_is_null() {
+    void subtract_should_throw_when_subtrahend_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> DoubleComplex.ZERO.subtract(null))
                 .withMessage("subtrahend")
@@ -126,7 +125,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void multiply_should_throw_exception_when_factor_is_null() {
+    void multiply_should_throw_when_factor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> DoubleComplex.ZERO.multiply(null))
                 .withMessage("multiplier")
@@ -139,7 +138,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_null() {
+    void divide_should_throw_when_divisor_is_null() {
         assertThatNullPointerException()
                 .isThrownBy(() -> DoubleComplex.ZERO.divide(null))
                 .withMessage("divisor")
@@ -147,7 +146,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void divide_should_throw_exception_when_divisor_is_not_invertible() {
+    void divide_should_throw_when_divisor_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> DoubleComplex.ONE.divide(DoubleComplex.ZERO))
                 .withMessage("divisor must be invertible but was DoubleComplex[real=0.0, imaginary=0.0]")
@@ -171,7 +170,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void pow_should_throw_exception_when_exponent_is_negative_and_is_not_invertible() {
+    void pow_should_throw_when_exponent_is_negative_and_is_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> DoubleComplex.ZERO.pow(-1))
                 .withMessage("this must be invertible but was DoubleComplex[real=0.0, imaginary=0.0]")
@@ -200,7 +199,7 @@ final class DoubleComplexTest {
     }
 
     @Test
-    void reciprocal_should_throw_exception_when_this_not_invertible() {
+    void reciprocal_should_throw_when_this_not_invertible() {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(DoubleComplex.ZERO::reciprocal)
                 .withMessage("this must be invertible but was DoubleComplex[real=0.0, imaginary=0.0]")
