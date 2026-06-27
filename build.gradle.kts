@@ -50,7 +50,7 @@ spotless {
         trimTrailingWhitespace()
     }
     java {
-        palantirJavaFormat("2.91.0").formatJavadoc(true)
+        palantirJavaFormat("2.94.0").formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()
@@ -88,7 +88,7 @@ java {
     withSourcesJar()
 }
 
-jacoco { toolVersion = "0.8.14" }
+jacoco { toolVersion = "0.8.15" }
 
 checkstyle {
     toolVersion = "12.3.1"
@@ -102,7 +102,7 @@ pmd {
 }
 
 spotbugs {
-    toolVersion = "4.9.8"
+    toolVersion = "4.10.2"
     excludeFilter = file("config/spotbugs/exclude-filter.xml")
     ignoreFailures = false
 }
@@ -228,9 +228,9 @@ tasks {
         xmlOutput.unsetConvention()
     }
     withType<Wrapper>().configureEach {
-        gradleVersion = "9.5.1"
+        gradleVersion = "9.6.1"
         distributionType = DistributionType.ALL
-        distributionSha256Sum = "c72fb9991f6025cbe337d52ba77e531b3faf62bdd3e348fe1ccee9f51c71adb0"
+        distributionSha256Sum = "61ba77b3ff7167e60962763eb4bae79db7120c189b9544358d0ade3c1e712a83"
     }
     check { dependsOn(jacocoTestReport, buildHealth, licensee) }
 }
