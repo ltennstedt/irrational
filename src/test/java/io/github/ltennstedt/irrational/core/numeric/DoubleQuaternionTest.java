@@ -138,6 +138,7 @@ final class DoubleQuaternionTest {
         1,     1,     1,     1,      1,  1,     1,     1,     1
         1e-13, 1e-13, 1e-13, 1e-13,  2,  0,     0,     0,     0
         1,     1,     1,     1,      2, -2,     2,     2,     2
+        1,     1,     1,     1,      3, -8,     0,     0,     0
         """)
     void pow_should_succeed(
             final double w,

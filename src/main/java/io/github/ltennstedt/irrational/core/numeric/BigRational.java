@@ -64,7 +64,7 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
 
     @Override
     public boolean isDyadic() {
-        return denominator.signum() > 0 && denominator.bitCount() == 1;
+        return denominator.bitCount() == 1;
     }
 
     @Override

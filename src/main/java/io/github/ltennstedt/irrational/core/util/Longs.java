@@ -14,6 +14,13 @@ public final class Longs {
      * @throws ArithmeticException when an arithmetic overflow occurs
      */
     public static long gcd(final long a, final long b) {
-        return b == 0L ? (a == Long.MIN_VALUE ? 1L << 63 : StrictMath.absExact(a)) : gcd(b, a % b);
+        var absA = StrictMath.absExact(a);
+        var absB = StrictMath.absExact(b);
+        while (absB != 0) {
+            final var t = absA % absB;
+            absA = absB;
+            absB = t;
+        }
+        return absA;
     }
 }
