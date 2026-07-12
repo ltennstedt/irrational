@@ -4,3 +4,5 @@ plugins {
 }
 
 rootProject.name = "irrational"
+includeBuild("build-logic")
+include("core")

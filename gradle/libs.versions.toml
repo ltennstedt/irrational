@@ -1,29 +1,31 @@
 [versions]
 assertj = "3.27.7"
+ben-manes-versions = "0.54.0"
 cyclonedx = "3.2.2"
 jspecify = "1.0.0"
-junit = "6.1.0"
+junit = "6.1.1"
 junit-pioneer = "2.3.0"
 licensee = "1.14.1"
 spotbugs = "6.5.8"
-spotless = "8.7.0"
-task-tree = "4.0.1"
+spotless = "8.8.0"
 validate-poms = "9.5.0"
 version-catalog-update = "1.1.0"
 
 [plugins]
-cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
-licensee = { id = "app.cash.licensee", version.ref = "licensee" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "ben-manes-versions" }
 spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-task-tree = { id = "com.dorongold.task-tree", version.ref = "task-tree" }
-validate-poms = { id = "io.freefair.maven-central.validate-poms", version.ref = "validate-poms" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+ben-manes-versions-plugin = { module = "com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin", version.ref = "ben-manes-versions" }
+cyclonedx-plugin = { module = "org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin", version.ref = "cyclonedx" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-pioneer = { module = "org.junit-pioneer:junit-pioneer", version.ref = "junit-pioneer" }
 junit-platform = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+licensee-plugin = { module = "app.cash.licensee:app.cash.licensee.gradle.plugin", version.ref = "licensee" }
+spotless-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
+validate-poms-plugin = { module = "io.freefair.maven-central.validate-poms:io.freefair.maven-central.validate-poms.gradle.plugin", version.ref = "validate-poms" }
