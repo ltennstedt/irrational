@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets
 
 plugins {
     `java-library`
+    id("com.diffplug.spotless")
     jacoco
     id("io.freefair.maven-central.validate-poms")
     id("org.cyclonedx.bom")
@@ -37,6 +38,25 @@ java {
     }
     withJavadocJar()
     withSourcesJar()
+}
+
+spotless {
+    kotlinGradle {
+        ktlint("1.8.0")
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
+    java {
+        palantirJavaFormat("2.96.0").formatJavadoc(true)
+        forbidModuleImports()
+        forbidWildcardImports()
+        formatAnnotations()
+        removeUnusedImports()
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
 }
 
 jacoco {

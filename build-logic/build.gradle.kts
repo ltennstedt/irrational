@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.ben.manes.versions)
+    alias(libs.plugins.spotless)
 }
 
 repositories {
@@ -26,4 +26,14 @@ configurations.configureEach {
 
 dependencyLocking {
     lockAllConfigurations()
+}
+
+spotless {
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        ktlint("1.8.0")
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
 }

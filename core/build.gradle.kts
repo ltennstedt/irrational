@@ -21,18 +21,18 @@ dependencies {
 
 checkstyle {
     toolVersion = "12.3.1"
-    this.configFile = file("${rootProject.projectDir.absolutePath}/config/checkstyle/checkstyle.xml")
+    configFile = file("${rootProject.projectDir.absolutePath}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
 }
 
 pmd {
     toolVersion = "7.26.0"
-    this.ruleSetFiles = files("${rootProject.projectDir.absolutePath}/config/pmd/ruleset.xml")
+    ruleSetFiles = files("${rootProject.projectDir.absolutePath}/config/pmd/ruleset.xml")
     isIgnoreFailures = false
 }
 
 spotbugs {
-    toolVersion = "4.10.2"
+    toolVersion = "4.10.3"
     excludeFilter = file("${rootProject.projectDir.absolutePath}/config/spotbugs/exclude-filter.xml")
     ignoreFailures = false
 }

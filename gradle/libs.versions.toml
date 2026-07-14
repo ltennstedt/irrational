@@ -3,16 +3,15 @@ assertj = "3.27.7"
 ben-manes-versions = "0.54.0"
 cyclonedx = "3.2.2"
 jspecify = "1.0.0"
-junit = "6.1.1"
+junit = "6.1.2"
 junit-pioneer = "2.3.0"
 licensee = "1.14.1"
-spotbugs = "6.5.8"
+spotbugs = "6.5.9"
 spotless = "8.8.0"
 validate-poms = "9.5.0"
 version-catalog-update = "1.1.0"
 
 [plugins]
-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "ben-manes-versions" }
 spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }

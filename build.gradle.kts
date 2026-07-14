@@ -7,21 +7,21 @@ repositories {
     mavenCentral()
 }
 
+configurations.configureEach {
+    resolutionStrategy.componentSelection.all {
+        if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
+            reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+        }
+    }
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 spotless {
     kotlinGradle {
-        target("**/*.gradle.kts")
         ktlint("1.8.0")
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
-    }
-    java {
-        target("**/*.java")
-        palantirJavaFormat("2.96.0").formatJavadoc(true)
-        forbidModuleImports()
-        forbidWildcardImports()
-        formatAnnotations()
-        removeUnusedImports()
         endWithNewline()
         leadingTabsToSpaces()
         trimTrailingWhitespace()
