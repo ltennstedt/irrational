@@ -7,9 +7,6 @@ plugins {
     alias(libs.plugins.spotbugs)
 }
 
-group = "io.github.irrational"
-version = "0.1.0-SNAPSHOT"
-
 dependencies {
     api(libs.jspecify)
     testImplementation(platform(libs.junit.bom))

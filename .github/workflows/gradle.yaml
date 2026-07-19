@@ -54,7 +54,7 @@ jobs:
       uses: deepsourcelabs/test-coverage-action@master
       with:
         key: java
-        coverage-file: ./build/reports/jacoco/test/jacocoTestReport.xml
+        coverage-file: report-aggregation/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
         dsn: "${{ secrets.DEEPSOURCE_DSN }}"
     - name: Deleting old workflow runs
       uses: Mattraks/delete-workflow-runs@v2

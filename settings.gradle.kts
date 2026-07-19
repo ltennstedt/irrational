@@ -5,4 +5,4 @@ plugins {
 
 rootProject.name = "irrational"
 includeBuild("build-logic")
-include("core")
+include("core", "report-aggregation")
