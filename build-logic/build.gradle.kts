@@ -13,13 +13,14 @@ dependencies {
     implementation(libs.licensee.plugin)
     implementation(libs.validate.poms.plugin)
     implementation(libs.cyclonedx.plugin)
-    implementation(libs.ben.manes.versions.plugin)
 }
 
 configurations.configureEach {
-    resolutionStrategy.componentSelection.all {
-        if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
-            reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+    resolutionStrategy {
+        componentSelection.all {
+            if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
+                reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+            }
         }
     }
 }

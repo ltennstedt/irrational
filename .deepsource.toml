@@ -8,5 +8,10 @@ name = "java"
 runtime_version = "17"
 
 [[analyzers]]
+name = "kotlin"
+
+[analyzers.meta]
+runtime_version = "17"
+
+[[analyzers]]
 name = "test-coverage"
-enabled = true

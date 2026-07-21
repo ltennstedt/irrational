@@ -11,11 +11,30 @@ repositories {
 
 dependencies {
     jacocoAggregation(project(":core"))
+    jacocoAggregation(project(":kotlin"))
+}
+
+tasks {
+    val isCi: Provider<Boolean> =
+        providers
+            .environmentVariable("CI")
+            .map { it.equals("true", ignoreCase = true) }
+            .orElse(false)
+    val isNotCi = isCi.map { !it }
+    withType<JacocoReport>().configureEach {
+        reports {
+            html.required = isNotCi
+            xml.required = isCi
+        }
+    }
+    check {
+        dependsOn(testCodeCoverageReport)
+    }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -31,25 +50,7 @@ spotless {
 testing {
     suites {
         named<JvmTestSuite>("test") {
-            useJUnitJupiter()
+            useJUnitJupiter(libs.versions.junit.get())
         }
-    }
-}
-
-tasks {
-    val isCi: Provider<Boolean> =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-    val isNotCi = isCi.map { !it }
-    withType<JacocoReport>().configureEach {
-        reports {
-            html.required.set(isNotCi)
-            xml.required.set(isCi)
-        }
-    }
-    check {
-        dependsOn(testCodeCoverageReport)
     }
 }

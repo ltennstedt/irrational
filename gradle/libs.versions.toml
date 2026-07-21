@@ -1,30 +1,35 @@
 [versions]
 assertj = "3.27.7"
-ben-manes-versions = "0.54.0"
-cyclonedx = "3.2.2"
+cyclonedx = "3.3.0"
+detekt = "1.23.8"
+dokka = "2.2.0"
 jspecify = "1.0.0"
 junit = "6.1.2"
-junit-pioneer = "2.3.0"
+junitPioneer = "2.3.0"
+kotest = "6.2.3"
+kotlin = "2.4.10"
 licensee = "1.14.1"
 spotbugs = "6.5.9"
-spotless = "8.8.0"
+spotless = "8.7.0"
 validate-poms = "9.5.0"
 version-catalog-update = "1.1.0"
 
 [plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotest = { id = "io.kotest", version.ref = "kotest" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-ben-manes-versions-plugin = { module = "com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin", version.ref = "ben-manes-versions" }
 cyclonedx-plugin = { module = "org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin", version.ref = "cyclonedx" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-junit-pioneer = { module = "org.junit-pioneer:junit-pioneer", version.ref = "junit-pioneer" }
-junit-platform = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+junit-pioneer = { module = "org.junit-pioneer:junit-pioneer", version.ref = "junitPioneer" }
+kotest-bom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
 licensee-plugin = { module = "app.cash.licensee:app.cash.licensee.gradle.plugin", version.ref = "licensee" }
 spotless-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
 validate-poms-plugin = { module = "io.freefair.maven-central.validate-poms:io.freefair.maven-central.validate-poms.gradle.plugin", version.ref = "validate-poms" }

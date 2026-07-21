@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.cyclonedx.gradle.CyclonedxDirectTask
 import java.nio.charset.StandardCharsets
 
@@ -10,7 +9,6 @@ plugins {
     id("org.cyclonedx.bom")
     id("app.cash.licensee")
     `maven-publish`
-    id("com.github.ben-manes.versions")
 }
 
 group = "io.github.irrational"
@@ -21,9 +19,11 @@ repositories {
 }
 
 configurations.configureEach {
-    resolutionStrategy.componentSelection.all {
-        if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
-            reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+    resolutionStrategy {
+        componentSelection.all {
+            if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
+                reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+            }
         }
     }
 }
@@ -32,12 +32,49 @@ dependencyLocking {
     lockAllConfigurations()
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+tasks {
+    withType<ProcessResources>().configureEach {
+        filteringCharset = StandardCharsets.UTF_8.name()
     }
-    withJavadocJar()
-    withSourcesJar()
+    val isCi: Provider<Boolean> =
+        providers
+            .environmentVariable("CI")
+            .map { it.equals("true", ignoreCase = true) }
+            .orElse(false)
+    val isNotCi = isCi.map { !it }
+    withType<Test>().configureEach {
+        useJUnitPlatform()
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        failFast = isCi.get()
+        reports {
+            html.required = isNotCi
+            junitXml.required = isCi
+        }
+    }
+    withType<JacocoReport>().configureEach {
+        dependsOn(test)
+        reports {
+            html.required = isNotCi
+            xml.required = isCi
+        }
+    }
+    withType<Jar>().configureEach {
+        archiveBaseName = "${rootProject.name}-${project.name}"
+    }
+    withType<CyclonedxDirectTask>().configureEach {
+        includeConfigs =
+            listOf(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME, JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)
+        xmlOutput.unsetConvention()
+    }
+    check {
+        dependsOn(jacocoTestReport, licensee)
+    }
+    register("localBuild") {
+        description = "Convenience task for local development builds before committing and pushing"
+        group = "other"
+        dependsOn(spotlessApply, build, named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
+        enabled = isNotCi.get()
+    }
 }
 
 spotless {
@@ -53,6 +90,12 @@ spotless {
         forbidWildcardImports()
         formatAnnotations()
         removeUnusedImports()
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
+    kotlin {
+        ktlint("1.8.0")
         endWithNewline()
         leadingTabsToSpaces()
         trimTrailingWhitespace()
@@ -122,48 +165,5 @@ publishing {
                 }
             }
         }
-    }
-}
-
-tasks {
-    withType<ProcessResources>().configureEach {
-        filteringCharset = StandardCharsets.UTF_8.name()
-    }
-    val isCi: Provider<Boolean> =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-    val isNotCi = isCi.map { !it }
-    withType<Test>().configureEach {
-        useJUnitPlatform()
-        failFast = isCi.get()
-        reports {
-            html.required.set(isNotCi)
-            junitXml.required.set(isCi)
-        }
-    }
-    withType<JacocoReport>().configureEach {
-        dependsOn(test)
-        reports {
-            html.required.set(isNotCi)
-            xml.required.set(isCi)
-        }
-    }
-    withType<Jar>().configureEach {
-        archiveBaseName = "${rootProject.name}-${project.name}"
-    }
-    withType<CyclonedxDirectTask>().configureEach {
-        includeConfigs =
-            listOf(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME, JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)
-        xmlOutput.unsetConvention()
-    }
-    withType<DependencyUpdatesTask>().configureEach {
-        rejectVersionIf {
-            candidate.version.endsWith("-M1")
-        }
-    }
-    check {
-        dependsOn(jacocoTestReport, licensee)
     }
 }

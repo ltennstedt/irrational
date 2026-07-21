@@ -10,10 +10,55 @@ plugins {
 dependencies {
     api(libs.jspecify)
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(libs.junit.pioneer)
     testImplementation(libs.assertj.core)
-    testRuntimeOnly(libs.junit.platform)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks {
+    val isCi: Provider<Boolean> =
+        providers
+            .environmentVariable("CI")
+            .map { it.equals("true", ignoreCase = true) }
+            .orElse(false)
+    val isNotCi = isCi.map { !it }
+    withType<Checkstyle>().configureEach {
+        exclude("**/module-info.java")
+        reports {
+            html.required = isNotCi
+            xml.required = isCi
+        }
+    }
+    withType<Pmd>().configureEach {
+        reports {
+            html.required = isNotCi
+            xml.required = isCi
+        }
+    }
+    withType<SpotBugsTask>().configureEach {
+        val taskName = name
+        reports {
+            create("html") {
+                required = isNotCi
+                outputLocation =
+                    layout.buildDirectory.file("reports/spotbugs/$taskName.html")
+            }
+            create("xml") {
+                required = isCi
+                outputLocation =
+                    layout.buildDirectory.file("reports/spotbugs/$taskName.xml")
+            }
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    withJavadocJar()
+    withSourcesJar()
 }
 
 checkstyle {
@@ -32,43 +77,4 @@ spotbugs {
     toolVersion = "4.10.3"
     excludeFilter = file("${rootProject.projectDir.absolutePath}/config/spotbugs/exclude-filter.xml")
     ignoreFailures = false
-}
-
-tasks {
-    val isCi: Provider<Boolean> =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-    val isNotCi = isCi.map { !it }
-    withType<Checkstyle>().configureEach {
-        exclude("**/module-info.java")
-        reports {
-            html.required.set(isNotCi)
-            xml.required.set(isCi)
-        }
-    }
-    withType<Pmd>().configureEach {
-        reports {
-            html.required.set(isNotCi)
-            xml.required.set(isCi)
-        }
-    }
-    withType<SpotBugsTask>().configureEach {
-        val taskName = name
-        reports {
-            create("html") {
-                required.set(isNotCi)
-                outputLocation.set(
-                    layout.buildDirectory.file("reports/spotbugs/$taskName.html"),
-                )
-            }
-            create("xml") {
-                required.set(isCi)
-                outputLocation.set(
-                    layout.buildDirectory.file("reports/spotbugs/$taskName.xml"),
-                )
-            }
-        }
-    }
 }
