@@ -44,7 +44,6 @@ tasks {
     val isNotCi = isCi.map { !it }
     withType<Test>().configureEach {
         useJUnitPlatform()
-        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
         failFast = isCi.get()
         reports {
             html.required = isNotCi
@@ -71,7 +70,7 @@ tasks {
     }
     register("localBuild") {
         description = "Convenience task for local development builds before committing and pushing"
-        group = "other"
+        group = "build"
         dependsOn(spotlessApply, build, named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
         enabled = isNotCi.get()
     }
@@ -84,22 +83,13 @@ spotless {
         leadingTabsToSpaces()
         trimTrailingWhitespace()
     }
-    java {
-        palantirJavaFormat("2.96.0").formatJavadoc(true)
-        forbidModuleImports()
-        forbidWildcardImports()
-        formatAnnotations()
-        removeUnusedImports()
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
     }
-    kotlin {
-        ktlint("1.8.0")
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
-    }
+    withSourcesJar()
 }
 
 jacoco {

@@ -12,6 +12,21 @@ repositories {
 dependencies {
     jacocoAggregation(project(":core"))
     jacocoAggregation(project(":kotlin"))
+    jacocoAggregation(project(":groovy"))
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        componentSelection.all {
+            if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
+                reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
+            }
+        }
+    }
+}
+
+dependencyLocking {
+    lockAllConfigurations()
 }
 
 tasks {
@@ -29,6 +44,12 @@ tasks {
     }
     check {
         dependsOn(testCodeCoverageReport)
+    }
+    register("localBuild") {
+        description = "Convenience task for local development builds before committing and pushing"
+        group = "build"
+        dependsOn(spotlessApply, build)
+        enabled = isNotCi.get()
     }
 }
 

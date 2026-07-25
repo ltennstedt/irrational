@@ -53,12 +53,21 @@ tasks {
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+spotless {
+    java {
+        palantirJavaFormat("2.96.0").formatJavadoc(true)
+        forbidModuleImports()
+        forbidWildcardImports()
+        formatAnnotations()
+        removeUnusedImports()
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
     }
+}
+
+java {
     withJavadocJar()
-    withSourcesJar()
 }
 
 checkstyle {

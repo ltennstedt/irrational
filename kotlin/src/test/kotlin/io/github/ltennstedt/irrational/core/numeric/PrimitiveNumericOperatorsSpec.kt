@@ -3,7 +3,7 @@ package io.github.ltennstedt.irrational.core.numeric
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.equals.shouldBeEqual
 
-class PrimitiveNumericSpec :
+class PrimitiveNumericOperatorsSpec :
     ShouldSpec({
         context("div") {
             should("succeed") {

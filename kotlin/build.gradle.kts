@@ -36,16 +36,15 @@ tasks {
     kotlinSourcesJar {
         enabled = false
     }
-    val isNotCi =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-            .map { !it }
     withType<Detekt>().configureEach {
         reports {
             html {
-                required = isNotCi
+                required =
+                    providers
+                        .environmentVariable("CI")
+                        .map { it.equals("true", ignoreCase = true) }
+                        .orElse(false)
+                        .map { !it }
             }
             md {
                 required = false
@@ -69,12 +68,16 @@ tasks {
     }
 }
 
-java {
-    withSourcesJar()
+spotless {
+    kotlin {
+        ktlint("1.8.0")
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
 }
 
 kotlin {
-    jvmToolchain(17)
     explicitApi()
 }
 

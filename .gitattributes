@@ -1,6 +1,8 @@
 *.bat text eol=crlf
+*.groovy text eol=lf
 *.java text eol=lf
 *.jar binary
+*.kt text eol=lf
 *.kts text eol=lf
 *.lockfile text eol=lf
 *.md text eol=lf

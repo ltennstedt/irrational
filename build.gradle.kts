@@ -24,7 +24,7 @@ dependencyLocking {
 tasks {
     register("localBuild") {
         description = "Convenience task for local development builds before committing and pushing"
-        group = "other"
+        group = "build"
         dependsOn(spotlessApply, versionCatalogFormat, build)
         enabled =
             providers

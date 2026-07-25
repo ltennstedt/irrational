@@ -99,7 +99,14 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
         return new BigRational(numerator.multiply(multiplier.numerator), denominator.multiply(multiplier.denominator));
     }
 
-    @Override
+    /**
+     * Returns the quotient of this and the divisor
+     *
+     * @param divisor divisor
+     * @return quotient
+     * @throws NullPointerException when divisor is null
+     * @throws ArithmeticException when divisor is not invertible
+     */
     public BigRational divide(final BigRational divisor) {
         Objects.requireNonNull(divisor, "divisor");
         if (!divisor.isInvertible()) {
@@ -113,7 +120,12 @@ public record BigRational(BigInteger numerator, BigInteger denominator) implemen
         return new BigRational(numerator.negate(), denominator);
     }
 
-    @Override
+    /**
+     * Returns this raised by the power of exponent
+     *
+     * @param exponent exponent
+     * @return power
+     */
     public BigRational pow(final int exponent) {
         if (exponent < 0) {
             if (!isInvertible()) {

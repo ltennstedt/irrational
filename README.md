@@ -33,10 +33,10 @@ is found locally.
 
 ```shell
 # Unix-like
-./gradlew build
+./gradlew localBuild
 
 # Windows
-./gradlew.bat build
+./gradlew.bat localBuild
 ```
 
 ### Design goals

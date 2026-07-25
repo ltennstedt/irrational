@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import java.math.BigInteger
 
-class RationalSpec :
+class BigRationalOperatorsSpec :
     ShouldSpec({
         context("div") {
             should("succeed") {
