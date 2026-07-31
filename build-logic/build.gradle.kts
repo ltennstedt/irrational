@@ -52,6 +52,9 @@ tasks {
             }
         }
     }
+    check {
+        dependsOn(buildHealth)
+    }
 }
 
 configurations.configureEach {

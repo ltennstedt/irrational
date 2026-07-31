@@ -4,6 +4,9 @@ plugins {
 }
 
 tasks {
+    check {
+        dependsOn(buildHealth)
+    }
     named("localBuild") {
         dependsOn(versionCatalogFormat)
     }
