@@ -1,48 +1,15 @@
 plugins {
-    alias(libs.plugins.spotless)
+    id("base-conventions")
     alias(libs.plugins.version.catalog.update)
 }
 
-repositories {
-    mavenCentral()
-}
-
-configurations.configureEach {
-    resolutionStrategy {
-        componentSelection.all {
-            if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
-                reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
-            }
-        }
-    }
-}
-
-dependencyLocking {
-    lockAllConfigurations()
-}
-
 tasks {
-    register("localBuild") {
-        description = "Convenience task for local development builds before committing and pushing"
-        group = "build"
-        dependsOn(spotlessApply, versionCatalogFormat, build)
-        enabled =
-            providers
-                .environmentVariable("CI")
-                .map { it.equals("true", ignoreCase = true) }
-                .orElse(false)
-                .map { !it }
-                .get()
+    named("localBuild") {
+        dependsOn(versionCatalogFormat)
     }
 }
 
 spotless {
-    kotlinGradle {
-        ktlint("1.8.0")
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
-    }
     yaml {
         target(".github/workflows/gradle.yaml", "config/detekt/detekt.yaml")
         jackson().yamlFeature("MINIMIZE_QUOTES", true)

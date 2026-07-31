@@ -1,6 +1,7 @@
 import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
+    id("base-conventions")
     id("common-conventions")
     checkstyle
     pmd
@@ -17,12 +18,6 @@ dependencies {
 }
 
 tasks {
-    val isCi: Provider<Boolean> =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-    val isNotCi = isCi.map { !it }
     withType<Checkstyle>().configureEach {
         exclude("**/module-info.java")
         reports {

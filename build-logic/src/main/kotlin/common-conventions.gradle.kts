@@ -14,34 +14,10 @@ plugins {
 group = "io.github.irrational"
 version = "0.1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
-
-configurations.configureEach {
-    resolutionStrategy {
-        componentSelection.all {
-            if (candidate.version.endsWith("-SNAPSHOT", ignoreCase = true)) {
-                reject("SNAPSHOT version rejected for ${candidate.group}:${candidate.module}:${candidate.version}")
-            }
-        }
-    }
-}
-
-dependencyLocking {
-    lockAllConfigurations()
-}
-
 tasks {
     withType<ProcessResources>().configureEach {
         filteringCharset = StandardCharsets.UTF_8.name()
     }
-    val isCi: Provider<Boolean> =
-        providers
-            .environmentVariable("CI")
-            .map { it.equals("true", ignoreCase = true) }
-            .orElse(false)
-    val isNotCi = isCi.map { !it }
     withType<Test>().configureEach {
         useJUnitPlatform()
         failFast = isCi.get()
@@ -68,20 +44,9 @@ tasks {
     check {
         dependsOn(jacocoTestReport, licensee)
     }
-    register("localBuild") {
-        description = "Convenience task for local development builds before committing and pushing"
-        group = "build"
-        dependsOn(spotlessApply, build, named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
+    named("localBuild") {
+        dependsOn(named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
         enabled = isNotCi.get()
-    }
-}
-
-spotless {
-    kotlinGradle {
-        ktlint("1.8.0")
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
     }
 }
 

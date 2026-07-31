@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("base-conventions")
     id("common-conventions")
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotest)
@@ -39,12 +40,7 @@ tasks {
     withType<Detekt>().configureEach {
         reports {
             html {
-                required =
-                    providers
-                        .environmentVariable("CI")
-                        .map { it.equals("true", ignoreCase = true) }
-                        .orElse(false)
-                        .map { !it }
+                required = isNotCi
             }
             md {
                 required = false
@@ -65,15 +61,6 @@ tasks {
     }
     assemble {
         dependsOn(dokkaHtmlJar)
-    }
-}
-
-spotless {
-    kotlin {
-        ktlint("1.8.0")
-        endWithNewline()
-        leadingTabsToSpaces()
-        trimTrailingWhitespace()
     }
 }
 

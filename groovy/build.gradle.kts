@@ -1,4 +1,5 @@
 plugins {
+    id("base-conventions")
     id("common-conventions")
     groovy
     codenarc
