@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class DoubleComplexTest {
-    private final Offset<Double> withinEpsilon = within(Doubles.EPSILON);
+    private final Offset<Double> offset = within(Doubles.EPSILON);
     private final DoubleComplex complex1 = new DoubleComplex(1D, 2D);
     private final DoubleComplex complex2 = new DoubleComplex(3D, 4D);
 
@@ -75,8 +75,8 @@ final class DoubleComplexTest {
             final double radius, final double factor, final double expectedReal, final double expectedImaginary) {
         final var actual = DoubleComplex.ofPolar(radius, factor * StrictMath.PI);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @ParameterizedTest
@@ -194,8 +194,8 @@ final class DoubleComplexTest {
             final double expectedImaginary) {
         final var actual = new DoubleComplex(real, imaginary).pow(exponent);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -217,8 +217,8 @@ final class DoubleComplexTest {
             final double real, final double imaginary, final double expectedReal, final double expectedImaginary) {
         final var actual = new DoubleComplex(real, imaginary).reciprocal();
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -228,7 +228,7 @@ final class DoubleComplexTest {
 
     @Test
     void norm_should_succeed() {
-        assertThat(complex1.norm()).isCloseTo(5D, withinEpsilon);
+        assertThat(complex1.norm()).isCloseTo(5D, offset);
     }
 
     @ParameterizedTest
@@ -237,11 +237,11 @@ final class DoubleComplexTest {
         0, 3, 3
         """)
     void abs_should_succeed(final double real, final double imaginary, final double expected) {
-        assertThat(new DoubleComplex(real, imaginary).abs()).isCloseTo(expected, withinEpsilon);
+        assertThat(new DoubleComplex(real, imaginary).abs()).isCloseTo(expected, offset);
     }
 
     @Test
     void arg_should_succeed() {
-        assertThat(DoubleComplex.ONE.arg()).isCloseTo(0D, withinEpsilon);
+        assertThat(DoubleComplex.ONE.arg()).isCloseTo(0D, offset);
     }
 }

@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class BigGaussianTest {
-    private final Offset<BigDecimal> withinEpsilon = within(new BigDecimal("1e-6"));
+    private final Offset<BigDecimal> offset = within(new BigDecimal("1e-6"));
     private final BigGaussian gaussian1 = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
     private final BigGaussian gaussian2 = new BigGaussian(BigInteger.valueOf(3L), BigInteger.valueOf(4L));
 
@@ -154,7 +154,7 @@ final class BigGaussianTest {
                 .divide(new BigGaussian(real, imaginary), MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test

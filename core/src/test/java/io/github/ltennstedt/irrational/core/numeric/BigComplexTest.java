@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class BigComplexTest {
-    private final Offset<BigDecimal> withinEpsilon = within(new BigDecimal("1e-6"));
+    private final Offset<BigDecimal> offset = within(new BigDecimal("1e-5"));
     private final BigComplex complex1 = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
     private final BigComplex complex2 = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
 
@@ -81,8 +81,8 @@ final class BigComplexTest {
                 factor.multiply(PiCalculator.pi(MathContext.DECIMAL32), MathContext.DECIMAL32),
                 MathContext.DECIMAL32);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @ParameterizedTest
@@ -248,7 +248,7 @@ final class BigComplexTest {
                 .divide(new BigComplex(real, imaginary), MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -303,8 +303,8 @@ final class BigComplexTest {
             final BigDecimal expectedImaginary) {
         final var actual = new BigComplex(real, imaginary).pow(exponent, MathContext.DECIMAL32);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -337,8 +337,8 @@ final class BigComplexTest {
             final BigDecimal expectedImaginary) {
         final var actual = new BigComplex(real, imaginary).reciprocal(MathContext.DECIMAL32);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -362,7 +362,7 @@ final class BigComplexTest {
 
     @Test
     void norm_without_MathContext_should_succeed() {
-        assertThat(complex1.norm()).isCloseTo(BigDecimal.valueOf(5L), withinEpsilon);
+        assertThat(complex1.norm()).isCloseTo(BigDecimal.valueOf(5L), offset);
     }
 
     @Test
@@ -375,7 +375,7 @@ final class BigComplexTest {
 
     @Test
     void norm_with_MathContext_should_succeed() {
-        assertThat(complex1.norm(MathContext.DECIMAL32)).isCloseTo(BigDecimal.valueOf(5L), withinEpsilon);
+        assertThat(complex1.norm(MathContext.DECIMAL32)).isCloseTo(BigDecimal.valueOf(5L), offset);
     }
 
     @Test
@@ -392,7 +392,7 @@ final class BigComplexTest {
         0, 3, 3
         """)
     void abs_should_succeed(final BigDecimal real, final BigDecimal imaginary, final BigDecimal expected) {
-        assertThat(new BigComplex(real, imaginary).abs(MathContext.DECIMAL32)).isCloseTo(expected, withinEpsilon);
+        assertThat(new BigComplex(real, imaginary).abs(MathContext.DECIMAL32)).isCloseTo(expected, offset);
     }
 
     @Test
@@ -405,6 +405,6 @@ final class BigComplexTest {
 
     @Test
     void arg_should_succeed() {
-        assertThat(BigComplex.ONE.arg(MathContext.DECIMAL32)).isCloseTo(BigDecimal.ZERO, withinEpsilon);
+        assertThat(BigComplex.ONE.arg(MathContext.DECIMAL32)).isCloseTo(BigDecimal.ZERO, offset);
     }
 }

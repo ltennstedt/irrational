@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class LongGaussianTest {
-    private final Offset<Double> withinEpsilon = within(Doubles.EPSILON);
+    private final Offset<Double> offset = within(Doubles.EPSILON);
     private final LongGaussian gaussian1 = new LongGaussian(1L, 2L);
     private final LongGaussian gaussian2 = new LongGaussian(3L, 4L);
 
@@ -154,8 +154,8 @@ final class LongGaussianTest {
             final double expectedImaginary) {
         final var actual = new LongGaussian(real, imaginary).pow(exponent);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -177,8 +177,8 @@ final class LongGaussianTest {
             final long real, final long imaginary, final long expectedReal, final long expectedImaginary) {
         final var actual = new LongGaussian(real, imaginary).reciprocal();
 
-        assertThat(actual.real()).isCloseTo(expectedReal, withinEpsilon);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, withinEpsilon);
+        assertThat(actual.real()).isCloseTo(expectedReal, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
     }
 
     @Test
@@ -188,7 +188,7 @@ final class LongGaussianTest {
 
     @Test
     void norm_should_succeed() {
-        assertThat(gaussian1.norm()).isCloseTo(5D, withinEpsilon);
+        assertThat(gaussian1.norm()).isCloseTo(5D, offset);
     }
 
     @ParameterizedTest
@@ -197,11 +197,11 @@ final class LongGaussianTest {
         0, 3, 3
         """)
     void abs_should_succeed(final long real, final long imaginary, final long expected) {
-        assertThat(new LongGaussian(real, imaginary).abs()).isCloseTo(expected, withinEpsilon);
+        assertThat(new LongGaussian(real, imaginary).abs()).isCloseTo(expected, offset);
     }
 
     @Test
     void arg_should_succeed() {
-        assertThat(LongGaussian.ONE.arg()).isCloseTo(0D, withinEpsilon);
+        assertThat(LongGaussian.ONE.arg()).isCloseTo(0D, offset);
     }
 }

@@ -1,6 +1,7 @@
 package io.github.ltennstedt.irrational.core.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
@@ -15,24 +16,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 final class AtanCalculatorTest {
-    private static final BigDecimal PI = PiCalculator.pi(MathContext.DECIMAL128);
-
-    private static Stream<Arguments> atanSource() {
-        return Stream.of(
-                arguments(BigDecimal.ZERO, BigDecimal.ZERO),
-                arguments(BigDecimal.ONE, BigDecimal.ONE.divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
-                arguments(
-                        BigDecimal.valueOf(-1L),
-                        BigDecimal.valueOf(-1L).divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
-                arguments(
-                        BigDecimal.valueOf(3L).sqrt(MathContext.DECIMAL128),
-                        BigDecimal.ONE.divide(BigDecimal.valueOf(3L), MathContext.DECIMAL128)),
-                arguments(
-                        BigDecimal.ONE.divide(
-                                BigDecimal.valueOf(3L).sqrt(MathContext.DECIMAL128), MathContext.DECIMAL128),
-                        BigDecimal.ONE.divide(BigDecimal.valueOf(6L), MathContext.DECIMAL128)));
-    }
-
     private static Stream<Arguments> atan2Source() {
         return Stream.of(
                 arguments(
@@ -55,29 +38,6 @@ final class AtanCalculatorTest {
                         BigDecimal.valueOf(-1L),
                         BigDecimal.ZERO,
                         BigDecimal.valueOf(-1L).divide(BigDecimal.valueOf(2L), MathContext.DECIMAL128)));
-    }
-
-    @Test
-    void atan_should_throw_when_x_is_null() {
-        assertThatNullPointerException()
-                .isThrownBy(() -> AtanCalculator.atan(null, MathContext.DECIMAL128))
-                .withMessage("x")
-                .withNoCause();
-    }
-
-    @Test
-    void atan_should_throw_when_mathContext_is_null() {
-        assertThatNullPointerException()
-                .isThrownBy(() -> AtanCalculator.atan(BigDecimal.ZERO, null))
-                .withMessage("mathContext")
-                .withNoCause();
-    }
-
-    @ParameterizedTest
-    @MethodSource("atanSource")
-    void atan(final BigDecimal x, final BigDecimal expected) {
-        assertThat(AtanCalculator.atan(x, MathContext.DECIMAL128))
-                .isCloseTo(expected.multiply(PI), within(BigDecimal.ONE.scaleByPowerOfTen(-2)));
     }
 
     @Test
@@ -112,10 +72,20 @@ final class AtanCalculatorTest {
                 .withNoCause();
     }
 
+    @Test
+    void atan2_should_throw_when_precision_is_unlimited() {
+        assertThatExceptionOfType(ArithmeticException.class)
+                .isThrownBy(() -> AtanCalculator.atan2(BigDecimal.ONE, BigDecimal.ONE, MathContext.UNLIMITED))
+                .withMessage("Unlimited precision is disallowed")
+                .withNoCause();
+    }
+
     @ParameterizedTest
     @MethodSource("atan2Source")
     void atan2_should_succeed(final BigDecimal y, final BigDecimal x, final BigDecimal expected) {
         assertThat(AtanCalculator.atan2(y, x, MathContext.DECIMAL128))
-                .isCloseTo(expected.multiply(PI), within(BigDecimal.ONE.scaleByPowerOfTen(-2)));
+                .isCloseTo(
+                        expected.multiply(PiCalculator.pi(MathContext.DECIMAL128)),
+                        within(BigDecimal.ONE.scaleByPowerOfTen(-2)));
     }
 }
