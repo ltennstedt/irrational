@@ -28,8 +28,8 @@ The JVM provides excellent primitive numeric types and arbitrary precision class
 mathematical semantics required by numeric applications.
 
 Existing mathematical libraries often focus on specific domains or provide building blocks rather than a unified set of
-numeric types. irrational aims to provide comprehensive arbitrary precision support, JVM ecosystem integration, and
-idiomatic APIs for Java, Kotlin, and Groovy developers.
+numeric types. irrational aims to provide comprehensive arbitrary precision support, JVM ecosystem integration and
+idiomatic APIs for Java, Kotlin and Groovy developers.
 
 ### Usage
 
@@ -50,13 +50,16 @@ if (rational instanceof LongRational(long n, long d)) {
 ```kotlin
 val rational = LongRational(1L, 2L)
 rational + LongRational(3L, 4L)
+5.toLongRational()
 listOf(rational).map { (n, d) -> "$n / $d" }
 ```
 
 **Groovy**
 
 ```groovy
-new LongRational(1L, 2L) + new LongRational(3L, 4L)
+final rational = new LongRational(1L, 2L)
+rational + new LongRational(3L, 4L)
+rational ** 5
 ```
 
 ### Building
@@ -64,15 +67,19 @@ new LongRational(1L, 2L) + new LongRational(3L, 4L)
 The Gradle Wrapper is provided to build this project. An appropriate JDK will be downloaded automatically if no
 compatible toolchain is found locally.
 
-| Programming language | Version |
-|----------------------|---------|
-| Java                 | 17      |
-| Kotlin               | 2.2     |
-| Groovy               | 5.0     |
+|        Programming language        | Version |
+|------------------------------------|---------|
+| [Java](https://www.java.com/)      | 17      |
+| [Kotlin](https://kotlinlang.org/)  | 2.2     |
+| [Groovy](https://groovy-lang.org/) | 5.0     |
 
-Versions are aligned with those of Spring Boot which are still publicly supported (OSS support).
+Versions are aligned with those of [Spring Boot](https://spring.io/projects/spring-boot) which are still publicly
+supported (OSS support).
 
 [Spring Boot support matrix](https://spring.io/projects/spring-boot#support)
+
+A convenience task for local developer builds including formatting, compiling, testing, packaging and checking is
+available.
 
 ```shell
 # Unix-like
