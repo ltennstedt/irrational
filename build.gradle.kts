@@ -1,3 +1,6 @@
+import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
+import nl.littlerobots.vcu.plugin.versionSelector
+
 plugins {
     id("base-conventions")
     alias(libs.plugins.version.catalog.update)
@@ -30,6 +33,13 @@ spotless {
 }
 
 versionCatalogUpdate {
+    versionSelector {
+        val isKotlinPlugin =
+            it.candidate.group == "org.jetbrains.kotlin.jvm" &&
+                it.candidate.module == "org.jetbrains.kotlin.jvm.gradle.plugin"
+        (isKotlinPlugin && it.candidate.version.startsWith("2.2.")) ||
+            (!isKotlinPlugin && VersionSelectors.STABLE.select(it))
+    }
     pin {
         versions = setOf("spotless")
     }
