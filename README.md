@@ -73,8 +73,8 @@ compatible toolchain is found locally.
 | [Kotlin](https://kotlinlang.org/)  | 2.2     |
 | [Groovy](https://groovy-lang.org/) | 5.0     |
 
-Versions are aligned with those of [Spring Boot](https://spring.io/projects/spring-boot) which are still publicly
-supported (OSS support).
+Versions correspond to those managed by Spring Boot as long as the Spring Boot version is still within the OSS
+support window.
 
 [Spring Boot support matrix](https://spring.io/projects/spring-boot#support)
 
