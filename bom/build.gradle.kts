@@ -17,6 +17,7 @@ version = "0.1.0-SNAPSHOT"
 dependencies {
     constraints {
         api(project(":core"))
+        api(project(":jakarta-validation"))
         api(project(":kotlin"))
         api(project(":groovy"))
     }

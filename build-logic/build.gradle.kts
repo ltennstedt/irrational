@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.licensee.plugin)
     implementation(libs.validate.poms.plugin)
     implementation(libs.cyclonedx.plugin)
+    implementation(libs.spotbugs.plugin)
 }
 
 tasks {
