@@ -6,4 +6,4 @@ plugins {
 
 rootProject.name = "irrational"
 includeBuild("build-logic")
-include("core", "kotlin", "groovy", "report-aggregation")
+include("bom", "core", "kotlin", "groovy", "report-aggregation")
