@@ -20,7 +20,7 @@ public final class AtanCalculator {
      * @throws NullPointerException when x is null
      * @throws NullPointerException when y is null
      * @throws NullPointerException when mathContext is null
-     * @throws IllegalArgumentException when x and y are 0
+     * @throws ArithmeticException when x and y are 0
      * @throws ArithmeticException when precision is unlimited
      */
     public static BigDecimal atan2(final BigDecimal y, final BigDecimal x, final MathContext mathContext) {
@@ -28,7 +28,7 @@ public final class AtanCalculator {
         Objects.requireNonNull(x, "x");
         Objects.requireNonNull(mathContext, "mathContext");
         if (x.signum() == 0 && y.signum() == 0) {
-            throw new IllegalArgumentException("x and y must not both be 0");
+            throw new ArithmeticException("x and y must not both be 0");
         }
         if (mathContext.getPrecision() == 0) {
             throw new ArithmeticException("Unlimited precision is disallowed");
