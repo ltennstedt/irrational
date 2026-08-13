@@ -149,8 +149,6 @@ style:
     active: true
   RedundantExplicitType:
     active: true
-  RedundantVisibilityModifierRule:
-    active: true
   ReturnCount:
     active: false
   SpacingBetweenPackageAndImports:

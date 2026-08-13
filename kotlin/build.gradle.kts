@@ -64,6 +64,15 @@ tasks {
     }
 }
 
+spotless {
+    kotlin {
+        ktlint("1.8.0")
+        endWithNewline()
+        leadingTabsToSpaces()
+        trimTrailingWhitespace()
+    }
+}
+
 kotlin {
     explicitApi()
 }

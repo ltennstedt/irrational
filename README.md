@@ -43,6 +43,8 @@ rational.add(new LongRational(3L, 4L));
 if (rational instanceof LongRational(long n, long d)) {
     System.out.println(n + "/" + d);
 }
+
+LongVector.builder(2).entry(1, 2L).entry(2, 4L).build();
 ```
 
 **Kotlin**
@@ -52,6 +54,21 @@ val rational = LongRational(1L, 2L)
 rational + LongRational(3L, 4L)
 5.toLongRational()
 listOf(rational).map { (n, d) -> "$n / $d" }
+
+val vector = longVector(size = 2) {
+    entry(index = 1, value = 3L)
+    entry(index = 2, value = 4L)
+}
+3L * vector
+if (3L in vector) {
+    println("one entry in vector has value 3")
+}
+if (LongVectorEntry(1, 3L) in vector) {
+    println("one entry in vector has index 1 and value 3")
+}
+if (vector[1] == 3L) {
+    println("entry at index 1 has value 3")
+}
 ```
 
 **Groovy**
@@ -78,15 +95,15 @@ support window.
 
 [Spring Boot support matrix](https://spring.io/projects/spring-boot#support)
 
-A convenience task for local developer builds including formatting, compiling, testing, packaging and checking is
-available.
+You have to execute the following tasks when a full local developer build including formatting, compiling, testing,
+packaging and checking is your goal.
 
 ```shell
 # Unix-like
-./gradlew localBuild
+./gradlew buildHealth versionCatalogFormat spotlessApply build publishToMavenLocal
 
 # Windows
-./gradlew.bat localBuild
+./gradlew.bat buildHealth versionCatalogFormat spotlessApply build publishToMavenLocal
 ```
 
 ### Subprojects
@@ -112,8 +129,8 @@ More subprojects are planned for the future.
 * Single source of truth
 * Parameter validation and fast failing
 * Builders for vectors and matrices
-* Prefer [records](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html) over classes and
-  [sealed interfaces](https://docs.oracle.com/en/java/javase/17/language/sealed-classes-and-interfaces.html)
+* Prefer [records](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html) and
+  [sealed interfaces](https://docs.oracle.com/en/java/javase/17/language/sealed-classes-and-interfaces.html) to classes
 * Language ergonomics via thin adapters for [Kotlin](https://kotlinlang.org/) and [Groovy](https://groovy-lang.org/)
 * Informative [Javadoc](https://docs.oracle.com/en/java/javase/17/javadoc/javadoc.html),
   [KDoc](https://kotlinlang.org/docs/kotlin-doc.html)
@@ -121,21 +138,8 @@ More subprojects are planned for the future.
 
 ### Quality
 
-**Formatting**
-* [Spotless](https://github.com/diffplug/spotless)
-
-**Linting**
-* [Checkstyle](https://checkstyle.sourceforge.io/)
-* [PMD](https://pmd.github.io/)
-* [SpotBugs](https://spotbugs.github.io/)
-* [Detekt](https://detekt.dev/)
-* [CodeNarc](https://codenarc.org/)
-* [SonarQube for IDE](https://www.sonarsource.com/products/sonarqube/ide/)
-* [DeepSource](https://deepsource.com/)
-
-**Testing**
-* [JUnit](https://junit.org/)
-* [AssertJ](https://assertj.github.io/doc/)
-* [Kotest](https://kotest.io/)
-* [Spock](https://spockframework.org/)
-* [JaCoCo](https://www.eclemma.org/jacoco/)
+|  Category  |                                                                                                                                                    Tools                                                                                                                                                    |
+|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Formatting | [Spotless](https://github.com/diffplug/spotless)                                                                                                                                                                                                                                                            |
+| Linting    | [Checkstyle](https://checkstyle.sourceforge.io/), [PMD](https://pmd.github.io/). [SpotBugs](https://spotbugs.github.io/), [Detekt](https://detekt.dev/), [CodeNarc](https://codenarc.org/), [SonarQube for IDE](https://www.sonarsource.com/products/sonarqube/ide/), [DeepSource](https://deepsource.com/) |
+| Testing    | [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/), [Kotest](https://kotest.io/), [Spock](https://spockframework.org/), [JaCoCo](https://www.eclemma.org/jacoco/)                                                                                                                       |

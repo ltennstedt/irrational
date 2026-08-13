@@ -110,7 +110,6 @@ ruleset {
     HashtableIsObsolete
     IfStatementCouldBeTernary
     ImplicitClosureParameter
-    ImplicitReturnStatement
     InvertedCondition
     InvertedIfElse
     LongLiteralWithLowerCaseL

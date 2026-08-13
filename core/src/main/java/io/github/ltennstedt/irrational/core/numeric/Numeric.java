@@ -1,57 +1,13 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.Additive;
+import io.github.ltennstedt.irrational.core.Multipliable;
+import io.github.ltennstedt.irrational.core.Subtractable;
+
 /**
  * Base interface for numbers
  *
  * @param <N> type of the number
  */
 public sealed interface Numeric<N extends Numeric<N, Q>, Q extends Numeric<Q, Q>>
-        permits Complex, DoubleQuaternion, Rational {
-    /**
-     * Indicates if this is invertible
-     *
-     * @return boolean
-     */
-    boolean isInvertible();
-
-    /**
-     * Indicates if this is 0
-     *
-     * @return boolean
-     */
-    boolean isZero();
-
-    /**
-     * Returns the sum of this and the summand
-     *
-     * @param summand summand
-     * @return sum
-     * @throws NullPointerException when summand is null
-     */
-    N add(N summand);
-
-    /**
-     * Returns the difference of this and the subtrahend
-     *
-     * @param subtrahend subtrahend
-     * @return difference
-     * @throws NullPointerException when subtrahend is null
-     */
-    N subtract(N subtrahend);
-
-    /**
-     * Returns the product of this and the multiplier
-     *
-     * @param multiplier multiplier
-     * @return product
-     * @throws NullPointerException when multiplier is null
-     */
-    N multiply(N multiplier);
-
-    /**
-     * Returns the negated number
-     *
-     * @return negated number
-     */
-    N negate();
-}
+        extends Additive<N>, Subtractable<N>, Multipliable<N> permits Complex, DoubleQuaternion, Rational {}

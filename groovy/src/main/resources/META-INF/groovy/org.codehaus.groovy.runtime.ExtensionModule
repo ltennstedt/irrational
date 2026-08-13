@@ -1,3 +1,3 @@
 moduleName=Groovy module for irrational
 moduleVersion=0.1.0-SNAPSHOT
-extensionClasses=io.github.ltennstedt.irrational.core.numeric.NumericOperators,io.github.ltennstedt.irrational.core.numeric.PrimitiveNumericOperators,io.github.ltennstedt.irrational.core.numeric.BigRationalOperators
+extensionClasses=io.github.ltennstedt.irrational.groovy.LongOperators,io.github.ltennstedt.irrational.groovy.numeric.NumericOperators,io.github.ltennstedt.irrational.groovy.numeric.PrimitiveNumericOperators,io.github.ltennstedt.irrational.groovy.numeric.BigRationalOperators,io.github.ltennstedt.irrational.groovy.linear.LongVectorOperators

@@ -9,15 +9,6 @@ repositories {
     mavenCentral()
 }
 
-tasks {
-    register("localBuild") {
-        description = "Convenience task for local development builds before committing and pushing"
-        group = "build"
-        dependsOn(spotlessApply, build)
-        enabled = isNotCi.get()
-    }
-}
-
 configurations.configureEach {
     resolutionStrategy {
         componentSelection.all {

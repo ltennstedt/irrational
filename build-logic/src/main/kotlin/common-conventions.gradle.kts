@@ -44,10 +44,6 @@ tasks {
     check {
         dependsOn(jacocoTestReport, licensee)
     }
-    named("localBuild") {
-        dependsOn(named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
-        enabled = isNotCi.get()
-    }
 }
 
 java {

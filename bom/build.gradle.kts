@@ -34,16 +34,6 @@ tasks {
             listOf(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME, JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)
         xmlOutput.unsetConvention()
     }
-    named("localBuild") {
-        dependsOn(named<PublishToMavenLocal>("publishMavenPublicationToMavenLocal"))
-        enabled =
-            providers
-                .environmentVariable("CI")
-                .map { it.equals("true", ignoreCase = true) }
-                .orElse(false)
-                .map { !it }
-                .get()
-    }
 }
 
 publishing {
