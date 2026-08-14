@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._9da13f0ce2420b7aafce48b332d000a7.build
-import gradle.kotlin.dsl.accessors._9da13f0ce2420b7aafce48b332d000a7.spotlessApply
-
 plugins {
     id("com.diffplug.spotless")
 }

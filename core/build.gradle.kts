@@ -50,7 +50,7 @@ tasks {
 
 spotless {
     java {
-        palantirJavaFormat("2.96.0").formatJavadoc(true)
+        palantirJavaFormat("2.97.0").formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()

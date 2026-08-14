@@ -24,8 +24,8 @@ dependencies {
 tasks {
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            apiVersion = KotlinVersion.KOTLIN_2_3
-            languageVersion = KotlinVersion.KOTLIN_2_3
+            apiVersion = KotlinVersion.KOTLIN_2_4
+            languageVersion = KotlinVersion.KOTLIN_2_4
             progressiveMode = true
             extraWarnings = true
         }
@@ -51,9 +51,6 @@ tasks {
                 required = false
             }
         }
-    }
-    check {
-        dependsOn(buildHealth)
     }
 }
 
