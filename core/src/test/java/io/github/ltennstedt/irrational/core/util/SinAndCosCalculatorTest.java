@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class SinAndCosCalculatorTest {
-    private final Offset<BigDecimal> offset = within(new BigDecimal("1E-33"));
+    private static final Offset<BigDecimal> OFFSET = within(new BigDecimal("1E-33"));
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -29,16 +29,14 @@ final class SinAndCosCalculatorTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        0, 0
-        0.5, 1
-        1, 0
-        1.5, -1
-        2, 0
-        """)
-    void sin_should_succeed(final BigDecimal factor, final BigDecimal expected) {
-        assertThat(SinAndCosCalculator.sin(
-                        factor.multiply(PiCalculator.pi(MathContext.DECIMAL128)), MathContext.DECIMAL128))
-                .isCloseTo(expected, offset);
+    0,                                    0
+    1.570796326794896619231321691639752,  1
+    3.141592653589793238462643383279503,  0
+    4.712388980384689857693965074919255, -1
+    6.283185307179586476925286766559005,  0
+    """)
+    void sin_should_succeed(final BigDecimal angle, final BigDecimal expected) {
+        assertThat(SinAndCosCalculator.sin(angle, MathContext.DECIMAL128)).isCloseTo(expected, OFFSET);
     }
 
     @ParameterizedTest
@@ -66,6 +64,6 @@ final class SinAndCosCalculatorTest {
     void cos_should_succeed(final BigDecimal factor, final BigDecimal expected) {
         assertThat(SinAndCosCalculator.cos(
                         factor.multiply(PiCalculator.pi(MathContext.DECIMAL128)), MathContext.DECIMAL128))
-                .isCloseTo(expected, offset);
+                .isCloseTo(expected, OFFSET);
     }
 }

@@ -8,34 +8,44 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.stream.Stream;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 final class AtanCalculatorTest {
+    private static final Offset<BigDecimal> OFFSET = within(new BigDecimal("1E-33"));
+
     private static Stream<Arguments> atan2Source() {
+        final var pi = PiCalculator.pi(MathContext.DECIMAL128);
         return Stream.of(
+                arguments(BigDecimal.ONE, BigDecimal.ONE, pi.divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
                 arguments(
+                        BigDecimal.valueOf(-1L),
                         BigDecimal.ONE,
-                        BigDecimal.ONE,
-                        BigDecimal.ONE.divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
+                        pi.divide(BigDecimal.valueOf(-4L), MathContext.DECIMAL128)),
+                arguments(
+                        BigDecimal.valueOf(2L), BigDecimal.ONE, new BigDecimal("1.107148717794090503017065460178537")),
+                arguments(
+                        BigDecimal.ONE, BigDecimal.valueOf(4L), new BigDecimal("0.2449786631268641541720824812112758")),
+                arguments(
+                        BigDecimal.ONE, BigDecimal.valueOf(2L), new BigDecimal("0.4636476090008061162142562314612144")),
+                arguments(BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO),
                 arguments(
                         BigDecimal.ONE,
                         BigDecimal.valueOf(-1L),
-                        BigDecimal.valueOf(3L).divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
+                        pi.multiply(BigDecimal.valueOf(3L)).divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
                 arguments(
                         BigDecimal.valueOf(-1L),
                         BigDecimal.valueOf(-1L),
-                        BigDecimal.valueOf(-3L).divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
+                        pi.multiply(BigDecimal.valueOf(-3L)).divide(BigDecimal.valueOf(4L), MathContext.DECIMAL128)),
+                arguments(BigDecimal.ZERO, BigDecimal.valueOf(-1L), pi),
+                arguments(BigDecimal.ONE, BigDecimal.ZERO, pi.divide(BigDecimal.valueOf(2L), MathContext.DECIMAL128)),
                 arguments(
-                        BigDecimal.ONE,
+                        BigDecimal.valueOf(-1L),
                         BigDecimal.ZERO,
-                        BigDecimal.ONE.divide(BigDecimal.valueOf(2L), MathContext.DECIMAL128)),
-                arguments(
-                        BigDecimal.valueOf(-1L),
-                        BigDecimal.ZERO,
-                        BigDecimal.valueOf(-1L).divide(BigDecimal.valueOf(2L), MathContext.DECIMAL128)));
+                        pi.divide(BigDecimal.valueOf(-2L), MathContext.DECIMAL128)));
     }
 
     @ParameterizedTest
@@ -61,9 +71,6 @@ final class AtanCalculatorTest {
     @ParameterizedTest
     @MethodSource("atan2Source")
     void atan2_should_succeed(final BigDecimal y, final BigDecimal x, final BigDecimal expected) {
-        assertThat(AtanCalculator.atan2(y, x, MathContext.DECIMAL128))
-                .isCloseTo(
-                        expected.multiply(PiCalculator.pi(MathContext.DECIMAL128)),
-                        within(BigDecimal.ONE.scaleByPowerOfTen(-2)));
+        assertThat(AtanCalculator.atan2(y, x, MathContext.DECIMAL128)).isCloseTo(expected, OFFSET);
     }
 }

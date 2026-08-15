@@ -91,7 +91,7 @@ public final class AtanCalculator {
             xPower = xPower.multiply(x2, mathContext);
             divisor = divisor.add(BigDecimal.valueOf(2L));
             final var candidate = BigDecimal.ONE.divide(divisor, mathContext);
-            coefficients.add((k & 1) == 1 ? candidate.negate() : candidate);
+            coefficients.add((k & 1) == 0 ? candidate.negate() : candidate);
             if (xPower.divide(divisor, mathContext).compareTo(tolerance) < 0) {
                 break;
             }
