@@ -55,21 +55,25 @@ public record LongGaussian(long real, long imaginary)
     @Override
     public LongGaussian add(final LongGaussian summand) {
         Objects.requireNonNull(summand, "summand");
-        return new LongGaussian(real + summand.real, imaginary + summand.imaginary);
+        return new LongGaussian(Math.addExact(real, summand.real), Math.addExact(imaginary, summand.imaginary));
     }
 
     @Override
     public LongGaussian subtract(final LongGaussian subtrahend) {
         Objects.requireNonNull(subtrahend, "subtrahend");
-        return new LongGaussian(real - subtrahend.real, imaginary - subtrahend.imaginary);
+        return new LongGaussian(
+                Math.subtractExact(real, subtrahend.real), Math.subtractExact(imaginary, subtrahend.imaginary));
     }
 
     @Override
     public LongGaussian multiply(final LongGaussian multiplier) {
         Objects.requireNonNull(multiplier, "multiplier");
         return new LongGaussian(
-                real * multiplier.real - imaginary * multiplier.imaginary,
-                real * multiplier.imaginary + imaginary * multiplier.real);
+                Math.subtractExact(
+                        Math.multiplyExact(real, multiplier.real), Math.multiplyExact(imaginary, multiplier.imaginary)),
+                Math.addExact(
+                        Math.multiplyExact(real, multiplier.imaginary),
+                        Math.multiplyExact(imaginary, multiplier.real)));
     }
 
     @Override
@@ -91,7 +95,7 @@ public record LongGaussian(long real, long imaginary)
 
     @Override
     public LongGaussian negate() {
-        return new LongGaussian(-real, -imaginary);
+        return new LongGaussian(Math.negateExact(real), Math.negateExact(imaginary));
     }
 
     /** @throws ArithmeticException when an arithmetic overflow occurs */
@@ -123,12 +127,12 @@ public record LongGaussian(long real, long imaginary)
             throw new ArithmeticException("this must be invertible but was " + this);
         }
         final var denominator = norm();
-        return new DoubleComplex(real / denominator, -imaginary / denominator);
+        return new DoubleComplex(real / denominator, Math.negateExact(imaginary) / denominator);
     }
 
     @Override
     public LongGaussian conjugate() {
-        return new LongGaussian(real, -imaginary);
+        return new LongGaussian(real, Math.negateExact(imaginary));
     }
 
     /**
