@@ -1,5 +1,7 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.Divisible;
+import io.github.ltennstedt.irrational.core.Exponentiable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -10,7 +12,9 @@ import java.util.Set;
  * @param imaginary imaginary part
  */
 public record LongGaussian(long real, long imaginary)
-        implements Complex<LongGaussian, DoubleComplex>, PrimitiveNumeric<LongGaussian, DoubleComplex> {
+        implements Complex<LongGaussian, DoubleComplex>,
+                Divisible<LongGaussian, DoubleComplex>,
+                Exponentiable<LongGaussian, DoubleComplex> {
     /** 0 */
     public static final LongGaussian ZERO = new LongGaussian(0L, 0L);
 

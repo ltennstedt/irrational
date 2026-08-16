@@ -1,10 +1,10 @@
-package io.github.ltennstedt.irrational.kotlin.numeric
+package io.github.ltennstedt.irrational.kotlin
 
 import io.github.ltennstedt.irrational.core.numeric.DoubleComplex
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.equals.shouldBeEqual
 
-class PrimitiveNumericOperatorsSpec :
+class DivisibleOperatorsSpec :
     ShouldSpec({
         context("div") {
             should("succeed") {

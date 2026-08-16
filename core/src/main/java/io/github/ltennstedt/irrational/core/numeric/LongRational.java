@@ -14,8 +14,7 @@ import java.util.Comparator;
  * @param numerator numerator
  * @param denominator denominator
  */
-public record LongRational(long numerator, long denominator)
-        implements Rational<LongRational>, PrimitiveNumeric<LongRational, LongRational> {
+public record LongRational(long numerator, long denominator) implements Rational<LongRational> {
     /** Comparator */
     public static final Comparator<LongRational> COMPARATOR = Comparable::compareTo;
 
@@ -148,7 +147,6 @@ public record LongRational(long numerator, long denominator)
         return (exponent & 1) == 0 ? squared : multiply(squared);
     }
 
-    /** @throws ArithmeticException when this is not invertible */
     @Override
     public LongRational reciprocal() {
         if (!isInvertible()) {

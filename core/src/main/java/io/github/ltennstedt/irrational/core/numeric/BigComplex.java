@@ -1,5 +1,10 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.MathContextAdditive;
+import io.github.ltennstedt.irrational.core.MathContextDivisible;
+import io.github.ltennstedt.irrational.core.MathContextExponentiable;
+import io.github.ltennstedt.irrational.core.MathContextMultipliable;
+import io.github.ltennstedt.irrational.core.MathContextSubtractable;
 import io.github.ltennstedt.irrational.core.util.AtanCalculator;
 import io.github.ltennstedt.irrational.core.util.SinAndCosCalculator;
 import java.math.BigDecimal;
@@ -13,7 +18,12 @@ import java.util.Objects;
  * @param imaginary imaginary part
  */
 public record BigComplex(BigDecimal real, BigDecimal imaginary)
-        implements BigNumeric<BigComplex, BigComplex>, MathContextNumeric<BigComplex>, Complex<BigComplex, BigComplex> {
+        implements MathContextAdditive<BigComplex>,
+                MathContextSubtractable<BigComplex>,
+                MathContextMultipliable<BigComplex, BigComplex>,
+                MathContextDivisible<BigComplex, BigComplex>,
+                MathContextExponentiable<BigComplex, BigComplex>,
+                Complex<BigComplex, BigComplex> {
     /** 0 */
     public static final BigComplex ZERO = new BigComplex(BigDecimal.ZERO, BigDecimal.ZERO);
 

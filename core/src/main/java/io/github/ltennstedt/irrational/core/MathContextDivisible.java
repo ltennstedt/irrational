@@ -1,14 +1,14 @@
-package io.github.ltennstedt.irrational.core.numeric;
+package io.github.ltennstedt.irrational.core;
 
 import java.math.MathContext;
 
 /**
- * Base interface for numbers based on {@link java.math.BigInteger} or {@link java.math.BigDecimal}
+ * Interface for types for which division with {@link MathContext} is defined
  *
- * @param <N> type of the number
+ * @param <D> type of the {@link MathContextDivisible}
  * @param <Q> type of the quotient
  */
-public interface BigNumeric<N extends BigNumeric<N, Q>, Q extends BigNumeric<Q, Q>> {
+public interface MathContextDivisible<D extends MathContextDivisible<D, Q>, Q extends MathContextDivisible<Q, Q>> {
     /**
      * Returns the quotient of this and the divisor
      *
@@ -19,17 +19,7 @@ public interface BigNumeric<N extends BigNumeric<N, Q>, Q extends BigNumeric<Q, 
      * @throws NullPointerException when mathContext is null
      * @throws ArithmeticException when divisor is not invertible
      */
-    Q divide(N divisor, MathContext mathContext);
-
-    /**
-     * Returns this raised by the power of exponent
-     *
-     * @param exponent exponent
-     * @param mathContext {@link MathContext}
-     * @return power
-     * @throws NullPointerException when mathContext is null
-     */
-    Q pow(int exponent, MathContext mathContext);
+    Q divide(D divisor, MathContext mathContext);
 
     /**
      * Returns the reciprocal

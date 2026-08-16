@@ -1,5 +1,7 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.Divisible;
+import io.github.ltennstedt.irrational.core.Exponentiable;
 import io.github.ltennstedt.irrational.core.util.Doubles;
 import java.util.Objects;
 
@@ -10,7 +12,9 @@ import java.util.Objects;
  * @param imaginary imaginary part
  */
 public record DoubleComplex(double real, double imaginary)
-        implements Complex<DoubleComplex, DoubleComplex>, PrimitiveNumeric<DoubleComplex, DoubleComplex> {
+        implements Complex<DoubleComplex, DoubleComplex>,
+                Divisible<DoubleComplex, DoubleComplex>,
+                Exponentiable<DoubleComplex, DoubleComplex> {
     /** 0 */
     public static final DoubleComplex ZERO = new DoubleComplex(0D, 0D);
 

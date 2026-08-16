@@ -1,5 +1,9 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.MathContextAdditive;
+import io.github.ltennstedt.irrational.core.MathContextDivisible;
+import io.github.ltennstedt.irrational.core.MathContextMultipliable;
+import io.github.ltennstedt.irrational.core.MathContextSubtractable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
@@ -13,8 +17,10 @@ import java.util.Objects;
  * @param z z
  */
 public record BigQuaternion(BigDecimal w, BigDecimal x, BigDecimal y, BigDecimal z)
-        implements BigNumeric<BigQuaternion, BigQuaternion>,
-                MathContextNumeric<BigQuaternion>,
+        implements MathContextAdditive<BigQuaternion>,
+                MathContextSubtractable<BigQuaternion>,
+                MathContextMultipliable<BigQuaternion, BigQuaternion>,
+                MathContextDivisible<BigQuaternion, BigQuaternion>,
                 Complex<BigQuaternion, BigQuaternion> {
     /** 0 */
     public static final BigQuaternion ZERO =

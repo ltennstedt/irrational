@@ -1,5 +1,10 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.Additive;
+import io.github.ltennstedt.irrational.core.Divisible;
+import io.github.ltennstedt.irrational.core.Exponentiable;
+import io.github.ltennstedt.irrational.core.Multipliable;
+import io.github.ltennstedt.irrational.core.Subtractable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -9,7 +14,8 @@ import java.math.RoundingMode;
  *
  * @param <R> type of the rational number
  */
-public sealed interface Rational<R extends Rational<R>> extends Numeric<R, R>, Comparable<R>
+public sealed interface Rational<R extends Rational<R>>
+        extends Comparable<R>, Additive<R>, Subtractable<R>, Multipliable<R>, Divisible<R, R>, Exponentiable<R, R>
         permits LongRational, BigRational {
     /**
      * Indicates if this is a unit
@@ -63,14 +69,6 @@ public sealed interface Rational<R extends Rational<R>> extends Numeric<R, R>, C
      * @return signum
      */
     int signum();
-
-    /**
-     * Returns the reciprocal
-     *
-     * @return reciprocal
-     * @throws ArithmeticException when this is not invertible
-     */
-    R reciprocal();
 
     /**
      * Returns the minimum

@@ -1,5 +1,7 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.MathContextDivisible;
+import io.github.ltennstedt.irrational.core.MathContextExponentiable;
 import io.github.ltennstedt.irrational.core.util.AtanCalculator;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -14,7 +16,9 @@ import java.util.Set;
  * @param imaginary imaginary part
  */
 public record BigGaussian(BigInteger real, BigInteger imaginary)
-        implements Complex<BigGaussian, BigComplex>, BigNumeric<BigGaussian, BigComplex> {
+        implements Complex<BigGaussian, BigComplex>,
+                MathContextDivisible<BigGaussian, BigComplex>,
+                MathContextExponentiable<BigGaussian, BigComplex> {
     /** 0 */
     public static final BigGaussian ZERO = new BigGaussian(BigInteger.ZERO, BigInteger.ZERO);
 

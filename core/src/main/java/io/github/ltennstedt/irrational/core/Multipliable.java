@@ -1,13 +1,14 @@
 package io.github.ltennstedt.irrational.core;
 
-import io.github.ltennstedt.irrational.core.numeric.Numeric;
-
 /**
  * Interface for types for which multiplication is defined
  *
- * @param <M> type
+ * @param <M> type of the {@link Multipliable}
  */
-public sealed interface Multipliable<M> permits Numeric {
+public sealed interface Multipliable<M extends Multipliable<M>>
+        permits io.github.ltennstedt.irrational.core.numeric.Complex,
+                io.github.ltennstedt.irrational.core.numeric.DoubleQuaternion,
+                io.github.ltennstedt.irrational.core.numeric.Rational {
     /**
      * Indicates if this is invertible
      *

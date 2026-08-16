@@ -1,5 +1,7 @@
 package io.github.ltennstedt.irrational.core.numeric;
 
+import io.github.ltennstedt.irrational.core.Divisible;
+import io.github.ltennstedt.irrational.core.Exponentiable;
 import io.github.ltennstedt.irrational.core.util.Doubles;
 import java.util.Objects;
 
@@ -12,9 +14,12 @@ import java.util.Objects;
  * @param z z
  */
 public record DoubleQuaternion(double w, double x, double y, double z)
-        implements Numeric<DoubleQuaternion, DoubleQuaternion>,
-                PrimitiveNumeric<DoubleQuaternion, DoubleQuaternion>,
-                Complex<DoubleQuaternion, DoubleQuaternion> {
+        implements Divisible<DoubleQuaternion, DoubleQuaternion>,
+                Exponentiable<DoubleQuaternion, DoubleQuaternion>,
+                Complex<DoubleQuaternion, DoubleQuaternion>,
+                io.github.ltennstedt.irrational.core.Additive<DoubleQuaternion>,
+                io.github.ltennstedt.irrational.core.Subtractable<DoubleQuaternion>,
+                io.github.ltennstedt.irrational.core.Multipliable<DoubleQuaternion> {
     /** 0 */
     public static final DoubleQuaternion ZERO = new DoubleQuaternion(0D, 0D, 0D, 0D);
 

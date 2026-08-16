@@ -1,14 +1,17 @@
 package io.github.ltennstedt.irrational.core;
 
 import io.github.ltennstedt.irrational.core.linear.Vector;
-import io.github.ltennstedt.irrational.core.numeric.Numeric;
 
 /**
  * Interface for types for which addition is defined
  *
- * @param <A> type
+ * @param <A> type of the {@link Additive}
  */
-public sealed interface Additive<A> permits Numeric, Vector {
+public sealed interface Additive<A>
+        permits Vector,
+                io.github.ltennstedt.irrational.core.numeric.Complex,
+                io.github.ltennstedt.irrational.core.numeric.DoubleQuaternion,
+                io.github.ltennstedt.irrational.core.numeric.Rational {
     /**
      * Indicates if this is 0
      *

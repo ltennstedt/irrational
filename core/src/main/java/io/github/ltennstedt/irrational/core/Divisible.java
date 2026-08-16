@@ -1,12 +1,12 @@
-package io.github.ltennstedt.irrational.core.numeric;
+package io.github.ltennstedt.irrational.core;
 
 /**
- * Base interface for numbers based on primitive types
+ * Interface for types for which division is defined
  *
- * @param <N> type of the number
+ * @param <D> type of the {@link Divisible}
  * @param <Q> type of the quotient
  */
-public interface PrimitiveNumeric<N extends PrimitiveNumeric<N, Q>, Q extends PrimitiveNumeric<Q, Q>> {
+public interface Divisible<D extends Divisible<D, Q>, Q extends Divisible<Q, Q>> {
     /**
      * Returns the quotient of this and the divisor
      *
@@ -15,15 +15,7 @@ public interface PrimitiveNumeric<N extends PrimitiveNumeric<N, Q>, Q extends Pr
      * @throws NullPointerException when divisor is null
      * @throws ArithmeticException when divisor is not invertible
      */
-    Q divide(N divisor);
-
-    /**
-     * Returns this raised by the power of exponent
-     *
-     * @param exponent exponent
-     * @return power
-     */
-    Q pow(int exponent);
+    Q divide(D divisor);
 
     /**
      * Returns the reciprocal

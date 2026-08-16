@@ -1,14 +1,17 @@
 package io.github.ltennstedt.irrational.core;
 
 import io.github.ltennstedt.irrational.core.linear.Vector;
-import io.github.ltennstedt.irrational.core.numeric.Numeric;
 
 /**
  * Interface for types for which subtraction is defined
  *
- * @param <S> type
+ * @param <S> type of the {@link Subtractable}
  */
-public sealed interface Subtractable<S extends Subtractable<S>> permits Numeric, Vector {
+public sealed interface Subtractable<S extends Subtractable<S>>
+        permits Vector,
+                io.github.ltennstedt.irrational.core.numeric.Complex,
+                io.github.ltennstedt.irrational.core.numeric.DoubleQuaternion,
+                io.github.ltennstedt.irrational.core.numeric.Rational {
     /**
      * Returns the difference of this and the subtrahend
      *
