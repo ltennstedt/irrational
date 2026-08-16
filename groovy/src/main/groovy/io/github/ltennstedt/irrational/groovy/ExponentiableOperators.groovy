@@ -3,9 +3,7 @@ package io.github.ltennstedt.irrational.groovy
 import groovy.transform.CompileStatic
 import io.github.ltennstedt.irrational.core.Exponentiable
 
-/**
- * Operators for PrimitiveNumeric
- */
+/** Operators for {@link ExponentiableOperators} */
 @CompileStatic
 final class ExponentiableOperators {
     private ExponentiableOperators() {}

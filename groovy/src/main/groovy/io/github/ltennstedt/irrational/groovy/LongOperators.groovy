@@ -3,7 +3,7 @@ package io.github.ltennstedt.irrational.groovy
 import groovy.transform.CompileStatic
 import io.github.ltennstedt.irrational.core.linear.LongVector
 
-/** Extensions for Long */
+/** Extensions for {@link Long */
 @CompileStatic
 final class LongOperators {
     private LongOperators() { }

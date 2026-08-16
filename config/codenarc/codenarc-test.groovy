@@ -112,8 +112,6 @@ ruleset {
     InvertedIfElse
     LongLiteralWithLowerCaseL
     MethodParameterTypeRequired
-    NoDouble
-    NoFloat
     NoJavaUtilDate
     NoTabCharacter
     ParameterReassignment
@@ -336,7 +334,6 @@ ruleset {
     AddEmptyString
     ConsecutiveLiteralAppends
     ConsecutiveStringConcatenation
-    UnnecessaryBigDecimalInstantiation
     UnnecessaryBigIntegerInstantiation
     UnnecessaryBooleanExpression
     UnnecessaryBooleanInstantiation

@@ -3,9 +3,7 @@ package io.github.ltennstedt.irrational.groovy
 import groovy.transform.CompileStatic
 import io.github.ltennstedt.irrational.core.Divisible
 
-/**
- * Operators for PrimitiveNumeric
- */
+/** Operators for {@link Divisible} */
 @CompileStatic
 final class DivisibleOperators {
     private DivisibleOperators() {}

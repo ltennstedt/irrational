@@ -3,7 +3,7 @@ package io.github.ltennstedt.irrational.groovy
 import groovy.transform.CompileStatic
 import io.github.ltennstedt.irrational.core.Subtractable
 
-/** Operators for Numeric */
+/** Operators for {@link Subtractable} */
 @CompileStatic
 final class SubtractableOperators {
     private SubtractableOperators() {}

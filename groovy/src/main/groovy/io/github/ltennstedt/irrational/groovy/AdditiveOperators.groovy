@@ -3,7 +3,7 @@ package io.github.ltennstedt.irrational.groovy
 import groovy.transform.CompileStatic
 import io.github.ltennstedt.irrational.core.Additive
 
-/** Operators for Numeric */
+/** Operators for {@link Additive} */
 @CompileStatic
 final class AdditiveOperators {
     private AdditiveOperators() {}
