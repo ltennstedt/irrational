@@ -2,6 +2,9 @@ plugins {
     id("com.diffplug.spotless")
 }
 
+group = "io.github.irrational"
+version = "0.1.0-SNAPSHOT"
+
 repositories {
     mavenCentral()
 }

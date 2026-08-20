@@ -11,9 +11,6 @@ plugins {
     id("io.freefair.maven-central.validate-poms")
 }
 
-group = "io.github.irrational"
-version = "0.1.0-SNAPSHOT"
-
 dependencies {
     constraints {
         api(project(":core"))

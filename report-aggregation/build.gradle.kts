@@ -12,6 +12,9 @@ dependencies {
 }
 
 tasks {
+    withType<Jar>().configureEach {
+        enabled = false
+    }
     withType<JacocoReport>().configureEach {
         reports {
             html.required = isNotCi

@@ -11,9 +11,6 @@ plugins {
     `maven-publish`
 }
 
-group = "io.github.irrational"
-version = "0.1.0-SNAPSHOT"
-
 tasks {
     withType<ProcessResources>().configureEach {
         filteringCharset = StandardCharsets.UTF_8.name()
