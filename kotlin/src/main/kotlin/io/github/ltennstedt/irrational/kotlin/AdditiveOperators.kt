@@ -3,7 +3,6 @@ package io.github.ltennstedt.irrational.kotlin
 import io.github.ltennstedt.irrational.core.Additive
 
 /** Unary + operator */
-@Suppress("UNCHECKED_CAST")
 public operator fun <A : Additive<A>> A.unaryPlus(): A = this
 
 /** Binary + operator */

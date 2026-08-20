@@ -8,8 +8,10 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import io.github.ltennstedt.irrational.core.linear.BigIntegerVector.BigIntegerVectorEntry;
 import io.github.ltennstedt.irrational.core.linear.LongVector.LongVectorEntry;
 import io.github.ltennstedt.irrational.core.util.Doubles;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -97,10 +99,11 @@ final class LongVectorTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        0,  0, false
+         0, 0, false
         -1, 0, false
-        0,  1, true
-        1,  0, true
+         1, 1, false
+         0, 1, true
+         1, 0, true
         """)
     void isStandardBasisVector_should_succeed(final long value1, final long value2, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, value1), new LongVectorEntry(2, value2)));
@@ -110,10 +113,11 @@ final class LongVectorTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
+         0,  0, false
         -1, -1, false
          1,  1, false
-         0,  1, true
-         1,  0, true
+         0, -1, true
+         2,  0, true
         """)
     void isUnitVector_should_succeed(final long value1, final long value2, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, value1), new LongVectorEntry(2, value2)));
@@ -123,7 +127,7 @@ final class LongVectorTest {
 
     @Test
     void size_should_succeed() {
-        assertThat(new LongVector(List.of()).size()).isZero();
+        assertThat(LongVector.EMPTY.size()).isZero();
     }
 
     @Test
@@ -142,6 +146,14 @@ final class LongVectorTest {
 
     @Test
     void value_should_succeed() {
+        final var entry = new LongVectorEntry(1, 0L);
+        final var vector = new LongVector(List.of(entry, new LongVectorEntry(2, 1L)));
+
+        assertThat(vector.value(1)).isZero();
+    }
+
+    @Test
+    void entry_should_succeed() {
         final var entry = new LongVectorEntry(1, 0L);
         final var vector = new LongVector(List.of(entry, new LongVectorEntry(2, 0L)));
 
@@ -185,17 +197,9 @@ final class LongVectorTest {
     @Test
     void containsEntry_should_throw_when_entry_is_null() {
         assertThatNullPointerException()
-                .isThrownBy(() -> new LongVector(List.of()).containsEntry(null))
+                .isThrownBy(() -> LongVector.EMPTY.containsEntry(null))
                 .withMessage("entry")
                 .withNoCause();
-    }
-
-    @Test
-    void entry_should_succeed() {
-        final var entry = new LongVectorEntry(1, 0L);
-        final var vector = new LongVector(List.of(entry, new LongVectorEntry(2, 0L)));
-
-        assertThat(vector.entry(1)).isSameAs(entry);
     }
 
     @Test
@@ -307,6 +311,14 @@ final class LongVectorTest {
         assertThat(vector.norm()).isCloseTo(2.23606797749979D, within(Doubles.EPSILON));
     }
 
+    @Test
+    void toBigIntegerVector_should_succeed() {
+        final var vector = new LongVector(List.of(new LongVectorEntry(1, 2L)));
+
+        final var expected = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.TWO)));
+        assertThat(vector.toBigIntegerVector()).isEqualTo(expected);
+    }
+
     @Nested
     final class LongVectorEntryTest {
         @Test
@@ -335,6 +347,12 @@ final class LongVectorTest {
         @Test
         void withValue_should_succeed() {
             assertThat(new LongVectorEntry(1, 0L).withValue(2L)).isEqualTo(new LongVectorEntry(1, 2L));
+        }
+
+        @Test
+        void toBigIntegerVectorEntry_should_succeed() {
+            assertThat(new LongVectorEntry(1, 2L).toBigIntegerVectorEntry())
+                    .isEqualTo(new BigIntegerVectorEntry(1, BigInteger.TWO));
         }
     }
 
@@ -377,8 +395,8 @@ final class LongVectorTest {
 
         @Test
         void build_should_succeed() {
-            assertThat(LongVector.builder(1).entry(1, 2L).build())
-                    .isEqualTo(new LongVector(List.of(new LongVectorEntry(1, 2L))));
+            assertThat(LongVector.builder(2).entry(2, 1L).entry(1, 2L).build())
+                    .isEqualTo(new LongVector(List.of(new LongVectorEntry(1, 2L), new LongVectorEntry(2, 1L))));
         }
     }
 }

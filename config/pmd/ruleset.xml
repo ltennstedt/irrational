@@ -74,7 +74,6 @@
         </properties>
     </rule>
     <rule ref="category/java/codestyle.xml/IdenticalCatchBranches"/>
-    <rule ref="category/java/codestyle.xml/LambdaCanBeMethodReference"/>
     <rule ref="category/java/codestyle.xml/LocalVariableCouldBeFinal"/>
     <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions">
         <properties>

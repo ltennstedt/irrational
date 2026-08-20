@@ -9,7 +9,8 @@ import io.github.ltennstedt.irrational.core.Subtractable;
  * @param <V> type of the vector
  * @param <E> type of the entry
  */
-public sealed interface Vector<V extends Vector<V, E>, E> extends Additive<V>, Subtractable<V> permits LongVector {
+public sealed interface Vector<V extends Vector<V, E>, E> extends Additive<V>, Subtractable<V>
+        permits BigIntegerVector, LongVector {
     /**
      * Returns the size
      *

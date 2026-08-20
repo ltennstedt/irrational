@@ -1,8 +1,9 @@
 package io.github.ltennstedt.irrational.core.linear;
 
 import io.github.ltennstedt.irrational.core.linear.BigIntegerVector.BigIntegerVectorEntry;
-import io.github.ltennstedt.irrational.core.linear.LongVector.LongVectorEntry;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,9 +14,10 @@ import java.util.Objects;
  *
  * @param entries entries
  */
-public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVector, LongVectorEntry> {
+public record BigIntegerVector(List<BigIntegerVectorEntry> entries)
+        implements Vector<BigIntegerVector, BigIntegerVectorEntry> {
     /** Empty vector */
-    public static final LongVector EMPTY = new LongVector(List.of());
+    public static final BigIntegerVector EMPTY = new BigIntegerVector(List.of());
 
     /**
      * Canonical constructor
@@ -25,20 +27,22 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      * @throws NullPointerException when entries contains null
      * @throws IllegalArgumentException when indices are not a consecutive integer sequence
      */
-    public LongVector {
+    public BigIntegerVector {
         Objects.requireNonNull(entries, "entries");
         for (var i = 0; i < entries.size(); i++) {
             Objects.requireNonNull(entries.get(i), "entries must not contain null but found null at index " + i);
         }
         entries = entries.stream()
-                .sorted(Comparator.comparingInt(LongVectorEntry::index))
+                .sorted(Comparator.comparingInt(BigIntegerVectorEntry::index))
                 .toList();
         for (var i = 0; i < entries.size(); i++) {
             if (entries.get(i).index() != i + 1) {
                 throw new IllegalArgumentException(
                         "indices must be a consecutive integer sequence starting with 1 and ending with entries.size "
                                 + "but was "
-                                + entries.stream().map(LongVectorEntry::index).toList());
+                                + entries.stream()
+                                        .map(BigIntegerVectorEntry::index)
+                                        .toList());
             }
         }
     }
@@ -50,34 +54,34 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      * @return builder
      * @throws IllegalArgumentException when size is negative
      */
-    public static LongVectorBuilder builder(final int size) {
-        return new LongVectorBuilder(size);
+    public static BigIntegerVectorBuilder builder(final int size) {
+        return new BigIntegerVectorBuilder(size);
     }
 
     @Override
     public boolean isZero() {
-        return entries.stream().map(LongVectorEntry::value).allMatch(v -> v == 0L);
+        return entries.stream().map(BigIntegerVectorEntry::value).allMatch(v -> v.equals(BigInteger.ZERO));
     }
 
     @Override
     public boolean isStandardBasisVector() {
         var foundZeros = 0;
-        var foundValue = 0L;
+        var foundValue = BigInteger.ZERO;
         for (final var entry : entries) {
-            if (entry.value() == 0L) {
+            if (entry.value().equals(BigInteger.ZERO)) {
                 foundZeros++;
             } else {
                 foundValue = entry.value();
             }
         }
-        return foundZeros == size() - 1 && foundValue == 1L;
+        return foundZeros == size() - 1 && foundValue.equals(BigInteger.ONE);
     }
 
     @Override
     public boolean isUnitVector() {
         var foundZeros = 0;
         for (final var entry : entries) {
-            if (entry.value() == 0L) {
+            if (entry.value().equals(BigInteger.ZERO)) {
                 foundZeros++;
             }
         }
@@ -91,7 +95,7 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
 
     @Override
     public int[] indices() {
-        return entries.stream().mapToInt(LongVectorEntry::index).toArray();
+        return entries.stream().mapToInt(BigIntegerVectorEntry::index).toArray();
     }
 
     /**
@@ -99,8 +103,8 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      *
      * @return values
      */
-    public long[] values() {
-        return entries.stream().mapToLong(LongVectorEntry::value).toArray();
+    public List<BigInteger> values() {
+        return entries.stream().map(BigIntegerVectorEntry::value).toList();
     }
 
     /**
@@ -111,7 +115,7 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      * @throws IllegalArgumentException when index is less than one or greater than size
      * @see #size()
      */
-    public long value(final int index) {
+    public BigInteger value(final int index) {
         return entry(index).value();
     }
 
@@ -123,7 +127,7 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      * @throws IllegalArgumentException when index is less than one or greater than size
      * @see #size()
      */
-    public LongVectorEntry entry(final int index) {
+    public BigIntegerVectorEntry entry(final int index) {
         if (index < 1 || index > size()) {
             throw new IllegalArgumentException(
                     "index must be greater than 0 and less than or equal to %s but was %s".formatted(size(), index));
@@ -133,7 +137,7 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
 
     @Override
     public boolean containsIndex(final int index) {
-        return entries.stream().mapToInt(LongVectorEntry::index).anyMatch(i -> i == index);
+        return entries.stream().mapToInt(BigIntegerVectorEntry::index).anyMatch(i -> i == index);
     }
 
     /**
@@ -141,46 +145,42 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      *
      * @param value value
      * @return boolean
+     * @throws NullPointerException when value is null
      */
-    public boolean containsValue(final long value) {
-        return entries.stream().mapToLong(LongVectorEntry::value).anyMatch(v -> v == value);
+    public boolean containsValue(final BigInteger value) {
+        Objects.requireNonNull(value, "value");
+        return entries.stream().map(BigIntegerVectorEntry::value).anyMatch(v -> v.equals(value));
     }
 
     @Override
-    public boolean containsEntry(final LongVectorEntry entry) {
+    public boolean containsEntry(final BigIntegerVectorEntry entry) {
         Objects.requireNonNull(entry, "entry");
         return entries.contains(entry);
     }
 
-    /**
-     * @throws IllegalArgumentException when vector sizes differ
-     * @throws ArithmeticException when an operation overflows
-     */
+    /** @throws IllegalArgumentException when vector sizes differ */
     @Override
-    public LongVector add(final LongVector summand) {
+    public BigIntegerVector add(final BigIntegerVector summand) {
         Objects.requireNonNull(summand, "summand");
         if (size() != summand.size()) {
             throw new IllegalArgumentException(
                     "vectors must be of the same size but were %s and %s".formatted(size(), summand.size()));
         }
-        return new LongVector(entries.stream()
-                .map(e -> e.withValue(Math.addExact(e.value(), summand.value(e.index()))))
+        return new BigIntegerVector(entries.stream()
+                .map(e -> e.withValue(e.value().add(summand.value(e.index()))))
                 .toList());
     }
 
-    /**
-     * @throws IllegalArgumentException when vector sizes differ
-     * @throws ArithmeticException when an operation overflows
-     */
+    /** @throws IllegalArgumentException when vector sizes differ */
     @Override
-    public LongVector subtract(final LongVector subtrahend) {
+    public BigIntegerVector subtract(final BigIntegerVector subtrahend) {
         Objects.requireNonNull(subtrahend, "subtrahend");
         if (size() != subtrahend.size()) {
             throw new IllegalArgumentException(
                     "vectors must be of the same size but were %s and %s".formatted(size(), subtrahend.size()));
         }
-        return new LongVector(entries.stream()
-                .map(e -> e.withValue(Math.subtractExact(e.value(), subtrahend.value(e.index()))))
+        return new BigIntegerVector(entries.stream()
+                .map(e -> e.withValue(e.value().subtract(subtrahend.value(e.index()))))
                 .toList());
     }
 
@@ -189,11 +189,12 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      *
      * @param scalar scalar
      * @return scalar product
-     * @throws ArithmeticException when an operation overflows
+     * @throws NullPointerException when scalar is null
      */
-    public LongVector scalarMultiply(final long scalar) {
-        return new LongVector(entries.stream()
-                .map(e -> e.withValue(Math.multiplyExact(scalar, e.value())))
+    public BigIntegerVector scalarMultiply(final BigInteger scalar) {
+        Objects.requireNonNull(scalar, "scalar");
+        return new BigIntegerVector(entries.stream()
+                .map(e -> e.withValue(scalar.multiply(e.value())))
                 .toList());
     }
 
@@ -204,102 +205,91 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
      * @return dot product
      * @throws NullPointerException when other is null
      * @throws IllegalArgumentException when vector sizes differ
-     * @throws ArithmeticException when an operation overflows
      */
-    public long dotProduct(final LongVector other) {
+    public BigInteger dotProduct(final BigIntegerVector other) {
         Objects.requireNonNull(other, "other");
         if (size() != other.size()) {
             throw new IllegalArgumentException(
                     "vectors must be of the same size but were %s and %s".formatted(size(), other.size()));
         }
         return entries.stream()
-                .mapToLong(e -> Math.multiplyExact(e.value(), other.value(e.index())))
-                .reduce(Math::addExact)
-                .orElse(0L);
+                .map(e -> e.value().multiply(other.value(e.index())))
+                .reduce(BigInteger::add)
+                .orElse(BigInteger.ZERO);
     }
 
-    /** @throws ArithmeticException when an operation overflows */
     @Override
-    public LongVector negate() {
-        return new LongVector(entries.stream()
-                .map(e -> e.withValue(Math.negateExact(e.value())))
-                .toList());
+    public BigIntegerVector negate() {
+        return new BigIntegerVector(
+                entries.stream().map(e -> e.withValue(e.value().negate())).toList());
     }
 
     /**
      * Returns the norm of this
      *
+     * @param mathContext {@link MathContext}
      * @return norm
+     * @throws NullPointerException when mathContext is null
      */
-    public double norm() {
-        return Math.sqrt(entries.stream()
-                .mapToDouble(e -> (double) e.value() * e.value())
-                .sum());
+    public BigDecimal norm(final MathContext mathContext) {
+        Objects.requireNonNull(mathContext, "mathContext");
+        return entries.stream()
+                .map(BigIntegerVectorEntry::value)
+                .map(BigDecimal::new)
+                .map(v -> v.multiply(v))
+                .reduce(BigDecimal::add)
+                .map(d -> d.sqrt(mathContext))
+                .orElse(BigDecimal.ZERO);
     }
 
     /**
-     * Returns this as {@link BigIntegerVector}
-     *
-     * @return {@link BigIntegerVector}
-     */
-    public BigIntegerVector toBigIntegerVector() {
-        return new BigIntegerVector(
-                entries.stream().map(LongVectorEntry::toBigIntegerVectorEntry).toList());
-    }
-
-    /**
-     * Entry for {@link LongVector}
+     * Entry for {@link BigIntegerVector}
      *
      * @param index index
      * @param value value
      */
-    public record LongVectorEntry(int index, long value) {
+    public record BigIntegerVectorEntry(int index, BigInteger value) {
         /**
          * Canonical constructor
          *
          * @param index index
          * @param value value
+         * @throws NullPointerException when value is null
          * @throws IllegalArgumentException when index is less than 1
          */
-        public LongVectorEntry {
+        public BigIntegerVectorEntry {
+            Objects.requireNonNull(value, "value");
             if (index < 1) {
                 throw new IllegalArgumentException("index must be greater than 0 but was " + index);
             }
         }
 
         /**
-         * Returns a new {@link LongVectorEntry} with index newIndex
+         * Returns a new {@link BigIntegerVectorEntry} with index newIndex
          *
          * @param newIndex new index
-         * @return {@link LongVectorEntry}
+         * @return {@link BigIntegerVectorEntry}
          * @throws IllegalArgumentException when index is less than 1
          */
-        public LongVectorEntry withIndex(final int newIndex) {
-            return new LongVectorEntry(newIndex, value);
+        public BigIntegerVectorEntry withIndex(final int newIndex) {
+            return new BigIntegerVectorEntry(newIndex, value);
         }
 
         /**
-         * Returns a new {@link LongVectorEntry} with value newValue
+         * Returns a new {@link BigIntegerVectorEntry} with value newValue
          *
          * @param newValue new value
-         * @return {@link LongVectorEntry}
-         */
-        public LongVectorEntry withValue(final long newValue) {
-            return new LongVectorEntry(index, newValue);
-        }
-
-        /**
-         * Returns this as {@link BigIntegerVectorEntry}
-         *
          * @return {@link BigIntegerVectorEntry}
+         * @throws NullPointerException when newValue is null
          */
-        public BigIntegerVectorEntry toBigIntegerVectorEntry() {
-            return new BigIntegerVectorEntry(index, BigInteger.valueOf(value));
+        public BigIntegerVectorEntry withValue(final BigInteger newValue) {
+            Objects.requireNonNull(newValue, "newValue");
+            return new BigIntegerVectorEntry(index, newValue);
         }
     }
 
-    /** Builder for {@link LongVector} */
-    public static final class LongVectorBuilder {
+    /** Builder for {@link BigIntegerVector} */
+    public static final class BigIntegerVectorBuilder {
         /** size */
         private final int size;
 
@@ -307,9 +297,9 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
         private final boolean[] present;
 
         /** entries */
-        private final List<LongVectorEntry> entries;
+        private final List<BigIntegerVectorEntry> entries;
 
-        private LongVectorBuilder(final int size) {
+        private BigIntegerVectorBuilder(final int size) {
             if (size < 0) {
                 throw new IllegalArgumentException("size must be greater than or equal to 0 but was " + size);
             }
@@ -324,10 +314,12 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
          * @param index index
          * @param value value
          * @return this
+         * @throws NullPointerException when value is null
          * @throws IllegalArgumentException when index is less than 1 or greater than size
          * @throws IllegalArgumentException when index is already present
          */
-        public LongVectorBuilder entry(final int index, final long value) {
+        public BigIntegerVectorBuilder entry(final int index, final BigInteger value) {
+            Objects.requireNonNull(value, "value");
             if (index < 1 || index > size) {
                 throw new IllegalArgumentException(
                         "index must be greater than 0 and less than or equal to %s but was %s".formatted(size, index));
@@ -336,24 +328,24 @@ public record LongVector(List<LongVectorEntry> entries) implements Vector<LongVe
                 throw new IllegalArgumentException("index %s is already present".formatted(index));
             }
             present[index - 1] = true;
-            entries.add(new LongVectorEntry(index, value));
+            entries.add(new BigIntegerVectorEntry(index, value));
             return this;
         }
 
         /**
-         * Builds a {@link LongVector}
+         * Builds a {@link BigIntegerVector}
          *
          * @return vector
          * @throws IllegalStateException when number of entries and size are unequal
          */
-        public LongVector build() {
+        public BigIntegerVector build() {
             if (entries.size() != size) {
                 throw new IllegalStateException("Expected %s entries but was %s".formatted(size, entries.size()));
             }
-            return new LongVector(entries);
+            return new BigIntegerVector(entries);
         }
 
-        List<LongVectorEntry> getEntries() {
+        List<BigIntegerVectorEntry> getEntries() {
             return entries;
         }
     }

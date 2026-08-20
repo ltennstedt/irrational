@@ -16,6 +16,7 @@ public fun longVector(
  * Kotlin builder for LongVector
  *
  * @property size size
+ * @throws IllegalArgumentException when index is negative
  */
 public class LongVectorKotlinBuilder(
     public val size: Int,
