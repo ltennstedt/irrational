@@ -1,23 +1,18 @@
 package io.github.ltennstedt.irrational.kotlin
 
 import io.github.ltennstedt.irrational.core.numeric.LongRational
-import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 class AdditiveOperatorsSpec :
-    ShouldSpec({
-        context("unaryPlus") {
-            val rational = LongRational(1L, 2L)
-            should("succeed") {
-                +rational shouldBeSameInstanceAs rational
+    FunSpec(
+        {
+            test("unaryPlus should succeed") {
+                +LongRational.ZERO shouldBeSameInstanceAs LongRational.ZERO
             }
-        }
-        context("plus") {
-            val rational = LongRational(1L, 2L)
-            val summand = LongRational(3L, 4L)
-            should("succeed") {
-                rational + summand shouldBeEqual LongRational(5L, 4L)
+            test("plus should succeed") {
+                LongRational(1L, 2L) + LongRational(3L, 4L) shouldBeEqual LongRational(5L, 4L)
             }
-        }
-    })
+        },
+    )
