@@ -54,8 +54,6 @@
     <rule ref="category/java/bestpractices.xml/UseVarargs"/>
     <rule ref="category/java/bestpractices.xml/WhileLoopWithLiteralBoolean"/>
     <rule ref="category/java/codestyle.xml/AvoidDollarSigns"/>
-    <rule ref="category/java/codestyle.xml/AvoidProtectedFieldInFinalClass"/>
-    <rule ref="category/java/codestyle.xml/AvoidProtectedMethodInFinalClassNotExtending"/>
     <rule ref="category/java/codestyle.xml/AvoidUsingNativeCode"/>
     <rule ref="category/java/codestyle.xml/BooleanGetMethodName"/>
     <rule ref="category/java/codestyle.xml/ClassNamingConventions"/>
@@ -112,6 +110,7 @@
     <rule ref="category/java/design.xml/ExceptionAsFlowControl"/>
     <rule ref="category/java/design.xml/FinalFieldCouldBeStatic"/>
     <rule ref="category/java/design.xml/ImmutableField"/>
+    <rule ref="category/java/design.xml/InstantiableUtilityClass"/>
     <rule ref="category/java/design.xml/LogicInversion"/>
     <rule ref="category/java/design.xml/MutableStaticState"/>
     <rule ref="category/java/design.xml/SignatureDeclareThrowsException"/>
@@ -121,7 +120,6 @@
     <rule ref="category/java/design.xml/SimplifyConditional"/>
     <rule ref="category/java/design.xml/SingularField"/>
     <rule ref="category/java/design.xml/UselessOverridingMethod"/>
-    <rule ref="category/java/design.xml/UseUtilityClass"/>
     <rule ref="category/java/errorprone.xml/AssignmentInOperand"/>
     <rule ref="category/java/errorprone.xml/AssignmentToNonFinalStatic"/>
     <rule ref="category/java/errorprone.xml/AvoidAssertAsIdentifier"/>
@@ -134,7 +132,6 @@
     <rule ref="category/java/errorprone.xml/AvoidInstanceofChecksInCatchClause"/>
     <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators"/>
     <rule ref="category/java/errorprone.xml/BrokenNullCheck"/>
-    <rule ref="category/java/errorprone.xml/CheckSkipResult"/>
     <rule ref="category/java/errorprone.xml/ClassCastExceptionWithToArray"/>
     <rule ref="category/java/errorprone.xml/CloseResource"/>
     <rule ref="category/java/errorprone.xml/CollectionTypeMismatch"/>
@@ -183,10 +180,10 @@
     <rule ref="category/java/errorprone.xml/UnnecessaryCaseChange"/>
     <rule ref="category/java/errorprone.xml/UnnecessaryConversionTemporary"/>
     <rule ref="category/java/errorprone.xml/UnusedNullCheckInEquals"/>
+    <rule ref="category/java/errorprone.xml/UnusedReturnValue"/>
     <rule ref="category/java/errorprone.xml/UnsupportedJdkApiUsage"/>
     <rule ref="category/java/errorprone.xml/UseCorrectExceptionLogging"/>
     <rule ref="category/java/errorprone.xml/UseEqualsToCompareStrings"/>
-    <rule ref="category/java/errorprone.xml/UselessPureMethodCall"/>
     <rule ref="category/java/errorprone.xml/UseLocaleWithCaseConversions"/>
     <rule ref="category/java/errorprone.xml/UseProperClassLoader"/>
     <rule ref="category/java/performance.xml/AddEmptyString"/>

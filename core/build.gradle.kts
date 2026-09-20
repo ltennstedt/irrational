@@ -50,7 +50,7 @@ tasks {
 
 spotless {
     java {
-        palantirJavaFormat("2.97.0").formatJavadoc(true)
+        palantirJavaFormat("2.98.0").formatJavadoc(true)
         forbidModuleImports()
         forbidWildcardImports()
         formatAnnotations()
@@ -72,13 +72,13 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.26.0"
+    toolVersion = "7.27.0"
     ruleSetFiles = files("${rootProject.projectDir.absolutePath}/config/pmd/ruleset.xml")
     isIgnoreFailures = false
 }
 
 spotbugs {
-    toolVersion = "4.10.3"
+    toolVersion = "4.10.4"
     excludeFilter = file("${rootProject.projectDir.absolutePath}/config/spotbugs/exclude-filter.xml")
     ignoreFailures = false
 }
