@@ -1,5 +1,3 @@
-import nl.littlerobots.vcu.plugin.resolver.VersionSelectors
-import nl.littlerobots.vcu.plugin.versionSelector
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 
 plugins {
@@ -12,9 +10,9 @@ tasks {
         dependsOn(buildHealth)
     }
     wrapper {
-        gradleVersion = "9.7.0"
+        gradleVersion = "9.8.1"
         distributionType = DistributionType.ALL
-        distributionSha256Sum = "a9ecb5ac5c2ca40691e6527724d11d0b43b8c0a52825b77c09899f2a72d2d2bf"
+        distributionSha256Sum = "5ceda8d2425eb2af196dec31b6fc1f38af2fb638fd621f86fa685805f2262224"
     }
     register("dependenciesAll") {
         description = "Runs task dependencies on all subprojects"
@@ -41,14 +39,7 @@ spotless {
 }
 
 versionCatalogUpdate {
-    versionSelector {
-        val isKotlinPlugin =
-            it.candidate.group == "org.jetbrains.kotlin.jvm" &&
-                it.candidate.module == "org.jetbrains.kotlin.jvm.gradle.plugin"
-        (isKotlinPlugin && it.candidate.version.startsWith("2.2.")) ||
-            (!isKotlinPlugin && VersionSelectors.STABLE.select(it))
-    }
     pin {
-        versions = setOf("spock")
+        versions = setOf("kotlin", "groovy")
     }
 }

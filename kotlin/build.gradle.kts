@@ -23,7 +23,6 @@ tasks {
         compilerOptions {
             apiVersion = KotlinVersion.KOTLIN_2_2
             languageVersion = KotlinVersion.KOTLIN_2_2
-            progressiveMode = true
             extraWarnings = true
         }
     }
