@@ -19,6 +19,19 @@ final class BigRationalTest {
     private final BigRational rational1 = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
     private final BigRational rational2 = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
 
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+         , 1, numerator
+        1,  , denominator
+        """)
+    void new_should_throw_when_any_argument_is_null(
+            final BigInteger numerator, final BigInteger denominator, final String message) {
+        assertThatNullPointerException()
+                .isThrownBy(() -> new BigRational(numerator, denominator))
+                .withMessage(message)
+                .withNoCause();
+    }
+
     @Test
     void new_should_throw_when_denominator_is_zero() {
         assertThatExceptionOfType(ArithmeticException.class)
@@ -284,6 +297,14 @@ final class BigRationalTest {
     void toBigDecimal_with_mathContext_should_succeed() {
         assertThat(new BigRational(BigInteger.ONE, BigInteger.valueOf(3L)).toBigDecimal(MathContext.DECIMAL32))
                 .isEqualTo(new BigDecimal("0.3333333"));
+    }
+
+    @Test
+    void compareTo_should_throw_when_other_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> BigRational.ZERO.compareTo(null))
+                .withMessage("other")
+                .withNoCause();
     }
 
     @ParameterizedTest

@@ -276,6 +276,14 @@ final class LongRationalTest {
         assertThat(new LongRational(1L, 3L).toBigDecimal(MathContext.DECIMAL32)).isEqualTo(new BigDecimal("0.3333333"));
     }
 
+    @Test
+    void compareTo_should_throw_when_other_is_null() {
+        assertThatNullPointerException()
+                .isThrownBy(() -> LongRational.ZERO.compareTo(null))
+                .withMessage("other")
+                .withNoCause();
+    }
+
     @ParameterizedTest
     @CsvSource(textBlock = """
         2, 1, -1

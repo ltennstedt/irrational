@@ -23,7 +23,7 @@ final class BigQuaternionTest {
         0, 0,  , 0, y
         0, 0, 0,  , z
         """)
-    void new_should_throw(
+    void new_should_throw_when_any_argument_is_null(
             final BigDecimal w, final BigDecimal x, final BigDecimal y, final BigDecimal z, final String message) {
         assertThatNullPointerException()
                 .isThrownBy(() -> new BigQuaternion(w, x, y, z))

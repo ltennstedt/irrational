@@ -174,7 +174,7 @@ final class LongGaussianTest {
          0, -1,  0,  1
         """)
     void reciprocal_should_succeed(
-            final long real, final long imaginary, final long expectedReal, final long expectedImaginary) {
+            final long real, final long imaginary, final double expectedReal, final double expectedImaginary) {
         final var actual = new LongGaussian(real, imaginary).reciprocal();
 
         assertThat(actual.real()).isCloseTo(expectedReal, offset);
@@ -196,7 +196,7 @@ final class LongGaussianTest {
         2, 0, 2
         0, 3, 3
         """)
-    void abs_should_succeed(final long real, final long imaginary, final long expected) {
+    void abs_should_succeed(final long real, final long imaginary, final double expected) {
         assertThat(new LongGaussian(real, imaginary).abs()).isCloseTo(expected, offset);
     }
 
