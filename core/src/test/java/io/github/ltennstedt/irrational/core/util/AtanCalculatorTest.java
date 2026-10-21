@@ -71,6 +71,8 @@ final class AtanCalculatorTest {
     @ParameterizedTest
     @MethodSource("atan2Source")
     void atan2_should_succeed(final BigDecimal y, final BigDecimal x, final BigDecimal expected) {
-        assertThat(AtanCalculator.atan2(y, x, MathContext.DECIMAL128)).isCloseTo(expected, OFFSET);
+        final var actual = AtanCalculator.atan2(y, x, MathContext.DECIMAL128);
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 }

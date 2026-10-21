@@ -13,7 +13,11 @@ final class RationalTest {
              1, true
         """)
     void isImproper_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isImproper()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isImproper();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -23,6 +27,10 @@ final class RationalTest {
              1, false
         """)
     void isNegative_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isNegative()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isNegative();
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

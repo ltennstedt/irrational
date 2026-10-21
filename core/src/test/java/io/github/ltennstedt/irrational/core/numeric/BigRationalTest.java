@@ -16,9 +16,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.params.LongRangeSource;
 
 final class BigRationalTest {
-    private final BigRational rational1 = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
-    private final BigRational rational2 = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
-
     @ParameterizedTest
     @CsvSource(textBlock = """
          , 1, numerator
@@ -50,8 +47,10 @@ final class BigRationalTest {
             final BigInteger denominator,
             final BigInteger expectedNumerator,
             final BigInteger expectedDenominator) {
-        assertThat(new BigRational(numerator, denominator))
-                .isEqualTo(new BigRational(expectedNumerator, expectedDenominator));
+        final var actual = new BigRational(numerator, denominator);
+
+        final var expected = new BigRational(expectedNumerator, expectedDenominator);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -60,7 +59,11 @@ final class BigRationalTest {
             1, true
         """)
     void isInvertible_should_succeed(final BigInteger numerator, final boolean expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).isInvertible()).isEqualTo(expected);
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+
+        final var actual = rational.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -69,7 +72,11 @@ final class BigRationalTest {
             0, true
         """)
     void isZero_should_succeed(final BigInteger numerator, final boolean expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).isZero()).isEqualTo(expected);
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+
+        final var actual = rational.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -78,7 +85,11 @@ final class BigRationalTest {
             1, true
         """)
     void isUnitFraction_should_succeed(final BigInteger numerator, final boolean expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).isUnitFraction()).isEqualTo(expected);
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+
+        final var actual = rational.isUnitFraction();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -94,7 +105,11 @@ final class BigRationalTest {
             9, false
         """)
     void isDyadic_should_succeed(final BigInteger denominator, final boolean expected) {
-        assertThat(new BigRational(BigInteger.ONE, denominator).isDyadic()).isEqualTo(expected);
+        final var rational = new BigRational(BigInteger.ONE, denominator);
+
+        final var actual = rational.isDyadic();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -107,7 +122,11 @@ final class BigRationalTest {
              1, 2, true
         """)
     void isProper_should_succeed(final BigInteger numerator, final BigInteger denominator, final boolean expected) {
-        assertThat(new BigRational(numerator, denominator).isProper()).isEqualTo(expected);
+        final var rational = new BigRational(numerator, denominator);
+
+        final var actual = rational.isProper();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -117,7 +136,11 @@ final class BigRationalTest {
              1, true
         """)
     void isPositive_should_succeed(final BigInteger numerator, final boolean expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).isPositive()).isEqualTo(expected);
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+
+        final var actual = rational.isPositive();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -130,8 +153,13 @@ final class BigRationalTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(rational1.add(rational2))
-                .isEqualTo(new BigRational(BigInteger.valueOf(22L), BigInteger.valueOf(15L)));
+        final var rational = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
+        final var summand = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
+
+        final var actual = rational.add(summand);
+
+        final var expected = new BigRational(BigInteger.valueOf(22L), BigInteger.valueOf(15L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -144,8 +172,13 @@ final class BigRationalTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(rational1.subtract(rational2))
-                .isEqualTo(new BigRational(BigInteger.valueOf(-2L), BigInteger.valueOf(15L)));
+        final var rational = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
+        final var subtrahend = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
+
+        final var actual = rational.subtract(subtrahend);
+
+        final var expected = new BigRational(BigInteger.valueOf(-2L), BigInteger.valueOf(15L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -158,8 +191,13 @@ final class BigRationalTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(rational1.multiply(rational2))
-                .isEqualTo(new BigRational(BigInteger.valueOf(8L), BigInteger.valueOf(15L)));
+        final var rational = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
+        final var multiplier = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
+
+        final var actual = rational.multiply(multiplier);
+
+        final var expected = new BigRational(BigInteger.valueOf(8L), BigInteger.valueOf(15L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -180,13 +218,21 @@ final class BigRationalTest {
 
     @Test
     void divide_should_succeed() {
-        assertThat(rational1.divide(rational2))
-                .isEqualTo(new BigRational(BigInteger.valueOf(5L), BigInteger.valueOf(6L)));
+        final var rational = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
+        final var divisor = new BigRational(BigInteger.valueOf(4L), BigInteger.valueOf(5L));
+
+        final var actual = rational.divide(divisor);
+
+        final var expected = new BigRational(BigInteger.valueOf(5L), BigInteger.valueOf(6L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void negate_should_succeed() {
-        assertThat(BigRational.ONE.negate()).isEqualTo(new BigRational(BigInteger.ONE.negate(), BigInteger.ONE));
+        final var actual = BigRational.ONE.negate();
+
+        final var expected = new BigRational(BigInteger.ONE.negate(), BigInteger.ONE);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -212,8 +258,12 @@ final class BigRationalTest {
             final int exponent,
             final BigInteger expectedNumerator,
             final BigInteger expectedDenominator) {
-        assertThat(new BigRational(numerator, denominator).pow(exponent))
-                .isEqualTo(new BigRational(expectedNumerator, expectedDenominator));
+        final var rational = new BigRational(numerator, denominator);
+
+        final var actual = rational.pow(exponent);
+
+        final var expected = new BigRational(expectedNumerator, expectedDenominator);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -226,14 +276,23 @@ final class BigRationalTest {
 
     @Test
     void reciprocal_should_succeed() {
-        assertThat(rational1.reciprocal()).isEqualTo(new BigRational(BigInteger.valueOf(3L), BigInteger.valueOf(2L)));
+        final var rational = new BigRational(BigInteger.TWO, BigInteger.valueOf(3L));
+
+        final var actual = rational.reciprocal();
+
+        final var expected = new BigRational(BigInteger.valueOf(3L), BigInteger.valueOf(2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @LongRangeSource(from = -1L, to = 1L, closed = true)
     void signum_should_succeed(final long numerator) {
-        assertThat(new BigRational(BigInteger.valueOf(numerator), BigInteger.ONE).signum())
-                .isEqualTo(Long.signum(numerator));
+        final var rational = new BigRational(BigInteger.valueOf(numerator), BigInteger.ONE);
+
+        final var actual = rational.signum();
+
+        final var signum = Long.signum(numerator);
+        assertThat(actual).isEqualTo(signum);
     }
 
     @Test
@@ -250,9 +309,15 @@ final class BigRationalTest {
             0, 0, 0
             1, 0, 0
         """)
-    void min_should_succeed(final BigInteger numerator, final BigInteger otherNumerator, final BigInteger expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).min(new BigRational(otherNumerator, BigInteger.ONE)))
-                .isEqualTo(new BigRational(expected, BigInteger.ONE));
+    void min_should_succeed(
+            final BigInteger numerator, final BigInteger otherNumerator, final BigInteger expectedNumerator) {
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+        final var other = new BigRational(otherNumerator, BigInteger.ONE);
+
+        final var actual = rational.min(other);
+
+        final var expectedRational = new BigRational(expectedNumerator, BigInteger.ONE);
+        assertThat(actual).isEqualTo(expectedRational);
     }
 
     @Test
@@ -269,34 +334,53 @@ final class BigRationalTest {
             0, 0, 0
             0, 1, 1
         """)
-    void max_should_succeed(final BigInteger numerator, final BigInteger otherNumerator, final BigInteger expected) {
-        assertThat(new BigRational(numerator, BigInteger.ONE).max(new BigRational(otherNumerator, BigInteger.ONE)))
-                .isEqualTo(new BigRational(expected, BigInteger.ONE));
+    void max_should_succeed(
+            final BigInteger numerator, final BigInteger otherNumerator, final BigInteger expectedNumerator) {
+        final var rational = new BigRational(numerator, BigInteger.ONE);
+        final var other = new BigRational(otherNumerator, BigInteger.ONE);
+
+        final var actual = rational.max(other);
+
+        final var expectedRational = new BigRational(expectedNumerator, BigInteger.ONE);
+        assertThat(actual).isEqualTo(expectedRational);
     }
 
     @ParameterizedTest
     @ValueSource(longs = {-2L, 2L})
     void abs_should_succeed(final long numerator) {
-        assertThat(new BigRational(BigInteger.valueOf(numerator), BigInteger.ONE).abs())
-                .isEqualTo(new BigRational(BigInteger.valueOf(numerator).abs(), BigInteger.ONE));
+        final var rational = new BigRational(BigInteger.valueOf(numerator), BigInteger.ONE);
+
+        final var actual = rational.abs();
+
+        final var expected = new BigRational(BigInteger.valueOf(numerator).abs(), BigInteger.ONE);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void toBigDecimal_with_scale_and_roundingMode_should_succeed() {
-        assertThat(new BigRational(BigInteger.ONE, BigInteger.valueOf(3L)).toBigDecimal(2, RoundingMode.UP))
-                .isEqualTo(new BigDecimal("0.34"));
+        final var rational = new BigRational(BigInteger.ONE, BigInteger.valueOf(3L));
+
+        final var actual = rational.toBigDecimal(2, RoundingMode.UP);
+
+        assertThat(actual).isEqualTo(new BigDecimal("0.34"));
     }
 
     @Test
     void toBigDecimal_with_roundingMode_should_succeed() {
-        assertThat(new BigRational(BigInteger.ONE, BigInteger.valueOf(3L)).toBigDecimal(RoundingMode.UP))
-                .isOne();
+        final var rational = new BigRational(BigInteger.ONE, BigInteger.valueOf(3L));
+
+        final var actual = rational.toBigDecimal(RoundingMode.UP);
+
+        assertThat(actual).isOne();
     }
 
     @Test
     void toBigDecimal_with_mathContext_should_succeed() {
-        assertThat(new BigRational(BigInteger.ONE, BigInteger.valueOf(3L)).toBigDecimal(MathContext.DECIMAL32))
-                .isEqualTo(new BigDecimal("0.3333333"));
+        final var rational = new BigRational(BigInteger.ONE, BigInteger.valueOf(3L));
+
+        final var actual = rational.toBigDecimal(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualTo(new BigDecimal("0.3333333"));
     }
 
     @Test
@@ -314,8 +398,11 @@ final class BigRationalTest {
         1, 2,  1
         """)
     void compareTo_should_succeed(final BigInteger numerator, final BigInteger denominator, final int expected) {
-        assertThat(BigRational.ONE.compareTo(new BigRational(numerator, denominator)))
-                .isEqualTo(expected);
+        final var other = new BigRational(numerator, denominator);
+
+        final var actual = BigRational.ONE.compareTo(other);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Nested
@@ -327,8 +414,9 @@ final class BigRationalTest {
             1, 2,  1
             """)
         void compareTo_should_succeed(final BigInteger numerator, final BigInteger denominator, final int expected) {
-            assertThat(BigRational.COMPARATOR.compare(BigRational.ONE, new BigRational(numerator, denominator)))
-                    .isEqualTo(expected);
+            final var actual = BigRational.COMPARATOR.compare(BigRational.ONE, new BigRational(numerator, denominator));
+
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }

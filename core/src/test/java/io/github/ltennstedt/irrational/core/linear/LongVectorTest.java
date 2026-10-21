@@ -74,7 +74,9 @@ final class LongVectorTest {
 
     @Test
     void builder_should_succeed() {
-        assertThat(LongVector.builder(0)).isNotNull();
+        final var actual = LongVector.builder(0);
+
+        assertThat(actual).isNotNull();
     }
 
     @ParameterizedTest
@@ -94,7 +96,9 @@ final class LongVectorTest {
     void isZero_should_succeed(final long value, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L), new LongVectorEntry(2, value)));
 
-        assertThat(vector.isZero()).isEqualTo(expected);
+        final var actual = vector.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -108,7 +112,9 @@ final class LongVectorTest {
     void isStandardBasisVector_should_succeed(final long value1, final long value2, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, value1), new LongVectorEntry(2, value2)));
 
-        assertThat(vector.isStandardBasisVector()).isEqualTo(expected);
+        final var actual = vector.isStandardBasisVector();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -122,34 +128,43 @@ final class LongVectorTest {
     void isUnitVector_should_succeed(final long value1, final long value2, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, value1), new LongVectorEntry(2, value2)));
 
-        assertThat(vector.isUnitVector()).isEqualTo(expected);
+        final var actual = vector.isUnitVector();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void size_should_succeed() {
-        assertThat(LongVector.EMPTY.size()).isZero();
+        final var actual = LongVector.EMPTY.size();
+
+        assertThat(actual).isZero();
     }
 
     @Test
     void indices_should_succeed() {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L)));
 
-        assertThat(vector.indices()).containsExactly(1);
+        final var actual = vector.indices();
+
+        assertThat(actual).containsExactly(1);
     }
 
     @Test
     void values_should_succeed() {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L)));
 
-        assertThat(vector.values()).containsExactly(0);
+        final var actual = vector.values();
+
+        assertThat(actual).containsExactly(0);
     }
 
     @Test
     void value_should_succeed() {
-        final var entry = new LongVectorEntry(1, 0L);
-        final var vector = new LongVector(List.of(entry, new LongVectorEntry(2, 1L)));
+        final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L), new LongVectorEntry(2, 1L)));
 
-        assertThat(vector.value(1)).isZero();
+        final var value = vector.value(1);
+
+        assertThat(value).isZero();
     }
 
     @Test
@@ -157,7 +172,9 @@ final class LongVectorTest {
         final var entry = new LongVectorEntry(1, 0L);
         final var vector = new LongVector(List.of(entry, new LongVectorEntry(2, 0L)));
 
-        assertThat(vector.entry(1)).isSameAs(entry);
+        final var actual = vector.entry(1);
+
+        assertThat(actual).isSameAs(entry);
     }
 
     @ParameterizedTest
@@ -168,7 +185,9 @@ final class LongVectorTest {
     void containsIndex_should_succeed(final int index, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L)));
 
-        assertThat(vector.containsIndex(index)).isEqualTo(expected);
+        final var actual = vector.containsIndex(index);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -179,7 +198,9 @@ final class LongVectorTest {
     void containsValue_should_succeed(final long value, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 0L)));
 
-        assertThat(vector.containsValue(value)).isEqualTo(expected);
+        final var actual = vector.containsValue(value);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -191,7 +212,9 @@ final class LongVectorTest {
     void containsEntry_should_succeed(final int index, final long value, final boolean expected) {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 1L)));
 
-        assertThat(vector.containsEntry(new LongVectorEntry(index, value))).isEqualTo(expected);
+        final var actual = vector.containsEntry(new LongVectorEntry(index, value));
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -293,30 +316,38 @@ final class LongVectorTest {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 1L), new LongVectorEntry(2, 2L)));
         final var other = new LongVector(List.of(new LongVectorEntry(1, 3L), new LongVectorEntry(2, 4L)));
 
-        assertThat(vector.dotProduct(other)).isEqualTo(11L);
+        final var actual = vector.dotProduct(other);
+
+        assertThat(actual).isEqualTo(11L);
     }
 
     @Test
     void negate_should_succeed() {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 1L), new LongVectorEntry(2, 2L)));
 
+        final var actual = vector.negate();
+
         final var expected = new LongVector(List.of(new LongVectorEntry(1, -1L), new LongVectorEntry(2, -2L)));
-        assertThat(vector.negate()).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 1L), new LongVectorEntry(2, 2L)));
 
-        assertThat(vector.norm()).isCloseTo(2.23606797749979D, within(Doubles.EPSILON));
+        final var actual = vector.norm();
+
+        assertThat(actual).isCloseTo(2.23606797749979D, within(Doubles.EPSILON));
     }
 
     @Test
     void toBigIntegerVector_should_succeed() {
         final var vector = new LongVector(List.of(new LongVectorEntry(1, 2L)));
 
+        final var actual = vector.toBigIntegerVector();
+
         final var expected = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.TWO)));
-        assertThat(vector.toBigIntegerVector()).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Nested
@@ -331,8 +362,10 @@ final class LongVectorTest {
 
         @Test
         void withIndex_should_throw_when_index_is_less_than_one() {
+            final var entry = new LongVectorEntry(1, 0L);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> new LongVectorEntry(1, 0L).withIndex(0))
+                    .isThrownBy(() -> entry.withIndex(0))
                     .withMessage("index must be greater than 0 but was 0")
                     .withNoCause();
         }
@@ -346,13 +379,20 @@ final class LongVectorTest {
 
         @Test
         void withValue_should_succeed() {
-            assertThat(new LongVectorEntry(1, 0L).withValue(2L)).isEqualTo(new LongVectorEntry(1, 2L));
+            final var entry = new LongVectorEntry(1, 0L);
+
+            final var actual = entry.withValue(2L);
+
+            assertThat(actual).isEqualTo(new LongVectorEntry(1, 2L));
         }
 
         @Test
         void toBigIntegerVectorEntry_should_succeed() {
-            assertThat(new LongVectorEntry(1, 2L).toBigIntegerVectorEntry())
-                    .isEqualTo(new BigIntegerVectorEntry(1, BigInteger.TWO));
+            final var entry = new LongVectorEntry(1, 2L);
+
+            final var actual = entry.toBigIntegerVectorEntry();
+
+            assertThat(actual).isEqualTo(new BigIntegerVectorEntry(1, BigInteger.TWO));
         }
     }
 
@@ -361,16 +401,20 @@ final class LongVectorTest {
         @ParameterizedTest
         @ValueSource(ints = {0, 2})
         void entry_should_throw_when_index_is_out_of_bounds(final int index) {
+            final var builder = LongVector.builder(1);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> LongVector.builder(1).entry(index, 0L))
+                    .isThrownBy(() -> builder.entry(index, 0L))
                     .withMessage("index must be greater than 0 and less than or equal to 1 but was " + index)
                     .withNoCause();
         }
 
         @Test
         void entry_should_throw_when_index_is_already_present() {
+            final var builder = LongVector.builder(2).entry(1, 0L);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> LongVector.builder(2).entry(1, 0L).entry(1, 1L))
+                    .isThrownBy(() -> builder.entry(1, 1L))
                     .withMessage("index 1 is already present")
                     .withNoCause();
         }
@@ -387,16 +431,22 @@ final class LongVectorTest {
 
         @Test
         void build_should_throw_when_sizes_are_different() {
+            final var builder = LongVector.builder(2).entry(1, 0L);
+
             assertThatIllegalStateException()
-                    .isThrownBy(() -> LongVector.builder(2).entry(1, 0L).build())
+                    .isThrownBy(() -> builder.build())
                     .withMessage("Expected 2 entries but was 1")
                     .withNoCause();
         }
 
         @Test
         void build_should_succeed() {
-            assertThat(LongVector.builder(2).entry(2, 1L).entry(1, 2L).build())
-                    .isEqualTo(new LongVector(List.of(new LongVectorEntry(1, 2L), new LongVectorEntry(2, 1L))));
+            final var builder = LongVector.builder(2).entry(2, 1L).entry(1, 2L);
+
+            final var actual = builder.build();
+
+            final var expected = new LongVector(List.of(new LongVectorEntry(1, 2L), new LongVectorEntry(2, 1L)));
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }

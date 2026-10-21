@@ -19,6 +19,8 @@ final class LongsTest {
              -9, -3, 3
         """)
     void gcd_should_succeed(final long a, final long b, final long expected) {
-        assertThat(Longs.gcd(a, b)).isEqualTo(expected);
+        final var actual = Longs.gcd(a, b);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

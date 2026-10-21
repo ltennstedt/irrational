@@ -11,11 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class BigQuaternionTest {
-    private final BigQuaternion quaternion1 =
-            new BigQuaternion(BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
-    private final BigQuaternion quaternion2 = new BigQuaternion(
-            BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
-
     @ParameterizedTest
     @CsvSource(textBlock = """
          , 0, 0, 0, w
@@ -38,7 +33,11 @@ final class BigQuaternionTest {
         """)
     void isInvertible_should_succeed(
             final BigDecimal w, final BigDecimal x, final BigDecimal y, final BigDecimal z, final boolean expected) {
-        assertThat(new BigQuaternion(w, x, y, z).isInvertible()).isEqualTo(expected);
+        final var quaternion = new BigQuaternion(w, x, y, z);
+
+        final var actual = quaternion.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -51,7 +50,11 @@ final class BigQuaternionTest {
         """)
     void isZero_should_succeed(
             final BigDecimal w, final BigDecimal x, final BigDecimal y, final BigDecimal z, final boolean expected) {
-        assertThat(new BigQuaternion(w, x, y, z).isZero()).isEqualTo(expected);
+        final var quaternion = new BigQuaternion(w, x, y, z);
+
+        final var actual = quaternion.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -64,9 +67,16 @@ final class BigQuaternionTest {
 
     @Test
     void add_without_MathContext_should_succeed() {
-        assertThat(quaternion1.add(quaternion2))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(6L), BigDecimal.valueOf(8L), BigDecimal.TEN, BigDecimal.valueOf(12L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var summand = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.add(summand);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(6L), BigDecimal.valueOf(8L), BigDecimal.TEN, BigDecimal.valueOf(12L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -87,9 +97,16 @@ final class BigQuaternionTest {
 
     @Test
     void add_with_MathContext_should_succeed() {
-        assertThat(quaternion1.add(quaternion2, MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(6L), BigDecimal.valueOf(8L), BigDecimal.TEN, BigDecimal.valueOf(12L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var summand = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.add(summand, MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(6L), BigDecimal.valueOf(8L), BigDecimal.TEN, BigDecimal.valueOf(12L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -102,12 +119,16 @@ final class BigQuaternionTest {
 
     @Test
     void subtract_without_MathContext_should_succeed() {
-        assertThat(quaternion1.subtract(quaternion2))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var subtrahend = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.subtract(subtrahend);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -128,12 +149,16 @@ final class BigQuaternionTest {
 
     @Test
     void subtract_with_MathContext_should_succeed() {
-        assertThat(quaternion1.subtract(quaternion2, MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L),
-                        BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var subtrahend = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.subtract(subtrahend, MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L), BigDecimal.valueOf(-4L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -146,12 +171,16 @@ final class BigQuaternionTest {
 
     @Test
     void multiply_without_MathContext_should_succeed() {
-        assertThat(quaternion1.multiply(quaternion2))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-60L),
-                        BigDecimal.valueOf(12L),
-                        BigDecimal.valueOf(30L),
-                        BigDecimal.valueOf(24L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var multiplier = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.multiply(multiplier);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-60L), BigDecimal.valueOf(12L), BigDecimal.valueOf(30L), BigDecimal.valueOf(24L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -172,12 +201,16 @@ final class BigQuaternionTest {
 
     @Test
     void multiply_with_MathContext_should_succeed() {
-        assertThat(quaternion1.multiply(quaternion2, MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-60L),
-                        BigDecimal.valueOf(12L),
-                        BigDecimal.valueOf(30L),
-                        BigDecimal.valueOf(24L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var multiplier = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.multiply(multiplier, MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-60L), BigDecimal.valueOf(12L), BigDecimal.valueOf(30L), BigDecimal.valueOf(24L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -206,22 +239,31 @@ final class BigQuaternionTest {
 
     @Test
     void divide_should_succeed() {
-        assertThat(quaternion1.divide(quaternion2, MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        new BigDecimal("0.4022988"),
-                        new BigDecimal("0.0459771"),
-                        new BigDecimal("0E-7"),
-                        new BigDecimal("0.0919540")));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+        final var divisor = new BigQuaternion(
+                BigDecimal.valueOf(5L), BigDecimal.valueOf(6L), BigDecimal.valueOf(7L), BigDecimal.valueOf(8L));
+
+        final var actual = quaternion.divide(divisor, MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                new BigDecimal("0.4022988"),
+                new BigDecimal("0.0459771"),
+                new BigDecimal("0E-7"),
+                new BigDecimal("0.0919540"));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void negate_without_MathContext_should_succeed() {
-        assertThat(quaternion1.negate())
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-1L),
-                        BigDecimal.valueOf(-2L),
-                        BigDecimal.valueOf(-3L),
-                        BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.negate();
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -234,12 +276,14 @@ final class BigQuaternionTest {
 
     @Test
     void negate_with_MathContext_should_succeed() {
-        assertThat(quaternion1.negate(MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.valueOf(-1L),
-                        BigDecimal.valueOf(-2L),
-                        BigDecimal.valueOf(-3L),
-                        BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.negate(MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -263,7 +307,7 @@ final class BigQuaternionTest {
         1,     1,     1,     1,     -1,  0.25, -0.25, -0.25, -0.25
         1,     1,     1,     1,      0,  1,     0,     0,     0
         1,     1,     1,     1,      1,  1,     1,     1,     1
-        0, 0, 0, 0,  2,  0,     0,     0,     0
+        0,     0,     0,     0,      2,  0,     0,     0,     0
         1,     1,     1,     1,      2, -2,     2,     2,     2
         1,     1,     1,     1,      3, -8,     0,     0,     0
         """)
@@ -277,8 +321,12 @@ final class BigQuaternionTest {
             final BigDecimal expectedX,
             final BigDecimal expectedY,
             final BigDecimal expectedZ) {
-        assertThat(new BigQuaternion(w, x, y, z).pow(exponent, MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(expectedW, expectedX, expectedY, expectedZ));
+        final var quaternion = new BigQuaternion(w, x, y, z);
+
+        final var actual = quaternion.pow(exponent, MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(expectedW, expectedX, expectedY, expectedZ);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -299,19 +347,31 @@ final class BigQuaternionTest {
 
     @Test
     void reciprocal_should_succeed() {
-        assertThat(quaternion1.reciprocal(MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        new BigDecimal("0.03333333"),
-                        new BigDecimal("-0.06666667"),
-                        new BigDecimal("-0.1"),
-                        new BigDecimal("-0.1333333")));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.reciprocal(MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                new BigDecimal("0.03333333"),
+                new BigDecimal("-0.06666667"),
+                new BigDecimal("-0.1"),
+                new BigDecimal("-0.1333333"));
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void conjugate_without_MathContext_should_succeed() {
-        assertThat(quaternion1.conjugate())
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.ONE, BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.conjugate();
+
+        final var expected = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L));
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -324,14 +384,25 @@ final class BigQuaternionTest {
 
     @Test
     void conjugate_with_MathContext_should_succeed() {
-        assertThat(quaternion1.conjugate(MathContext.DECIMAL32))
-                .isEqualTo(new BigQuaternion(
-                        BigDecimal.ONE, BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L)));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.conjugate(MathContext.DECIMAL32);
+
+        final var expected = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(-2L), BigDecimal.valueOf(-3L), BigDecimal.valueOf(-4L));
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_without_MathContext_should_succeed() {
-        assertThat(quaternion1.norm()).isEqualByComparingTo(BigDecimal.valueOf(30L));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.norm();
+
+        assertThat(actual).isEqualByComparingTo(BigDecimal.valueOf(30L));
     }
 
     @Test
@@ -344,7 +415,12 @@ final class BigQuaternionTest {
 
     @Test
     void norm_with_MathContext_should_succeed() {
-        assertThat(quaternion1.norm(MathContext.DECIMAL32)).isEqualByComparingTo(BigDecimal.valueOf(30L));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.norm(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualByComparingTo(BigDecimal.valueOf(30L));
     }
 
     @Test
@@ -357,6 +433,11 @@ final class BigQuaternionTest {
 
     @Test
     void abs_should_succeed() {
-        assertThat(quaternion1.abs(MathContext.DECIMAL32)).isEqualByComparingTo(new BigDecimal("5.477226"));
+        final var quaternion = new BigQuaternion(
+                BigDecimal.ONE, BigDecimal.valueOf(2L), BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = quaternion.abs(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualByComparingTo(new BigDecimal("5.477226"));
     }
 }

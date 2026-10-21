@@ -29,14 +29,16 @@ final class SinAndCosCalculatorTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-    0,                                    0
-    1.570796326794896619231321691639752,  1
-    3.141592653589793238462643383279503,  0
-    4.712388980384689857693965074919255, -1
-    6.283185307179586476925286766559005,  0
-    """)
+        0,                                    0
+        1.570796326794896619231321691639752,  1
+        3.141592653589793238462643383279503,  0
+        4.712388980384689857693965074919255, -1
+        6.283185307179586476925286766559005,  0
+        """)
     void sin_should_succeed(final BigDecimal angle, final BigDecimal expected) {
-        assertThat(SinAndCosCalculator.sin(angle, MathContext.DECIMAL128)).isCloseTo(expected, OFFSET);
+        final var actual = SinAndCosCalculator.sin(angle, MathContext.DECIMAL128);
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 
     @ParameterizedTest
@@ -55,15 +57,17 @@ final class SinAndCosCalculatorTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        0, 1
-        0.5, 0
-        1, -1
-        1.5, 0
-        2, 1
+        0,    1
+        0.5,  0
+        1,   -1
+        1.5,  0
+        2,    1
         """)
     void cos_should_succeed(final BigDecimal factor, final BigDecimal expected) {
-        assertThat(SinAndCosCalculator.cos(
-                        factor.multiply(PiCalculator.pi(MathContext.DECIMAL128)), MathContext.DECIMAL128))
-                .isCloseTo(expected, OFFSET);
+        final var x = factor.multiply(PiCalculator.pi(MathContext.DECIMAL128));
+
+        final var actual = SinAndCosCalculator.cos(x, MathContext.DECIMAL128);
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 }

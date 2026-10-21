@@ -21,9 +21,11 @@ final class PiCalculatorTest {
     @Test
     void pi_should_succeed() {
         final var pi = new BigDecimal(String.valueOf(StrictMath.PI));
+        final var mathContext = new MathContext(pi.precision(), RoundingMode.HALF_EVEN);
 
-        final var actual = PiCalculator.pi(new MathContext(pi.precision(), RoundingMode.HALF_EVEN));
+        final var actual = PiCalculator.pi(mathContext);
 
-        assertThat(actual).isCloseTo(pi, within(new BigDecimal(String.valueOf(Doubles.EPSILON))));
+        final var offset = within(new BigDecimal(String.valueOf(Doubles.EPSILON)));
+        assertThat(actual).isCloseTo(pi, offset);
     }
 }

@@ -12,6 +12,8 @@ final class DoublesTest {
         1e-12, false
         """)
     void isNear_should_succeed(final double x, final boolean expected) {
-        assertThat(Doubles.isNear(x, 0D)).isEqualTo(expected);
+        final var actual = Doubles.isNear(x, 0D);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

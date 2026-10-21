@@ -14,9 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class BigComplexTest {
-    private final Offset<BigDecimal> offset = within(new BigDecimal("1e-5"));
-    private final BigComplex complex1 = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
-    private final BigComplex complex2 = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+    private static final Offset<BigDecimal> OFFSET = within(new BigDecimal("1e-5"));
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -42,7 +40,10 @@ final class BigComplexTest {
             final BigDecimal imaginary,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        assertThat(new BigComplex(real, imaginary)).isEqualTo(new BigComplex(expectedReal, expectedImaginary));
+        final var actual = new BigComplex(real, imaginary);
+
+        final var expected = new BigComplex(expectedReal, expectedImaginary);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -81,8 +82,8 @@ final class BigComplexTest {
                 factor.multiply(PiCalculator.pi(MathContext.DECIMAL32), MathContext.DECIMAL32),
                 MathContext.DECIMAL32);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @ParameterizedTest
@@ -91,7 +92,11 @@ final class BigComplexTest {
         1, 1, true
         """)
     void isInvertible_should_succeed(final BigDecimal real, final BigDecimal imaginary, final boolean expected) {
-        assertThat(new BigComplex(real, imaginary).isInvertible()).isEqualTo(expected);
+        final var complex = new BigComplex(real, imaginary);
+
+        final var actual = complex.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -101,7 +106,11 @@ final class BigComplexTest {
         1, 0, false
         """)
     void isZero_should_succeed(final BigDecimal real, final BigDecimal imaginary, final boolean expected) {
-        assertThat(new BigComplex(real, imaginary).isZero()).isEqualTo(expected);
+        final var complex = new BigComplex(real, imaginary);
+
+        final var actual = complex.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -114,7 +123,13 @@ final class BigComplexTest {
 
     @Test
     void add_without_MathContext_should_succeed() {
-        assertThat(complex1.add(complex2)).isEqualTo(new BigComplex(BigDecimal.valueOf(4L), BigDecimal.valueOf(6L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var summand = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.add(summand);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(4L), BigDecimal.valueOf(6L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -135,8 +150,13 @@ final class BigComplexTest {
 
     @Test
     void add_with_MathContext_should_succeed() {
-        assertThat(complex1.add(complex2, MathContext.DECIMAL32))
-                .isEqualTo(new BigComplex(BigDecimal.valueOf(4L), BigDecimal.valueOf(6L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var summand = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.add(summand, MathContext.DECIMAL32);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(4L), BigDecimal.valueOf(6L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -149,8 +169,13 @@ final class BigComplexTest {
 
     @Test
     void subtract_without_MathContext_should_succeed() {
-        assertThat(complex1.subtract(complex2))
-                .isEqualTo(new BigComplex(BigDecimal.valueOf(-2L), BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var subtrahend = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.subtract(subtrahend);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-2L), BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -171,8 +196,13 @@ final class BigComplexTest {
 
     @Test
     void subtract_with_MathContext_should_succeed() {
-        assertThat(complex1.subtract(complex2, MathContext.DECIMAL32))
-                .isEqualTo(new BigComplex(BigDecimal.valueOf(-2L), BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var subtrahend = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.subtract(subtrahend, MathContext.DECIMAL32);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-2L), BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -185,7 +215,13 @@ final class BigComplexTest {
 
     @Test
     void multiply_without_MathContext_should_succeed() {
-        assertThat(complex1.multiply(complex2)).isEqualTo(new BigComplex(BigDecimal.valueOf(-5L), BigDecimal.TEN));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var multiplier = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.multiply(multiplier);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-5L), BigDecimal.TEN);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -206,8 +242,13 @@ final class BigComplexTest {
 
     @Test
     void multiply_with_MathContext_should_succeed() {
-        assertThat(complex1.multiply(complex2, MathContext.DECIMAL32))
-                .isEqualTo(new BigComplex(BigDecimal.valueOf(-5L), BigDecimal.TEN));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+        final var multiplier = new BigComplex(BigDecimal.valueOf(3L), BigDecimal.valueOf(4L));
+
+        final var actual = complex.multiply(multiplier, MathContext.DECIMAL32);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-5L), BigDecimal.TEN);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -244,16 +285,23 @@ final class BigComplexTest {
             final BigDecimal imaginary,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(3L))
-                .divide(new BigComplex(real, imaginary), MathContext.DECIMAL32);
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(3L));
+        final var divisor = new BigComplex(real, imaginary);
+
+        final var actual = complex.divide(divisor, MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
     void negate_without_MathContext_should_succeed() {
-        assertThat(complex1.negate()).isEqualTo(new BigComplex(BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.negate();
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -266,8 +314,12 @@ final class BigComplexTest {
 
     @Test
     void negate_with_MathContext_should_succeed() {
-        assertThat(complex1.negate(MathContext.DECIMAL32))
-                .isEqualTo(new BigComplex(BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.negate(MathContext.DECIMAL32);
+
+        final var expected = new BigComplex(BigDecimal.valueOf(-1L), BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -301,10 +353,12 @@ final class BigComplexTest {
             final int exponent,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigComplex(real, imaginary).pow(exponent, MathContext.DECIMAL32);
+        final var complex = new BigComplex(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = complex.pow(exponent, MathContext.DECIMAL32);
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
@@ -335,15 +389,22 @@ final class BigComplexTest {
             final BigDecimal imaginary,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigComplex(real, imaginary).reciprocal(MathContext.DECIMAL32);
+        final var complex = new BigComplex(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = complex.reciprocal(MathContext.DECIMAL32);
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
     void conjugate_without_MathContext_should_succeed() {
-        assertThat(complex1.conjugate()).isEqualTo(new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.conjugate();
+
+        final var expected = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -356,13 +417,21 @@ final class BigComplexTest {
 
     @Test
     void conjugate_with_MathContext_should_succeed() {
-        assertThat(complex1.conjugate(MathContext.DECIMAL32))
-                .isEqualTo(new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(-2L)));
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.conjugate(MathContext.DECIMAL32);
+
+        final var expected = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_without_MathContext_should_succeed() {
-        assertThat(complex1.norm()).isCloseTo(BigDecimal.valueOf(5L), offset);
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.norm();
+
+        assertThat(actual).isCloseTo(BigDecimal.valueOf(5L), OFFSET);
     }
 
     @Test
@@ -375,7 +444,11 @@ final class BigComplexTest {
 
     @Test
     void norm_with_MathContext_should_succeed() {
-        assertThat(complex1.norm(MathContext.DECIMAL32)).isCloseTo(BigDecimal.valueOf(5L), offset);
+        final var complex = new BigComplex(BigDecimal.ONE, BigDecimal.valueOf(2L));
+
+        final var actual = complex.norm(MathContext.DECIMAL32);
+
+        assertThat(actual).isCloseTo(BigDecimal.valueOf(5L), OFFSET);
     }
 
     @Test
@@ -392,7 +465,11 @@ final class BigComplexTest {
         0, 3, 3
         """)
     void abs_should_succeed(final BigDecimal real, final BigDecimal imaginary, final BigDecimal expected) {
-        assertThat(new BigComplex(real, imaginary).abs(MathContext.DECIMAL32)).isCloseTo(expected, offset);
+        final var complex = new BigComplex(real, imaginary);
+
+        final var actual = complex.abs(MathContext.DECIMAL32);
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 
     @Test
@@ -405,6 +482,8 @@ final class BigComplexTest {
 
     @Test
     void arg_should_succeed() {
-        assertThat(BigComplex.ONE.arg(MathContext.DECIMAL32)).isCloseTo(BigDecimal.ZERO, offset);
+        final var actual = BigComplex.ONE.arg(MathContext.DECIMAL32);
+
+        assertThat(actual).isCloseTo(BigDecimal.ZERO, OFFSET);
     }
 }

@@ -14,9 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class BigGaussianTest {
-    private final Offset<BigDecimal> offset = within(new BigDecimal("1e-6"));
-    private final BigGaussian gaussian1 = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
-    private final BigGaussian gaussian2 = new BigGaussian(BigInteger.valueOf(3L), BigInteger.valueOf(4L));
+    private static final Offset<BigDecimal> OFFSET = within(new BigDecimal("1e-6"));
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -42,7 +40,10 @@ final class BigGaussianTest {
             final BigInteger imaginary,
             final BigInteger expectedReal,
             final BigInteger expectedImaginary) {
-        assertThat(new BigGaussian(real, imaginary)).isEqualTo(new BigGaussian(expectedReal, expectedImaginary));
+        final var actual = new BigGaussian(real, imaginary);
+
+        final var expected = new BigGaussian(expectedReal, expectedImaginary);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -51,7 +52,11 @@ final class BigGaussianTest {
         1, 1, true
         """)
     void isInvertible_should_succeed(final BigInteger real, final BigInteger imaginary, final boolean expected) {
-        assertThat(new BigGaussian(real, imaginary).isInvertible()).isEqualTo(expected);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -61,7 +66,11 @@ final class BigGaussianTest {
         1, 0, false
         """)
     void isZero_should_succeed(final BigInteger real, final BigInteger imaginary, final boolean expected) {
-        assertThat(new BigGaussian(real, imaginary).isZero()).isEqualTo(expected);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -73,7 +82,11 @@ final class BigGaussianTest {
          0, -1, true
         """)
     void isUnit_should_succeed(final BigInteger real, final BigInteger imaginary, final boolean expected) {
-        assertThat(new BigGaussian(real, imaginary).isUnit()).isEqualTo(expected);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.isUnit();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -86,7 +99,13 @@ final class BigGaussianTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(gaussian1.add(gaussian2)).isEqualTo(new BigGaussian(BigInteger.valueOf(4L), BigInteger.valueOf(6L)));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+        final var summand = new BigGaussian(BigInteger.valueOf(3L), BigInteger.valueOf(4L));
+
+        final var actual = gaussian.add(summand);
+
+        final var expected = new BigGaussian(BigInteger.valueOf(4L), BigInteger.valueOf(6L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -99,8 +118,13 @@ final class BigGaussianTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(gaussian1.subtract(gaussian2))
-                .isEqualTo(new BigGaussian(BigInteger.valueOf(-2L), BigInteger.valueOf(-2L)));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+        final var subtrahend = new BigGaussian(BigInteger.valueOf(3L), BigInteger.valueOf(4L));
+
+        final var actual = gaussian.subtract(subtrahend);
+
+        final var expected = new BigGaussian(BigInteger.valueOf(-2L), BigInteger.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -113,7 +137,13 @@ final class BigGaussianTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(gaussian1.multiply(gaussian2)).isEqualTo(new BigGaussian(BigInteger.valueOf(-5L), BigInteger.TEN));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+        final var multiplier = new BigGaussian(BigInteger.valueOf(3L), BigInteger.valueOf(4L));
+
+        final var actual = gaussian.multiply(multiplier);
+
+        final var expected = new BigGaussian(BigInteger.valueOf(-5L), BigInteger.TEN);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -150,16 +180,23 @@ final class BigGaussianTest {
             final BigInteger imaginary,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(3L))
-                .divide(new BigGaussian(real, imaginary), MathContext.DECIMAL32);
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(3L));
+        final var divisor = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.divide(divisor, MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
     void negate_should_succeed() {
-        assertThat(gaussian1.negate()).isEqualTo(new BigGaussian(BigInteger.valueOf(-1L), BigInteger.valueOf(-2L)));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+
+        final var actual = gaussian.negate();
+
+        final var expected = new BigGaussian(BigInteger.valueOf(-1L), BigInteger.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -193,7 +230,9 @@ final class BigGaussianTest {
             final int exponent,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigGaussian(real, imaginary).pow(exponent, MathContext.DECIMAL32);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.pow(exponent, MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
         assertThat(actual.imaginary()).isEqualByComparingTo(expectedImaginary);
@@ -227,7 +266,9 @@ final class BigGaussianTest {
             final BigInteger imaginary,
             final BigDecimal expectedReal,
             final BigDecimal expectedImaginary) {
-        final var actual = new BigGaussian(real, imaginary).reciprocal(MathContext.DECIMAL32);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.reciprocal(MathContext.DECIMAL32);
 
         assertThat(actual.real()).isEqualByComparingTo(expectedReal);
         assertThat(actual.imaginary()).isEqualByComparingTo(expectedImaginary);
@@ -235,12 +276,21 @@ final class BigGaussianTest {
 
     @Test
     void conjugate_should_succeed() {
-        assertThat(gaussian1.conjugate()).isEqualTo(new BigGaussian(BigInteger.ONE, BigInteger.valueOf(-2L)));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+
+        final var actual = gaussian.conjugate();
+
+        final var expected = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(-2L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
-        assertThat(gaussian1.norm()).isEqualTo(BigInteger.valueOf(5L));
+        final var gaussian = new BigGaussian(BigInteger.ONE, BigInteger.valueOf(2L));
+
+        final var actual = gaussian.norm();
+
+        assertThat(actual).isEqualTo(BigInteger.valueOf(5L));
     }
 
     @Test
@@ -257,7 +307,11 @@ final class BigGaussianTest {
         0, 3, 3
         """)
     void abs_should_succeed(final BigInteger real, final BigInteger imaginary, final BigDecimal expected) {
-        assertThat(new BigGaussian(real, imaginary).abs(MathContext.DECIMAL32)).isEqualByComparingTo(expected);
+        final var gaussian = new BigGaussian(real, imaginary);
+
+        final var actual = gaussian.abs(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualByComparingTo(expected);
     }
 
     @Test
@@ -270,6 +324,8 @@ final class BigGaussianTest {
 
     @Test
     void arg_should_succeed() {
-        assertThat(BigGaussian.ONE.arg(MathContext.DECIMAL32)).isZero();
+        final var actual = BigGaussian.ONE.arg(MathContext.DECIMAL32);
+
+        assertThat(actual).isZero();
     }
 }

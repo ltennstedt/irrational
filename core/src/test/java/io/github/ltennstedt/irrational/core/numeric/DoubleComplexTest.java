@@ -12,9 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class DoubleComplexTest {
-    private final Offset<Double> offset = within(Doubles.EPSILON);
-    private final DoubleComplex complex1 = new DoubleComplex(1D, 2D);
-    private final DoubleComplex complex2 = new DoubleComplex(3D, 4D);
+    private static final Offset<Double> OFFSET = within(Doubles.EPSILON);
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -40,7 +38,10 @@ final class DoubleComplexTest {
         """)
     void new_should_succeed(
             final double real, final double imaginary, final double expectedReal, final double expectedImaginary) {
-        assertThat(new DoubleComplex(real, imaginary)).isEqualTo(new DoubleComplex(expectedReal, expectedImaginary));
+        final var actual = new DoubleComplex(real, imaginary);
+
+        final var expected = new DoubleComplex(expectedReal, expectedImaginary);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -75,8 +76,8 @@ final class DoubleComplexTest {
             final double radius, final double factor, final double expectedReal, final double expectedImaginary) {
         final var actual = DoubleComplex.ofPolar(radius, factor * StrictMath.PI);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @ParameterizedTest
@@ -86,7 +87,11 @@ final class DoubleComplexTest {
         1, 0, true
         """)
     void isInvertible_should_succeed(final double real, final double imaginary, final boolean expected) {
-        assertThat(new DoubleComplex(real, imaginary).isInvertible()).isEqualTo(expected);
+        final var complex = new DoubleComplex(real, imaginary);
+
+        final var actual = complex.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -95,7 +100,11 @@ final class DoubleComplexTest {
         1e-13, 1e-13, true
         """)
     void isZero_should_succeed(final double real, final double imaginary, final boolean expected) {
-        assertThat(new DoubleComplex(real, imaginary).isZero()).isEqualTo(expected);
+        final var complex = new DoubleComplex(real, imaginary);
+
+        final var actual = complex.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -108,7 +117,13 @@ final class DoubleComplexTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(complex1.add(complex2)).isEqualTo(new DoubleComplex(4D, 6D));
+        final var complex = new DoubleComplex(1D, 2D);
+        final var summand = new DoubleComplex(3D, 4D);
+
+        final var actual = complex.add(summand);
+
+        final var expected = new DoubleComplex(4D, 6D);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -121,7 +136,13 @@ final class DoubleComplexTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(complex1.subtract(complex2)).isEqualTo(new DoubleComplex(-2D, -2D));
+        final var complex = new DoubleComplex(1D, 2D);
+        final var subtrahend = new DoubleComplex(3D, 4D);
+
+        final var actual = complex.subtract(subtrahend);
+
+        final var expected = new DoubleComplex(-2D, -2D);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -134,7 +155,13 @@ final class DoubleComplexTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(complex1.multiply(complex2)).isEqualTo(new DoubleComplex(-5D, 10D));
+        final var complex = new DoubleComplex(1D, 2D);
+        final var multiplier = new DoubleComplex(3D, 4D);
+
+        final var actual = complex.multiply(multiplier);
+
+        final var expected = new DoubleComplex(-5D, 10D);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -160,13 +187,23 @@ final class DoubleComplexTest {
         """)
     void divide_should_succeed(
             final double real, final double imaginary, final double expectedReal, final double expectedImaginary) {
-        assertThat(new DoubleComplex(1D, 3D).divide(new DoubleComplex(real, imaginary)))
-                .isEqualTo(new DoubleComplex(expectedReal, expectedImaginary));
+        final var complex = new DoubleComplex(1D, 3D);
+        final var divisor = new DoubleComplex(real, imaginary);
+
+        final var actual = complex.divide(divisor);
+
+        final var expected = new DoubleComplex(expectedReal, expectedImaginary);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void negate_should_succeed() {
-        assertThat(complex1.negate()).isEqualTo(new DoubleComplex(-1D, -2D));
+        final var complex = new DoubleComplex(1D, 2D);
+
+        final var actual = complex.negate();
+
+        final var expected = new DoubleComplex(-1D, -2D);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -192,10 +229,12 @@ final class DoubleComplexTest {
             final int exponent,
             final double expectedReal,
             final double expectedImaginary) {
-        final var actual = new DoubleComplex(real, imaginary).pow(exponent);
+        final var complex = new DoubleComplex(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = complex.pow(exponent);
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
@@ -215,20 +254,31 @@ final class DoubleComplexTest {
         """)
     void reciprocal_should_succeed(
             final double real, final double imaginary, final double expectedReal, final double expectedImaginary) {
-        final var actual = new DoubleComplex(real, imaginary).reciprocal();
+        final var complex = new DoubleComplex(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = complex.reciprocal();
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
     void conjugate_should_succeed() {
-        assertThat(complex1.conjugate()).isEqualTo(new DoubleComplex(1D, -2D));
+        final var complex = new DoubleComplex(1D, 2D);
+
+        final var actual = complex.conjugate();
+
+        final var expected = new DoubleComplex(1D, -2D);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
-        assertThat(complex1.norm()).isCloseTo(5D, offset);
+        final var complex = new DoubleComplex(1D, 2D);
+
+        final var actual = complex.norm();
+
+        assertThat(actual).isCloseTo(5D, OFFSET);
     }
 
     @ParameterizedTest
@@ -237,11 +287,17 @@ final class DoubleComplexTest {
         0, 3, 3
         """)
     void abs_should_succeed(final double real, final double imaginary, final double expected) {
-        assertThat(new DoubleComplex(real, imaginary).abs()).isCloseTo(expected, offset);
+        final var complex = new DoubleComplex(real, imaginary);
+
+        final var actual = complex.abs();
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 
     @Test
     void arg_should_succeed() {
-        assertThat(DoubleComplex.ONE.arg()).isCloseTo(0D, offset);
+        final var actual = DoubleComplex.ONE.arg();
+
+        assertThat(actual).isCloseTo(0D, OFFSET);
     }
 }

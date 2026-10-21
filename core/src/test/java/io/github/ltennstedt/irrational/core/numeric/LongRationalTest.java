@@ -15,9 +15,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.params.LongRangeSource;
 
 final class LongRationalTest {
-    private final LongRational rational1 = new LongRational(2L, 3L);
-    private final LongRational rational2 = new LongRational(4L, 5L);
-
     @Test
     void new_should_throw_when_denominator_is_0() {
         assertThatExceptionOfType(ArithmeticException.class)
@@ -36,8 +33,10 @@ final class LongRationalTest {
             final long denominator,
             final long expectedNumerator,
             final long expectedDenominator) {
-        assertThat(new LongRational(numerator, denominator))
-                .isEqualTo(new LongRational(expectedNumerator, expectedDenominator));
+        final var actual = new LongRational(numerator, denominator);
+
+        final var expected = new LongRational(expectedNumerator, expectedDenominator);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -46,7 +45,11 @@ final class LongRationalTest {
             1, true
         """)
     void isInvertible_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isInvertible()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -55,7 +58,11 @@ final class LongRationalTest {
             0, true
         """)
     void isZero_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isZero()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -64,7 +71,11 @@ final class LongRationalTest {
             1, true
         """)
     void isUnitFraction_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isUnitFraction()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isUnitFraction();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -80,7 +91,11 @@ final class LongRationalTest {
             9, false
         """)
     void isDyadic_should_succeed(final long denominator, final boolean expected) {
-        assertThat(new LongRational(1L, denominator).isDyadic()).isEqualTo(expected);
+        final var rational = new LongRational(1L, denominator);
+
+        final var actual = rational.isDyadic();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -93,7 +108,11 @@ final class LongRationalTest {
              1, 2, true
         """)
     void isProper_should_succeed(final long numerator, final long denominator, final boolean expected) {
-        assertThat(new LongRational(numerator, denominator).isProper()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, denominator);
+
+        final var actual = rational.isProper();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -103,7 +122,11 @@ final class LongRationalTest {
              1, true
         """)
     void isPositive_should_succeed(final long numerator, final boolean expected) {
-        assertThat(new LongRational(numerator, 1L).isPositive()).isEqualTo(expected);
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.isPositive();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -116,7 +139,13 @@ final class LongRationalTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(rational1.add(rational2)).isEqualTo(new LongRational(22L, 15L));
+        final var rational = new LongRational(2L, 3L);
+        final var summand = new LongRational(4L, 5L);
+
+        final var actual = rational.add(summand);
+
+        final var expected = new LongRational(22L, 15L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -129,7 +158,13 @@ final class LongRationalTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(rational1.subtract(rational2)).isEqualTo(new LongRational(-2L, 15L));
+        final var rational = new LongRational(2L, 3L);
+        final var subtrahend = new LongRational(4L, 5L);
+
+        final var actual = rational.subtract(subtrahend);
+
+        final var expected = new LongRational(-2L, 15L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -142,7 +177,13 @@ final class LongRationalTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(rational1.multiply(rational2)).isEqualTo(new LongRational(8L, 15L));
+        final var rational = new LongRational(2L, 3L);
+        final var multiplier = new LongRational(4L, 5L);
+
+        final var actual = rational.multiply(multiplier);
+
+        final var expected = new LongRational(8L, 15L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -163,12 +204,21 @@ final class LongRationalTest {
 
     @Test
     void divide_should_succeed() {
-        assertThat(rational1.divide(rational2)).isEqualTo(new LongRational(5L, 6L));
+        final var rational = new LongRational(2L, 3L);
+        final var divisor = new LongRational(4L, 5L);
+
+        final var actual = rational.divide(divisor);
+
+        final var expected = new LongRational(5L, 6L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void negate_should_succeed() {
-        assertThat(LongRational.ONE.negate()).isEqualTo(new LongRational(-1L, 1L));
+        final var actual = LongRational.ONE.negate();
+
+        final var expected = new LongRational(-1L, 1L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -194,8 +244,12 @@ final class LongRationalTest {
             final int exponent,
             final long expectedNumerator,
             final long expectedDenominator) {
-        assertThat(new LongRational(numerator, denominator).pow(exponent))
-                .isEqualTo(new LongRational(expectedNumerator, expectedDenominator));
+        final var rational = new LongRational(numerator, denominator);
+
+        final var actual = rational.pow(exponent);
+
+        final var expected = new LongRational(expectedNumerator, expectedDenominator);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -208,13 +262,23 @@ final class LongRationalTest {
 
     @Test
     void reciprocal_should_succeed() {
-        assertThat(rational1.reciprocal()).isEqualTo(new LongRational(3L, 2L));
+        final var rational = new LongRational(2L, 3L);
+
+        final var actual = rational.reciprocal();
+
+        final var expected = new LongRational(3L, 2L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @LongRangeSource(from = -1L, to = 1L, closed = true)
     void signum_should_succeed(final long numerator) {
-        assertThat(new LongRational(numerator, 1L).signum()).isEqualTo(Long.signum(numerator));
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.signum();
+
+        final var expected = Long.signum(numerator);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -231,9 +295,14 @@ final class LongRationalTest {
             0, 0, 0
             1, 0, 0
         """)
-    void min_should_succeed(final long numerator, final long otherNumerator, final long expected) {
-        assertThat(new LongRational(numerator, 1L).min(new LongRational(otherNumerator, 1L)))
-                .isEqualTo(new LongRational(expected, 1L));
+    void min_should_succeed(final long numerator, final long otherNumerator, final long expectedNumerator) {
+        final var rational = new LongRational(numerator, 1L);
+        final var other = new LongRational(otherNumerator, 1L);
+
+        final var actual = rational.min(other);
+
+        final var expectedRational = new LongRational(expectedNumerator, 1L);
+        assertThat(actual).isEqualTo(expectedRational);
     }
 
     @Test
@@ -250,30 +319,52 @@ final class LongRationalTest {
             0, 0, 0
             0, 1, 1
         """)
-    void max_should_succeed(final long numerator, final long otherNumerator, final long expected) {
-        assertThat(new LongRational(numerator, 1L).max(new LongRational(otherNumerator, 1L)))
-                .isEqualTo(new LongRational(expected, 1L));
+    void max_should_succeed(final long numerator, final long otherNumerator, final long expectedNumerator) {
+        final var rational = new LongRational(numerator, 1L);
+
+        final var other = new LongRational(otherNumerator, 1L);
+
+        final var actual = rational.max(other);
+        final var expectedRational = new LongRational(expectedNumerator, 1L);
+        assertThat(actual).isEqualTo(expectedRational);
     }
 
     @ParameterizedTest
     @ValueSource(longs = {-2L, 2L})
     void abs_should_succeed(final long numerator) {
-        assertThat(new LongRational(numerator, 1L).abs()).isEqualTo(new LongRational(Math.absExact(numerator), 1L));
+        final var rational = new LongRational(numerator, 1L);
+
+        final var actual = rational.abs();
+
+        final var expected = new LongRational(Math.absExact(numerator), 1L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void toBigDecimal_with_scale_and_roundingMode_should_succeed() {
-        assertThat(new LongRational(1L, 3L).toBigDecimal(2, RoundingMode.UP)).isEqualTo(new BigDecimal("0.34"));
+        final var rational = new LongRational(1L, 3L);
+
+        final var actual = rational.toBigDecimal(2, RoundingMode.UP);
+
+        assertThat(actual).isEqualTo(new BigDecimal("0.34"));
     }
 
     @Test
     void toBigDecimal_with_roundingMode_should_succeed() {
-        assertThat(new LongRational(1L, 3L).toBigDecimal(RoundingMode.UP)).isOne();
+        final var rational = new LongRational(1L, 3L);
+
+        final var actual = rational.toBigDecimal(RoundingMode.UP);
+
+        assertThat(actual).isOne();
     }
 
     @Test
     void toBigDecimal_with_mathContext_should_succeed() {
-        assertThat(new LongRational(1L, 3L).toBigDecimal(MathContext.DECIMAL32)).isEqualTo(new BigDecimal("0.3333333"));
+        final var rational = new LongRational(1L, 3L);
+
+        final var actual = rational.toBigDecimal(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualTo(new BigDecimal("0.3333333"));
     }
 
     @Test
@@ -291,8 +382,11 @@ final class LongRationalTest {
         1, 2,  1
         """)
     void compareTo_should_succeed(final long numerator, final long denominator, final int expected) {
-        assertThat(LongRational.ONE.compareTo(new LongRational(numerator, denominator)))
-                .isEqualTo(expected);
+        final var other = new LongRational(numerator, denominator);
+
+        final var actual = LongRational.ONE.compareTo(other);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Nested
@@ -304,8 +398,11 @@ final class LongRationalTest {
             1, 2,  1
             """)
         void compareTo_should_succeed(final long numerator, final long denominator, final int expected) {
-            assertThat(LongRational.COMPARATOR.compare(LongRational.ONE, new LongRational(numerator, denominator)))
-                    .isEqualTo(expected);
+            final var other = new LongRational(numerator, denominator);
+
+            final var actual = LongRational.COMPARATOR.compare(LongRational.ONE, other);
+
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }

@@ -12,9 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class LongGaussianTest {
-    private final Offset<Double> offset = within(Doubles.EPSILON);
-    private final LongGaussian gaussian1 = new LongGaussian(1L, 2L);
-    private final LongGaussian gaussian2 = new LongGaussian(3L, 4L);
+    private static final Offset<Double> OFFSET = within(Doubles.EPSILON);
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -24,7 +22,11 @@ final class LongGaussianTest {
         """)
     void new_should_succeed(
             final long real, final long imaginary, final long expectedReal, final long expectedImaginary) {
-        assertThat(new LongGaussian(real, imaginary)).isEqualTo(new LongGaussian(expectedReal, expectedImaginary));
+        final var actual = new LongGaussian(real, imaginary);
+
+        final var expected = new LongGaussian(expectedReal, expectedImaginary);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -34,7 +36,11 @@ final class LongGaussianTest {
         1, 0, true
         """)
     void isInvertible_should_succeed(final long real, final long imaginary, final boolean expected) {
-        assertThat(new LongGaussian(real, imaginary).isInvertible()).isEqualTo(expected);
+        final var gaussian = new LongGaussian(real, imaginary);
+
+        final var actual = gaussian.isInvertible();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -43,7 +49,11 @@ final class LongGaussianTest {
         0, 0, true
         """)
     void isZero_should_succeed(final long real, final long imaginary, final boolean expected) {
-        assertThat(new LongGaussian(real, imaginary).isZero()).isEqualTo(expected);
+        final var gaussian = new LongGaussian(real, imaginary);
+
+        final var actual = gaussian.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -55,7 +65,11 @@ final class LongGaussianTest {
          0, -1, true
         """)
     void isUnit_should_succeed(final long real, final long imaginary, final boolean expected) {
-        assertThat(new LongGaussian(real, imaginary).isUnit()).isEqualTo(expected);
+        final var gaussian = new LongGaussian(real, imaginary);
+
+        final var actual = gaussian.isUnit();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -68,7 +82,13 @@ final class LongGaussianTest {
 
     @Test
     void add_should_succeed() {
-        assertThat(gaussian1.add(gaussian2)).isEqualTo(new LongGaussian(4L, 6L));
+        final var gaussian = new LongGaussian(1L, 2L);
+        final var summand = new LongGaussian(3L, 4L);
+
+        final var actual = gaussian.add(summand);
+
+        final var expected = new LongGaussian(4L, 6L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -81,7 +101,13 @@ final class LongGaussianTest {
 
     @Test
     void subtract_should_succeed() {
-        assertThat(gaussian1.subtract(gaussian2)).isEqualTo(new LongGaussian(-2L, -2L));
+        final var gaussian = new LongGaussian(1L, 2L);
+        final var subtrahend = new LongGaussian(3L, 4L);
+
+        final var actual = gaussian.subtract(subtrahend);
+
+        final var expected = new LongGaussian(-2L, -2L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -94,7 +120,13 @@ final class LongGaussianTest {
 
     @Test
     void multiply_should_succeed() {
-        assertThat(gaussian1.multiply(gaussian2)).isEqualTo(new LongGaussian(-5L, 10L));
+        final var gaussian = new LongGaussian(1L, 2L);
+        final var multiplier = new LongGaussian(3L, 4L);
+
+        final var actual = gaussian.multiply(multiplier);
+
+        final var expected = new LongGaussian(-5L, 10L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -120,13 +152,23 @@ final class LongGaussianTest {
         """)
     void divide_should_succeed(
             final long real, final long imaginary, final double expectedReal, final double expectedImaginary) {
-        assertThat(new LongGaussian(1L, 3L).divide(new LongGaussian(real, imaginary)))
-                .isEqualTo(new DoubleComplex(expectedReal, expectedImaginary));
+        final var gaussian = new LongGaussian(1L, 3L);
+        final var divisor = new LongGaussian(real, imaginary);
+
+        final var actual = gaussian.divide(divisor);
+
+        final var expected = new DoubleComplex(expectedReal, expectedImaginary);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void negate_should_succeed() {
-        assertThat(gaussian1.negate()).isEqualTo(new LongGaussian(-1L, -2L));
+        final var gaussian = new LongGaussian(1L, 2L);
+
+        final var actual = gaussian.negate();
+
+        final var expected = new LongGaussian(-1L, -2L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -152,10 +194,12 @@ final class LongGaussianTest {
             final int exponent,
             final double expectedReal,
             final double expectedImaginary) {
-        final var actual = new LongGaussian(real, imaginary).pow(exponent);
+        final var gaussian = new LongGaussian(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = gaussian.pow(exponent);
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
@@ -175,20 +219,31 @@ final class LongGaussianTest {
         """)
     void reciprocal_should_succeed(
             final long real, final long imaginary, final double expectedReal, final double expectedImaginary) {
-        final var actual = new LongGaussian(real, imaginary).reciprocal();
+        final var gaussian = new LongGaussian(real, imaginary);
 
-        assertThat(actual.real()).isCloseTo(expectedReal, offset);
-        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, offset);
+        final var actual = gaussian.reciprocal();
+
+        assertThat(actual.real()).isCloseTo(expectedReal, OFFSET);
+        assertThat(actual.imaginary()).isCloseTo(expectedImaginary, OFFSET);
     }
 
     @Test
     void conjugate_should_succeed() {
-        assertThat(gaussian1.conjugate()).isEqualTo(new LongGaussian(1L, -2L));
+        final var gaussian = new LongGaussian(1L, 2L);
+
+        final var actual = gaussian.conjugate();
+
+        final var expected = new LongGaussian(1L, -2L);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
-        assertThat(gaussian1.norm()).isCloseTo(5D, offset);
+        final var gaussian = new LongGaussian(1L, 2L);
+
+        final var actual = gaussian.norm();
+
+        assertThat(actual).isCloseTo(5D, OFFSET);
     }
 
     @ParameterizedTest
@@ -197,11 +252,17 @@ final class LongGaussianTest {
         0, 3, 3
         """)
     void abs_should_succeed(final long real, final long imaginary, final double expected) {
-        assertThat(new LongGaussian(real, imaginary).abs()).isCloseTo(expected, offset);
+        final var gaussian = new LongGaussian(real, imaginary);
+
+        final var actual = gaussian.abs();
+
+        assertThat(actual).isCloseTo(expected, OFFSET);
     }
 
     @Test
     void arg_should_succeed() {
-        assertThat(LongGaussian.ONE.arg()).isCloseTo(0D, offset);
+        final var actual = LongGaussian.ONE.arg();
+
+        assertThat(actual).isCloseTo(0D, OFFSET);
     }
 }
