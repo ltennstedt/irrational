@@ -10,9 +10,9 @@ tasks {
         dependsOn(buildHealth)
     }
     wrapper {
-        gradleVersion = "9.8.1"
+        gradleVersion = "9.8.2"
         distributionType = DistributionType.ALL
-        distributionSha256Sum = "5ceda8d2425eb2af196dec31b6fc1f38af2fb638fd621f86fa685805f2262224"
+        distributionSha256Sum = "a1bb7e9651ef09e4cd9a62d471564e0ee23b5757e5f21fd7358d7cfc21018fdf"
     }
     register("dependenciesAll") {
         description = "Runs task dependencies on all subprojects"
