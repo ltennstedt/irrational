@@ -59,12 +59,12 @@ final class BigIntegerVectorTest {
 
     @Test
     void new_should_succeed() {
-        final var actual = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(2, BigInteger.ZERO), new BigIntegerVectorEntry(1, BigInteger.ZERO)));
-        final var expected = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO), new BigIntegerVectorEntry(2, BigInteger.ZERO)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.ZERO);
 
-        assertThat(actual).isEqualTo(expected);
+        final var actual = new BigIntegerVector(List.of(entry2, entry1));
+
+        assertThat(actual).isEqualTo(new BigIntegerVector(List.of(entry1, entry2)));
     }
 
     @Test
@@ -77,7 +77,9 @@ final class BigIntegerVectorTest {
 
     @Test
     void builder_should_succeed() {
-        assertThat(BigIntegerVector.builder(0)).isNotNull();
+        final var actual = BigIntegerVector.builder(0);
+
+        assertThat(actual).isNotNull();
     }
 
     @ParameterizedTest
@@ -95,10 +97,13 @@ final class BigIntegerVectorTest {
         0, true
         """)
     void isZero_should_succeed(final BigInteger value, final boolean expected) {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO), new BigIntegerVectorEntry(2, value)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+        final var entry2 = new BigIntegerVectorEntry(2, value);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.isZero()).isEqualTo(expected);
+        final var actual = vector.isZero();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -111,10 +116,13 @@ final class BigIntegerVectorTest {
         """)
     void isStandardBasisVector_should_succeed(
             final BigInteger value1, final BigInteger value2, final boolean expected) {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, value1), new BigIntegerVectorEntry(2, value2)));
+        final var entry1 = new BigIntegerVectorEntry(1, value1);
+        final var entry2 = new BigIntegerVectorEntry(2, value2);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.isStandardBasisVector()).isEqualTo(expected);
+        final var actual = vector.isStandardBasisVector();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -126,45 +134,60 @@ final class BigIntegerVectorTest {
          2,  0, true
         """)
     void isUnitVector_should_succeed(final BigInteger value1, final BigInteger value2, final boolean expected) {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, value1), new BigIntegerVectorEntry(2, value2)));
+        final var entry1 = new BigIntegerVectorEntry(1, value1);
+        final var entry2 = new BigIntegerVectorEntry(2, value2);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.isUnitVector()).isEqualTo(expected);
+        final var actual = vector.isUnitVector();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void size_should_succeed() {
-        assertThat(BigIntegerVector.EMPTY.size()).isZero();
+        final var actual = BigIntegerVector.EMPTY.size();
+
+        assertThat(actual).isZero();
     }
 
     @Test
     void indices_should_succeed() {
         final var vector = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO)));
 
-        assertThat(vector.indices()).containsExactly(1);
+        final var actual = vector.indices();
+
+        assertThat(actual).containsExactly(1);
     }
 
     @Test
     void values_should_succeed() {
         final var vector = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO)));
 
-        assertThat(vector.values()).containsExactly(BigInteger.ZERO);
+        final var actual = vector.values();
+
+        assertThat(actual).containsExactly(BigInteger.ZERO);
     }
 
     @Test
     void value_should_succeed() {
-        final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
-        final var vector = new BigIntegerVector(List.of(entry, new BigIntegerVectorEntry(2, BigInteger.ONE)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.ONE);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.value(1)).isZero();
+        final var actual = vector.value(1);
+
+        assertThat(actual).isZero();
     }
 
     @Test
     void entry_should_succeed() {
-        final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
-        final var vector = new BigIntegerVector(List.of(entry, new BigIntegerVectorEntry(2, BigInteger.ZERO)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.ZERO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.entry(1)).isSameAs(entry);
+        final var actual = vector.entry(1);
+
+        assertThat(actual).isSameAs(entry1);
     }
 
     @ParameterizedTest
@@ -175,7 +198,9 @@ final class BigIntegerVectorTest {
     void containsIndex_should_succeed(final int index, final boolean expected) {
         final var vector = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO)));
 
-        assertThat(vector.containsIndex(index)).isEqualTo(expected);
+        final var actual = vector.containsIndex(index);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -194,7 +219,9 @@ final class BigIntegerVectorTest {
     void containsValue_should_succeed(final BigInteger value, final boolean expected) {
         final var vector = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.ZERO)));
 
-        assertThat(vector.containsValue(value)).isEqualTo(expected);
+        final var actual = vector.containsValue(value);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -214,8 +241,9 @@ final class BigIntegerVectorTest {
     void containsEntry_should_succeed(final int index, final BigInteger value, final boolean expected) {
         final var vector = new BigIntegerVector(List.of(new BigIntegerVectorEntry(1, BigInteger.ONE)));
 
-        assertThat(vector.containsEntry(new BigIntegerVectorEntry(index, value)))
-                .isEqualTo(expected);
+        final var actual = vector.containsEntry(new BigIntegerVectorEntry(index, value));
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -238,17 +266,18 @@ final class BigIntegerVectorTest {
 
     @Test
     void add_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
-        final var summand = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(3L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(4L))));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
+        final var entry3 = new BigIntegerVectorEntry(1, BigInteger.valueOf(3L));
+        final var entry4 = new BigIntegerVectorEntry(2, BigInteger.valueOf(4L));
+        final var summand = new BigIntegerVector(List.of(entry3, entry4));
 
         final var actual = vector.add(summand);
 
-        final var expected = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(4L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(6L))));
+        final var entry5 = new BigIntegerVectorEntry(1, BigInteger.valueOf(4L));
+        final var entry6 = new BigIntegerVectorEntry(2, BigInteger.valueOf(6L));
+        final var expected = new BigIntegerVector(List.of(entry5, entry6));
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -272,17 +301,18 @@ final class BigIntegerVectorTest {
 
     @Test
     void subtract_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
-        final var subtrahend = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(3L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(5L))));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
+        final var entry3 = new BigIntegerVectorEntry(1, BigInteger.valueOf(3L));
+        final var entry4 = new BigIntegerVectorEntry(2, BigInteger.valueOf(5L));
+        final var subtrahend = new BigIntegerVector(List.of(entry3, entry4));
 
         final var actual = vector.subtract(subtrahend);
 
-        final var expected = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(-2L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(-3L))));
+        final var entry5 = new BigIntegerVectorEntry(1, BigInteger.valueOf(-2L));
+        final var entry6 = new BigIntegerVectorEntry(2, BigInteger.valueOf(-3L));
+        final var expected = new BigIntegerVector(List.of(entry5, entry6));
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -296,14 +326,15 @@ final class BigIntegerVectorTest {
 
     @Test
     void scalarMultiply_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
         final var actual = vector.scalarMultiply(BigInteger.valueOf(3L));
 
-        final var expected = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(3L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(6L))));
+        final var entry3 = new BigIntegerVectorEntry(1, BigInteger.valueOf(3L));
+        final var entry4 = new BigIntegerVectorEntry(2, BigInteger.valueOf(6L));
+        final var expected = new BigIntegerVector(List.of(entry3, entry4));
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -327,24 +358,30 @@ final class BigIntegerVectorTest {
 
     @Test
     void dotProduct_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
-        final var other = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(3L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(4L))));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
+        final var entry3 = new BigIntegerVectorEntry(1, BigInteger.valueOf(3L));
+        final var entry4 = new BigIntegerVectorEntry(2, BigInteger.valueOf(4L));
+        final var other = new BigIntegerVector(List.of(entry3, entry4));
 
-        assertThat(vector.dotProduct(other)).isEqualTo(BigInteger.valueOf(11L));
+        final var actual = vector.dotProduct(other);
+
+        assertThat(actual).isEqualTo(BigInteger.valueOf(11L));
     }
 
     @Test
     void negate_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
+        final var entry3 = new BigIntegerVectorEntry(1, BigInteger.valueOf(-1L));
+        final var entry4 = new BigIntegerVectorEntry(2, BigInteger.valueOf(-2L));
+        final var expected = new BigIntegerVector(List.of(entry3, entry4));
 
-        final var expected = new BigIntegerVector(List.of(
-                new BigIntegerVectorEntry(1, BigInteger.valueOf(-1L)),
-                new BigIntegerVectorEntry(2, BigInteger.valueOf(-2L))));
-        assertThat(vector.negate()).isEqualTo(expected);
+        final var actual = vector.negate();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -357,10 +394,13 @@ final class BigIntegerVectorTest {
 
     @Test
     void norm_should_succeed() {
-        final var vector = new BigIntegerVector(
-                List.of(new BigIntegerVectorEntry(1, BigInteger.ONE), new BigIntegerVectorEntry(2, BigInteger.TWO)));
+        final var entry1 = new BigIntegerVectorEntry(1, BigInteger.ONE);
+        final var entry2 = new BigIntegerVectorEntry(2, BigInteger.TWO);
+        final var vector = new BigIntegerVector(List.of(entry1, entry2));
 
-        assertThat(vector.norm(MathContext.DECIMAL32)).isEqualByComparingTo(new BigDecimal("2.236068"));
+        final var actual = vector.norm(MathContext.DECIMAL32);
+
+        assertThat(actual).isEqualByComparingTo(new BigDecimal("2.236068"));
     }
 
     @Nested
@@ -380,31 +420,38 @@ final class BigIntegerVectorTest {
 
         @Test
         void withIndex_should_throw_when_index_is_less_than_one() {
+            final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> new BigIntegerVectorEntry(1, BigInteger.ZERO).withIndex(0))
+                    .isThrownBy(() -> entry.withIndex(0))
                     .withMessage("index must be greater than 0 but was 0")
                     .withNoCause();
         }
 
         @Test
         void withIndex_should_succeed() {
-            final var actual = new BigIntegerVectorEntry(1, BigInteger.ZERO).withIndex(2);
+            final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+
+            final var actual = entry.withIndex(2);
 
             assertThat(actual).isEqualTo(new BigIntegerVectorEntry(2, BigInteger.ZERO));
         }
 
         @Test
         void withValue_should_throw_when_newValue_is_null() {
+            final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+
             assertThatNullPointerException()
-                    .isThrownBy(() -> new BigIntegerVectorEntry(1, BigInteger.ZERO).withValue(null))
+                    .isThrownBy(() -> entry.withValue(null))
                     .withMessage("newValue")
                     .withNoCause();
         }
 
         @Test
         void withValue_should_succeed() {
-            assertThat(new BigIntegerVectorEntry(1, BigInteger.ZERO).withValue(BigInteger.TWO))
-                    .isEqualTo(new BigIntegerVectorEntry(1, BigInteger.TWO));
+            final var entry = new BigIntegerVectorEntry(1, BigInteger.ZERO);
+
+            assertThat(entry.withValue(BigInteger.TWO)).isEqualTo(new BigIntegerVectorEntry(1, BigInteger.TWO));
         }
     }
 
@@ -413,26 +460,30 @@ final class BigIntegerVectorTest {
         @ParameterizedTest
         @ValueSource(ints = {0, 2})
         void entry_should_throw_when_index_is_out_of_bounds(final int index) {
+            final var builder = BigIntegerVector.builder(1);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> BigIntegerVector.builder(1).entry(index, BigInteger.ZERO))
+                    .isThrownBy(() -> builder.entry(index, BigInteger.ZERO))
                     .withMessage("index must be greater than 0 and less than or equal to 1 but was " + index)
                     .withNoCause();
         }
 
         @Test
         void entry_should_throw_when_index_is_already_present() {
+            final var builder = BigIntegerVector.builder(2).entry(1, BigInteger.ZERO);
+
             assertThatIllegalArgumentException()
-                    .isThrownBy(() -> BigIntegerVector.builder(2)
-                            .entry(1, BigInteger.ZERO)
-                            .entry(1, BigInteger.ONE))
+                    .isThrownBy(() -> builder.entry(1, BigInteger.ONE))
                     .withMessage("index 1 is already present")
                     .withNoCause();
         }
 
         @Test
         void entry_should_throw_when_value_is_null() {
+            final var builder = BigIntegerVector.builder(1);
+
             assertThatNullPointerException()
-                    .isThrownBy(() -> BigIntegerVector.builder(1).entry(1, null))
+                    .isThrownBy(() -> builder.entry(1, null))
                     .withMessage("value")
                     .withNoCause();
         }
@@ -449,23 +500,25 @@ final class BigIntegerVectorTest {
 
         @Test
         void build_should_throw_when_sizes_are_different() {
+            final var builder = BigIntegerVector.builder(2).entry(1, BigInteger.ZERO);
+
             assertThatIllegalStateException()
-                    .isThrownBy(() -> BigIntegerVector.builder(2)
-                            .entry(1, BigInteger.ZERO)
-                            .build())
+                    .isThrownBy(builder::build)
                     .withMessage("Expected 2 entries but was 1")
                     .withNoCause();
         }
 
         @Test
         void build_should_succeed() {
-            assertThat(BigIntegerVector.builder(2)
-                            .entry(2, BigInteger.ONE)
-                            .entry(1, BigInteger.TWO)
-                            .build())
-                    .isEqualTo(new BigIntegerVector(List.of(
-                            new BigIntegerVectorEntry(1, BigInteger.TWO),
-                            new BigIntegerVectorEntry(2, BigInteger.ONE))));
+            final var builder =
+                    BigIntegerVector.builder(2).entry(2, BigInteger.ONE).entry(1, BigInteger.TWO);
+
+            final var actual = builder.build();
+
+            final var entry1 = new BigIntegerVectorEntry(1, BigInteger.TWO);
+            final var entry2 = new BigIntegerVectorEntry(2, BigInteger.ONE);
+            final var expected = new BigIntegerVector(List.of(entry1, entry2));
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }
