@@ -1,5 +1,5 @@
-import org.cyclonedx.gradle.CyclonedxDirectTask
 import java.nio.charset.StandardCharsets
+import org.cyclonedx.gradle.CyclonedxDirectTask
 
 plugins {
     `java-library`
@@ -51,7 +51,7 @@ java {
 }
 
 jacoco {
-    toolVersion = "0.8.15"
+    toolVersion = "0.8.16"
 }
 
 licensee {

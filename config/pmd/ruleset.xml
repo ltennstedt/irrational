@@ -33,7 +33,7 @@
     <rule ref="category/java/bestpractices.xml/RelianceOnDefaultCharset"/>
     <rule ref="category/java/bestpractices.xml/ReplaceEnumerationWithIterator"/>
     <rule ref="category/java/bestpractices.xml/ReplaceHashtableWithMap"/>
-    <rule ref="category/java/bestpractices.xml/ReplaceVectorWithList"/>
+    <rule ref="category/java/bestpractices.xml/ReplaceJavaUtilVector"/>
     <rule ref="category/java/bestpractices.xml/SystemPrintln"/>
     <rule ref="category/java/bestpractices.xml/UnitTestShouldIncludeAssert"/>
     <rule ref="category/java/bestpractices.xml/UnitTestShouldUseAfterAnnotation"/>
@@ -201,7 +201,6 @@
     <rule ref="category/java/performance.xml/RedundantFieldInitializer"/>
     <rule ref="category/java/performance.xml/StringInstantiation"/>
     <rule ref="category/java/performance.xml/StringToString"/>
-    <rule ref="category/java/performance.xml/UseArrayListInsteadOfVector"/>
     <rule ref="category/java/performance.xml/UseArraysAsList"/>
     <rule ref="category/java/performance.xml/UseIndexOfChar"/>
     <rule ref="category/java/performance.xml/UselessStringValueOf"/>

@@ -37,14 +37,28 @@ idiomatic APIs for Java, Kotlin and Groovy developers.
 
 ```java
 final var rational = new LongRational(1L, 2L);
-rational.add(new LongRational(3L, 4L));
+rational.
 
-// Java 19/20 (preview) and Java 21+
-if (rational instanceof LongRational(long n, long d)) {
-    System.out.println(n + "/" + d);
+add(new LongRational(3L, 4L));
+
+        // Java 19/20 (preview) and Java 21+
+        if(rational instanceof
+
+LongRational(long n, long d)){
+        System.out.
+
+println(n +"/"+d);
 }
 
-LongVector.builder(2).entry(1, 2L).entry(2, 4L).build();
+        LongVector.
+
+builder(2).
+
+entry(1,2L).
+
+entry(2,4L).
+
+build();
 ```
 
 **Kotlin**
@@ -54,7 +68,6 @@ val rational = LongRational(1L, 2L)
 rational + LongRational(3L, 4L)
 5.toLongRational()
 listOf(rational).map { (n, d) -> "$n / $d" }
-
 val vector = longVector(size = 2) {
     entry(index = 1, value = 3L)
     entry(index = 2, value = 4L)
@@ -76,7 +89,7 @@ if (vector[1] == 3L) {
 ```groovy
 final rational = new LongRational(1L, 2L)
 rational + new LongRational(3L, 4L)
-rational ** 5
+rational**5
 ```
 
 ### Building
@@ -87,13 +100,10 @@ compatible toolchain is found locally.
 |        Programming language        | Version |
 |------------------------------------|---------|
 | [Java](https://www.java.com/)      | 17      |
-| [Kotlin](https://kotlinlang.org/)  | 2.2     |
+| [Kotlin](https://kotlinlang.org/)  | 2.3     |
 | [Groovy](https://groovy-lang.org/) | 5.0     |
 
-Versions correspond to those managed by Spring Boot as long as the Spring Boot version is still within the OSS
-support window.
-
-[Spring Boot support matrix](https://spring.io/projects/spring-boot#support)
+Versions correspond to those managed by the current Spring Boot version.
 
 You have to execute the following tasks when a full local developer build including formatting, compiling, testing,
 packaging and checking is your goal.
