@@ -8,13 +8,13 @@ import spock.lang.Specification
 final class DivisibleOperatorsSpecification extends Specification {
     def "div should succeed"() {
         given:
-        final complex = new DoubleComplex(1D, 3D)
-        final divisor = new DoubleComplex(2D, 1D)
+        final complex = new DoubleComplex(1.0D, 3.0D)
+        final divisor = new DoubleComplex(2.0D, 1.0D)
 
         when:
         final actual = complex / divisor
 
         then:
-        actual == new DoubleComplex(1D, 1D)
+        actual == new DoubleComplex(1.0D, 1.0D)
     }
 }

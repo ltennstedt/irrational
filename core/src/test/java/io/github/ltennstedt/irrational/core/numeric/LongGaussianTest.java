@@ -5,14 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 
-import io.github.ltennstedt.irrational.core.util.Doubles;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class LongGaussianTest {
-    private static final Offset<Double> OFFSET = within(Doubles.EPSILON);
+    private static final Offset<Double> OFFSET = within(1e-12D);
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -243,7 +242,7 @@ final class LongGaussianTest {
 
         final var actual = gaussian.norm();
 
-        assertThat(actual).isCloseTo(5D, OFFSET);
+        assertThat(actual).isCloseTo(5.0D, OFFSET);
     }
 
     @ParameterizedTest

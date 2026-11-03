@@ -217,7 +217,6 @@ ruleset {
     SpaceAfterWhile
     SpaceAroundClosureArrow
     SpaceAroundMapEntryColon
-    SpaceAroundOperator
     SpaceBeforeOpeningBrace
     SpaceInsideParentheses
     TrailingWhitespace

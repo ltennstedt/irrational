@@ -21,19 +21,19 @@ public record DoubleQuaternion(double w, double x, double y, double z)
                 io.github.ltennstedt.irrational.core.Subtractable<DoubleQuaternion>,
                 io.github.ltennstedt.irrational.core.Multipliable<DoubleQuaternion> {
     /** 0 */
-    public static final DoubleQuaternion ZERO = new DoubleQuaternion(0D, 0D, 0D, 0D);
+    public static final DoubleQuaternion ZERO = new DoubleQuaternion(0.0D, 0.0D, 0.0D, 0.0D);
 
     /** 1 */
-    public static final DoubleQuaternion ONE = new DoubleQuaternion(1D, 0D, 0D, 0D);
+    public static final DoubleQuaternion ONE = new DoubleQuaternion(1.0D, 0.0D, 0.0D, 0.0D);
 
     /** i */
-    public static final DoubleQuaternion I = new DoubleQuaternion(0D, 1D, 0D, 0D);
+    public static final DoubleQuaternion I = new DoubleQuaternion(0.0D, 1.0D, 0.0D, 0.0D);
 
     /** j */
-    public static final DoubleQuaternion J = new DoubleQuaternion(0D, 0D, 1D, 0D);
+    public static final DoubleQuaternion J = new DoubleQuaternion(0.0D, 0.0D, 1.0D, 0.0D);
 
     /** k */
-    public static final DoubleQuaternion K = new DoubleQuaternion(0D, 0D, 0D, 1D);
+    public static final DoubleQuaternion K = new DoubleQuaternion(0.0D, 0.0D, 0.0D, 1.0D);
 
     /**
      * Canonical constructor
@@ -48,10 +48,10 @@ public record DoubleQuaternion(double w, double x, double y, double z)
      * @throws ArithmeticException when z is NaN or infinite
      */
     public DoubleQuaternion {
-        w = Doubles.normalizeZero(Doubles.check(w, "w"));
-        x = Doubles.normalizeZero(Doubles.check(x, "x"));
-        y = Doubles.normalizeZero(Doubles.check(y, "y"));
-        z = Doubles.normalizeZero(Doubles.check(z, "z"));
+        w = Doubles.check(w, "w");
+        x = Doubles.check(x, "x");
+        y = Doubles.check(y, "y");
+        z = Doubles.check(z, "z");
     }
 
     @Override
@@ -61,7 +61,7 @@ public record DoubleQuaternion(double w, double x, double y, double z)
 
     @Override
     public boolean isZero() {
-        return Doubles.isNear(w, 0D) && Doubles.isNear(x, 0D) && Doubles.isNear(y, 0D) && Doubles.isNear(z, 0D);
+        return w == 0.0D && x == 0.0D && y == 0.0D && z == 0.0D;
     }
 
     @Override

@@ -10,7 +10,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import io.github.ltennstedt.irrational.core.linear.BigIntegerVector.BigIntegerVectorEntry;
 import io.github.ltennstedt.irrational.core.linear.LongVector.LongVectorEntry;
-import io.github.ltennstedt.irrational.core.util.Doubles;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -337,7 +336,7 @@ final class LongVectorTest {
 
         final var actual = vector.norm();
 
-        assertThat(actual).isCloseTo(2.23606797749979D, within(Doubles.EPSILON));
+        assertThat(actual).isCloseTo(2.23606797749979D, within(1e-12));
     }
 
     @Test

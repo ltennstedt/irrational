@@ -28,7 +28,7 @@ final class DoubleQuaternionTest {
             final double w, final double x, final double y, final double z, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new DoubleQuaternion(w, x, y, z))
-                .withMessageContainingAll(name, part)
+                .withMessage(name + " must be a finite number but was " + part)
                 .withNoCause();
     }
 
@@ -48,11 +48,11 @@ final class DoubleQuaternionTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        1e-12, 1e-13, 1e-13, 1e-13, false
-        1e-13, 1e-12, 1e-13, 1e-13, false
-        1e-13, 1e-13, 1e-12, 1e-13, false
-        1e-13, 1e-13, 1e-13, 1e-12, false
-        1e-13, 1e-13, 1e-13, 1e-13, true
+        1, 0, 0, 0, false
+        0, 1, 0, 0, false
+        0, 0, 1, 0, false
+        0, 0, 0, 1, false
+        0, 0, 0, 0, true
         """)
     void isZero_should_succeed(final double w, final double x, final double y, final double z, final boolean expected) {
         final var quaternion = new DoubleQuaternion(w, x, y, z);
@@ -72,12 +72,12 @@ final class DoubleQuaternionTest {
 
     @Test
     void add_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
-        final var summand = new DoubleQuaternion(5D, 6D, 7D, 8D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
+        final var summand = new DoubleQuaternion(5.0D, 6.0D, 7.0D, 8.0D);
 
         final var actual = quaternion.add(summand);
 
-        final var expected = new DoubleQuaternion(6D, 8D, 10D, 12D);
+        final var expected = new DoubleQuaternion(6.0D, 8.0D, 10.0D, 12.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -91,12 +91,12 @@ final class DoubleQuaternionTest {
 
     @Test
     void subtract_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
-        final var subtrahend = new DoubleQuaternion(5D, 6D, 7D, 8D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
+        final var subtrahend = new DoubleQuaternion(5.0D, 6.0D, 7.0D, 8.0D);
 
         final var actual = quaternion.subtract(subtrahend);
 
-        final var expected = new DoubleQuaternion(-4D, -4D, -4D, -4D);
+        final var expected = new DoubleQuaternion(-4.0D, -4.0D, -4.0D, -4.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -110,12 +110,12 @@ final class DoubleQuaternionTest {
 
     @Test
     void multiply_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
-        final var multiplier = new DoubleQuaternion(5D, 6D, 7D, 8D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
+        final var multiplier = new DoubleQuaternion(5.0D, 6.0D, 7.0D, 8.0D);
 
         final var actual = quaternion.multiply(multiplier);
 
-        final var expected = new DoubleQuaternion(-60D, 12D, 30D, 24D);
+        final var expected = new DoubleQuaternion(-60.0D, 12.0D, 30.0D, 24.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -137,8 +137,8 @@ final class DoubleQuaternionTest {
 
     @Test
     void divide_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
-        final var divisor = new DoubleQuaternion(5D, 6D, 7D, 8D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
+        final var divisor = new DoubleQuaternion(5.0D, 6.0D, 7.0D, 8.0D);
 
         final var actual = quaternion.divide(divisor);
 
@@ -148,11 +148,11 @@ final class DoubleQuaternionTest {
 
     @Test
     void negate_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
 
         final var actual = quaternion.negate();
 
-        final var expected = new DoubleQuaternion(-1D, -2D, -3D, -4D);
+        final var expected = new DoubleQuaternion(-1.0D, -2.0D, -3.0D, -4.0D);
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -167,12 +167,12 @@ final class DoubleQuaternionTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        1,     1,     1,     1,     -1,  0.25, -0.25, -0.25, -0.25
-        1,     1,     1,     1,      0,  1,     0,     0,     0
-        1,     1,     1,     1,      1,  1,     1,     1,     1
-        1e-13, 1e-13, 1e-13, 1e-13,  2,  0,     0,     0,     0
-        1,     1,     1,     1,      2, -2,     2,     2,     2
-        1,     1,     1,     1,      3, -8,     0,     0,     0
+        1, 1, 1, 1, -1,  0.25, -0.25, -0.25, -0.25
+        1, 1, 1, 1,  0,  1,     0,     0,     0
+        1, 1, 1, 1,  1,  1,     1,     1,     1
+        0, 0, 0, 0,  2,  0,     0,     0,     0
+        1, 1, 1, 1,  2, -2,     2,     2,     2
+        1, 1, 1, 1,  3, -8,     0,     0,     0
         """)
     void pow_should_succeed(
             final double w,
@@ -202,7 +202,7 @@ final class DoubleQuaternionTest {
 
     @Test
     void reciprocal_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
 
         final var actual = quaternion.reciprocal();
 
@@ -213,26 +213,26 @@ final class DoubleQuaternionTest {
 
     @Test
     void conjugate_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
 
         final var actual = quaternion.conjugate();
 
-        final var expected = new DoubleQuaternion(1D, -2D, -3D, -4D);
+        final var expected = new DoubleQuaternion(1.0D, -2.0D, -3.0D, -4.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
 
         final var actual = quaternion.norm();
 
-        assertThat(actual).isEqualByComparingTo(30D);
+        assertThat(actual).isEqualByComparingTo(30.0D);
     }
 
     @Test
     void abs_should_succeed() {
-        final var quaternion = new DoubleQuaternion(1D, 2D, 3D, 4D);
+        final var quaternion = new DoubleQuaternion(1.0D, 2.0D, 3.0D, 4.0D);
 
         final var actual = quaternion.abs();
 

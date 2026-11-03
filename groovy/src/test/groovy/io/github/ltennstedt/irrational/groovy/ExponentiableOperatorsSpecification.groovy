@@ -8,10 +8,10 @@ import spock.lang.Specification
 final class ExponentiableOperatorsSpecification extends Specification {
     def "power should succeed"() {
         given:
-        final complex = new DoubleComplex(1D, 3D)
+        final complex = new DoubleComplex(1.0D, 3.0D)
 
         when:
-        final actual = complex ** 0
+        final actual = complex**0
 
         then:
         actual == DoubleComplex.ONE

@@ -5,14 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 
-import io.github.ltennstedt.irrational.core.util.Doubles;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 final class DoubleComplexTest {
-    private static final Offset<Double> OFFSET = within(Doubles.EPSILON);
+    private static final Offset<Double> OFFSET = within(1e-12D);
 
     @ParameterizedTest
     @CsvSource(textBlock = """
@@ -26,13 +25,12 @@ final class DoubleComplexTest {
     void new_should_throw(final double real, final double imaginary, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> new DoubleComplex(real, imaginary))
-                .withMessageContainingAll(name, part)
+                .withMessage(name + " must be a finite number but was " + part)
                 .withNoCause();
     }
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        -0, -0, 0, 0
          1,  0, 1, 0
          0,  1, 0, 1
         """)
@@ -56,7 +54,7 @@ final class DoubleComplexTest {
     void ofPolar_should_throw(final double radius, final double argument, final String name, final String part) {
         assertThatExceptionOfType(ArithmeticException.class)
                 .isThrownBy(() -> DoubleComplex.ofPolar(radius, argument))
-                .withMessage("%s must not be NaN and must be finite but was %s".formatted(name, part))
+                .withMessage(name + " must be a finite number but was " + part)
                 .withNoCause();
     }
 
@@ -96,8 +94,9 @@ final class DoubleComplexTest {
 
     @ParameterizedTest
     @CsvSource(textBlock = """
-        1,     1,     false
-        1e-13, 1e-13, true
+        0, 1, false
+        1, 0, false
+        0, 0, true
         """)
     void isZero_should_succeed(final double real, final double imaginary, final boolean expected) {
         final var complex = new DoubleComplex(real, imaginary);
@@ -117,12 +116,12 @@ final class DoubleComplexTest {
 
     @Test
     void add_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
-        final var summand = new DoubleComplex(3D, 4D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
+        final var summand = new DoubleComplex(3.0D, 4.0D);
 
         final var actual = complex.add(summand);
 
-        final var expected = new DoubleComplex(4D, 6D);
+        final var expected = new DoubleComplex(4.0D, 6.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -136,12 +135,12 @@ final class DoubleComplexTest {
 
     @Test
     void subtract_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
-        final var subtrahend = new DoubleComplex(3D, 4D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
+        final var subtrahend = new DoubleComplex(3.0D, 4.0D);
 
         final var actual = complex.subtract(subtrahend);
 
-        final var expected = new DoubleComplex(-2D, -2D);
+        final var expected = new DoubleComplex(-2.0D, -2.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -155,12 +154,12 @@ final class DoubleComplexTest {
 
     @Test
     void multiply_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
-        final var multiplier = new DoubleComplex(3D, 4D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
+        final var multiplier = new DoubleComplex(3.0D, 4.0D);
 
         final var actual = complex.multiply(multiplier);
 
-        final var expected = new DoubleComplex(-5D, 10D);
+        final var expected = new DoubleComplex(-5.0D, 10.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -187,7 +186,7 @@ final class DoubleComplexTest {
         """)
     void divide_should_succeed(
             final double real, final double imaginary, final double expectedReal, final double expectedImaginary) {
-        final var complex = new DoubleComplex(1D, 3D);
+        final var complex = new DoubleComplex(1.0D, 3.0D);
         final var divisor = new DoubleComplex(real, imaginary);
 
         final var actual = complex.divide(divisor);
@@ -198,11 +197,11 @@ final class DoubleComplexTest {
 
     @Test
     void negate_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
 
         final var actual = complex.negate();
 
-        final var expected = new DoubleComplex(-1D, -2D);
+        final var expected = new DoubleComplex(-1.0D, -2.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -264,21 +263,21 @@ final class DoubleComplexTest {
 
     @Test
     void conjugate_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
 
         final var actual = complex.conjugate();
 
-        final var expected = new DoubleComplex(1D, -2D);
+        final var expected = new DoubleComplex(1.0D, -2.0D);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void norm_should_succeed() {
-        final var complex = new DoubleComplex(1D, 2D);
+        final var complex = new DoubleComplex(1.0D, 2.0D);
 
         final var actual = complex.norm();
 
-        assertThat(actual).isCloseTo(5D, OFFSET);
+        assertThat(actual).isCloseTo(5.0D, OFFSET);
     }
 
     @ParameterizedTest
@@ -298,6 +297,6 @@ final class DoubleComplexTest {
     void arg_should_succeed() {
         final var actual = DoubleComplex.ONE.arg();
 
-        assertThat(actual).isCloseTo(0D, OFFSET);
+        assertThat(actual).isCloseTo(0.0D, OFFSET);
     }
 }

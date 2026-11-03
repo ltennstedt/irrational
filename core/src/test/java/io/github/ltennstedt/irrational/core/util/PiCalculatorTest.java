@@ -25,7 +25,7 @@ final class PiCalculatorTest {
 
         final var actual = PiCalculator.pi(mathContext);
 
-        final var offset = within(new BigDecimal(String.valueOf(Doubles.EPSILON)));
+        final var offset = within(new BigDecimal("1e-12"));
         assertThat(actual).isCloseTo(pi, offset);
     }
 }

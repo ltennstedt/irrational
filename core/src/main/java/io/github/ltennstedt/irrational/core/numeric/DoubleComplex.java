@@ -16,13 +16,13 @@ public record DoubleComplex(double real, double imaginary)
                 Divisible<DoubleComplex, DoubleComplex>,
                 Exponentiable<DoubleComplex, DoubleComplex> {
     /** 0 */
-    public static final DoubleComplex ZERO = new DoubleComplex(0D, 0D);
+    public static final DoubleComplex ZERO = new DoubleComplex(0.0D, 0.0D);
 
     /** 1 */
-    public static final DoubleComplex ONE = new DoubleComplex(1D, 0D);
+    public static final DoubleComplex ONE = new DoubleComplex(1.0D, 0.0D);
 
     /** i */
-    public static final DoubleComplex I = new DoubleComplex(0D, 1D);
+    public static final DoubleComplex I = new DoubleComplex(0.0D, 1.0D);
 
     /**
      * Canonical constructor
@@ -33,8 +33,8 @@ public record DoubleComplex(double real, double imaginary)
      * @throws ArithmeticException when imaginary is NaN or infinite
      */
     public DoubleComplex {
-        real = Doubles.normalizeZero(Doubles.check(real, "real"));
-        imaginary = Doubles.normalizeZero(Doubles.check(imaginary, "imaginary"));
+        Doubles.check(real, "real");
+        Doubles.check(imaginary, "imaginary");
     }
 
     /**
@@ -47,8 +47,8 @@ public record DoubleComplex(double real, double imaginary)
      * @throws NullPointerException when angle is null
      */
     public static DoubleComplex ofPolar(final double radius, final double angle) {
-        final var normalizedRadius = Doubles.normalizeZero(Doubles.check(radius, "radius"));
-        final var normalizedAngle = Doubles.normalizeZero(Doubles.check(angle, "angle"));
+        final var normalizedRadius = Doubles.check(radius, "radius");
+        final var normalizedAngle = Doubles.check(angle, "angle");
         return new DoubleComplex(
                 normalizedRadius * StrictMath.cos(normalizedAngle), normalizedRadius * StrictMath.sin(normalizedAngle));
     }
@@ -60,7 +60,7 @@ public record DoubleComplex(double real, double imaginary)
 
     @Override
     public boolean isZero() {
-        return Doubles.isNear(norm(), 0D);
+        return real == 0.0D && imaginary == 0.0D;
     }
 
     @Override
