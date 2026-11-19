@@ -10,9 +10,9 @@ tasks {
         dependsOn(buildHealth)
     }
     wrapper {
-        gradleVersion = "9.8.2"
+        gradleVersion = "9.9.2"
         distributionType = DistributionType.ALL
-        distributionSha256Sum = "a1bb7e9651ef09e4cd9a62d471564e0ee23b5757e5f21fd7358d7cfc21018fdf"
+        distributionSha256Sum = "1ac85e9cbc2b091ad04e6c6d0f486f0a2a2fabd78f9f8719a0d5bcc0ce1b345b"
     }
     register("dependenciesAll") {
         description = "Runs task dependencies on all subprojects"
@@ -40,6 +40,6 @@ spotless {
 
 versionCatalogUpdate {
     pin {
-        versions = setOf("kotlin", "groovy")
+        versions = setOf("jspecify", "kotlin", "groovy", "junit", "assertj", "spock")
     }
 }
